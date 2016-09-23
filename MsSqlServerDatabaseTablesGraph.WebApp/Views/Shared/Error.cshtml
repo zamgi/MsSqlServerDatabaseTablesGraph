@@ -1,0 +1,22 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    Layout = null;
+    ViewBag.Title = "ERROR";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@this.GetTitle()</title>
+    <style type="text/css">
+        body { 
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+        }
+    </style>
+</head>
+<body>
+    @Html.Partial( "~/Views/Shared/ErrorPartial.cshtml" )
+</body>
+</html>

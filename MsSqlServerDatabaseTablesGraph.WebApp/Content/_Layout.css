@@ -1,0 +1,186 @@
+﻿.collapse-expand-button {
+    position:absolute;
+    left: 2px;
+    border: 1px solid #4C4A4A;
+    border-radius: 2px;
+    margin-left: 1px;
+    margin-top: 1px;
+    cursor: pointer;
+    opacity: 0.3;
+    z-index: 10;    
+    height: 16px;
+    width: 10px;
+    vertical-align: central;
+}
+.collapse-expand-button img {
+    vertical-align: top;
+}
+.collapse-expand-button:hover {
+    opacity: 1;
+}
+
+.spliter_panel div.vspliter {
+    background: url("../Scripts/spliter/spliter_bg.png") #e6e6e6;
+    border-left: 1px solid #8f8f8f;
+    border-right: 1px solid #8f8f8f;
+    width: 3px;
+}
+.spliter_panel div.hspliter {
+    background: url("../Scripts/spliter/spliter_bg.png") #e6e6e6;
+    border-top: 1px solid #8f8f8f;
+    border-bottom: 1px solid #8f8f8f;
+    height: 3px;
+}
+#left_side_div, #main_side_div {
+    overflow: auto;
+    height: 100%;
+    background-color: whitesmoke;
+}
+        #main_side_div select {
+            cursor: pointer;
+        }
+        #body {
+            overflow: hidden;
+        }
+#main_panel {
+    height: 100%;
+}
+
+#logo_toolbar {
+    display: inline-block;
+    float: right; 
+    font-size: x-small; 
+    font-weight: normal;    
+}
+#logo_toolbar img {
+    height: 24px;
+    border: 1px dotted silver;
+    cursor: pointer;
+}
+#logo_toolbar img:hover {
+    border-color: gray;
+}
+#logo_login {
+    float: right;
+    padding-left: 10px;
+    padding-right: 10px;    
+    padding-top: 5px;
+}
+#logo_header_border {
+    background-color:  #e6e6e6;
+    height: 2px;
+    border-bottom: 1px solid #8f8f8f;
+}
+#logo_header {
+    background-color: lightyellow; /*lightsteelblue;*/ /*lightblue;*/
+}
+#logo_header.lists {
+    background-color: lightblue; /*lightsteelblue*/
+}
+    #logo_header > table {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    #logo_header > table td {
+        white-space: nowrap;
+        padding: 0;
+    }
+    #logo_header > table td button {
+        background-color: #d3dce0;
+        border: 1px solid #787878;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 1.2em;
+        font-weight: 600;
+        padding: 7px;
+        margin-right: 8px;
+        width: auto;
+    }
+#logo_header_subheader, #logo_login {
+    display: inline-block;
+    padding-left: 25px;
+}
+#logo_header_subheader {    
+    overflow: hidden;
+}
+    #logo_header_subheader a {
+        display: inline-block;
+        text-decoration: none;
+    }
+        #logo_header_subheader a:hover {
+            background-color: transparent;
+        }
+#logo_header_subheader h2 {
+    vertical-align: top; display: inline; margin-left: 10px; color: darkgrey;
+}
+#logo_header_subheader h3 {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0px; 
+    white-space: normal;
+    max-height: 70px;
+    overflow: hidden
+}
+@media (max-width: 800px) {
+    #logo_header_subheader {
+        padding-left: 0;
+    }
+    #logo_header_subheader h3 {
+        max-width: 400px;
+    }
+    #logo_header_subheader a {
+        display: none;
+    }
+}
+@media (max-width: 650px) {
+    #logo_header_subheader {
+        padding-left: 0;
+    }
+    #logo_header_subheader a, #logo_header_subheader h3 {
+        display: none;
+    }
+}
+
+/*partition-tree*/
+ul.partition-tree-1 {
+    list-style: url('../Images/partition-tree/ic_folder_open.png');
+    padding-left: 25px;
+    margin-top: 0px;
+    margin-right: 1px;
+    font-size: 14px;
+    font-family: 'Courier New';
+    white-space: nowrap;
+}
+ul.partition-tree-1 a {
+    display: block;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-decoration: none;
+}
+ul.partition-tree-2 {
+    list-style: url('../Images/partition-tree/ic_doc.png');
+    padding-left: 15px;
+    font-family:  serif;
+}
+    /*ЕГРЮЛ-РОССТАТ; Egrul-Rosstat*/
+    ul.partition-tree-2.small-font a {
+        font-size: 1em;
+        font-weight: normal;
+    }
+ul.partition-tree-2 a:hover {
+    color: white !important;
+    background: linear-gradient(darkgray, gray, darkgray) !important;
+    cursor: pointer; 
+}
+ul.partition-tree-2 > li.selected {
+    color: white;
+    background: linear-gradient(gray, lightgray, gray);
+}
+    ul.partition-tree-2 > li.selected a {
+        background: linear-gradient(gray, lightgray, gray);
+    }
+ul.partition-tree-2 > li > label {
+    color: silver;    
+}
+

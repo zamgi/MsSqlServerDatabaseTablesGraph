@@ -1,0 +1,61 @@
+﻿.link  {
+    cursor: pointer;
+    stroke: #ccc; 
+    stroke-width: 0.13em;    
+    fill: transparent;
+}
+.link-hover {
+    cursor: pointer;
+    stroke: violet;
+    stroke-width: 0.2em;    
+    fill: transparent;
+}
+/*.all-link-mouseover, .xyz_link.all-link-mouseover {
+    stroke: silver; 
+}*/
+.arrow {
+    fill: #ccc;
+}
+.arrow-hover {
+    fill: violet;
+}
+.node {
+    cursor: pointer;
+}
+.node-text {
+    font: 10px sans-serif;
+    /*pointer-events: none;*/
+    /*fill: red;*/
+        	
+    /*stroke: #fff;
+    stroke-width: 3px;
+    stroke-opacity: .8;*/
+}
+.node-text-center {
+    font: 12px sans-serif;
+    fill: #0094ff;
+    /*stroke: #0094ff;
+    stroke-dasharray: 0.01em;*/
+}
+.node-text-center-shadow {
+    font: 12px sans-serif;
+    fill: darkgray;
+}
+/*.node-image {
+    width: 16px;
+    height: 16px;
+}
+.node-image-hover {
+    width: 20px;
+    height: 20px;
+}*/
+.node-circle-center {
+    fill: transparent;
+    stroke-width: 0.13em;
+    stroke: #0094ff;
+}
+.node-circle-center-mouseover {
+    fill: transparent;
+    stroke-width: 0.13em;
+    stroke: silver;
+}

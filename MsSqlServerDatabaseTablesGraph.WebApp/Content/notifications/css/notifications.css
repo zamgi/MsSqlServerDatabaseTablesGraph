@@ -1,0 +1,199 @@
+﻿/*Стили для сообщений*/
+.notification-message,
+.notification-dialog {
+    display: none;
+}
+
+.notification-message table {
+    border: none;
+    border-spacing: 0px;
+    border-collapse: collapse;   
+    width: 100%; 
+}
+    .notification-message table td {
+        vertical-align: top;
+    }
+
+.notification-message-container {
+    /*padding: 2px;*/
+    overflow: hidden;
+    /*border: solid 1px black;*/
+    /*border-radius: 4px;*/
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 57px;
+    z-index: 10000;
+    box-shadow: 6px 6px 14px 0px rgba(50, 50, 50, 0.75);
+    background-color: transparent;
+    display:none;
+}
+
+.notification-message-2 {
+    /*height: 24px;*/
+    padding: 2px;
+    overflow: hidden;
+    border: solid 1px black;
+    border-radius: 4px;
+    /*position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 57px;*/
+    z-index: 10000;
+    /*box-shadow: 6px 6px 14px 0px rgba(50, 50, 50, 0.75);*/
+}
+
+.notification-message {
+    /*height: 24px;*/
+    padding: 2px;
+    overflow: hidden;
+    border: solid 1px black;
+    border-radius: 4px;
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 57px;
+    z-index: 10000;
+    box-shadow: 6px 6px 14px 0px rgba(50, 50, 50, 0.75);    
+}
+
+    .notification-message span,
+    .notification-message-2 span {
+        display: inline-block;
+        /*padding: 5px 20px 0px 10px;*/
+    }
+
+    .notification-message td,
+    .notification-message-2 td {
+        padding: 2px 2px 0px 2px;
+    }
+
+    .notification-message i,
+    .notification-message-2 i {
+        cursor: pointer;
+        padding: 2px 2px 0px 2px;
+        float: right;
+        /*margin-right: 3px;
+        margin-top: 3px;*/
+        border: solid 1px transparent;
+        opacity: 0.5;
+    }
+
+        .notification-message i:hover,
+        .notification-message-2 i:hover {
+            opacity: 1;
+            border: solid 1px gray;
+            border-radius: 4px;
+        }
+
+.notification-message-info {
+    background-color: #fbfcdd;
+    max-width: 700px;
+    margin: auto;
+}
+
+.notification-message-error {
+    background-color: #FFBABA; /*lightpink*/ /*lightcoral*/ /*crimson*/
+    color: #D8000C;
+    border-color: #D8000C;
+    text-align: start;
+}
+    .notification-message-error img.error {
+        height: 24px;
+        vertical-align: top;
+    }
+
+.notification-dialog span {
+    display: inline-block;
+    margin-left: 55px;
+    margin-top: 8px;
+}
+
+
+.notification-dialog-error {
+    background: url(../images/dlg-error.png) no-repeat 10px 10px !important;
+    min-height: 50px !important;
+}
+
+.notification-dialog-info {
+    background: url(../images/dlg-info.png) no-repeat 10px 10px !important;
+    min-height: 50px !important;
+}
+
+.notification-dialog-wait {
+    background: url(../images/ajax-loader.gif) no-repeat center center !important;
+}
+
+.notification-dialog-quest {
+    background: url(../images/dlg-quest.png) no-repeat 10px 10px !important;
+    min-height: 50px !important;
+}
+.notification-dialog-connection-to-db {
+    background: url(../images/dlg-connection-to-db.png) no-repeat 10px 10px !important;
+    min-height: 50px !important;
+}
+
+.notifications-list {
+    list-style-type: none;
+}
+
+    .notifications-list li {
+        margin-bottom: 10px;
+        border-bottom: solid 1px gray;
+    }
+
+.notification-date {
+    padding-right: 15px;
+}
+
+.notification-title {
+    padding-left: 5px;
+    font-weight: bold;
+}
+.notification-text {
+    padding-left: 5px;
+    margin: 5px 0 10px 0;
+}
+
+.notification-source {
+    display: block;
+    padding: 3px 10px 3px 150px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.notification-dialog-wait-root .ui-dialog-titlebar-close {
+    display: none;
+}
+
+button.btn-refresh-notification {
+    width: 155px;
+    margin-left: 20px;
+    padding: 3px !important;
+    color: #fff;
+    background-color: #9dc29b;
+    border-color: #85a084;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    display: inline-block;
+}
+    button.btn-refresh-notification:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #7c9b86;
+        border-color: #6c866b;                
+    }
+    button.btn-refresh-notification:focus {
+        text-decoration: none;
+        color: #333;                
+    }

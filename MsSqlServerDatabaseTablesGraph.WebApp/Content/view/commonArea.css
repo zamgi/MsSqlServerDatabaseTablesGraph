@@ -1,0 +1,120 @@
+﻿button[ disabled ] {
+    color: silver;
+    border-color: silver;
+}
+#logo_header_subheader h3.company-card-editing-header {
+    color: gray; font-style: italic; font-weight: normal;
+    margin: 0px;
+}
+#saveToolCommand, #refreshToolCommand {
+    margin-top: 2px;
+}
+
+
+div.top-strip {
+    /*background: linear-gradient(lightblue, lightskyblue); height: 5px;*/
+    background: linear-gradient(gray, lightgray); height: 5px;
+}
+div.bottom-strip {
+    background: linear-gradient(lightgray, gray); height: 5px;
+}
+div.command {
+    padding: 0 10px 10px 10px;
+    text-align: center;
+}
+
+div.handsontable td.arm-modify
+, input.arm-modify
+, select.arm-modify, option.arm-modify
+, label.arm-modify
+, textarea.arm-modify {
+    /*font-weight: bold;*/
+    /*color: maroon;*/
+    background-color: yellow;
+}
+option.arm-not-modify {
+    background-color: white;
+}
+
+.ui-datepicker, .htDatepickerHolder, .hasDatepicker { 
+    z-index: 9999 !important;
+}
+
+body.arm-banner {
+    overflow: hidden;
+}
+body.arm-banner .ht_clone_top.handsontable, 
+body.arm-banner .ht_clone_left.handsontable,
+body.arm-banner .ht_clone_corner.handsontable,
+body.arm-banner .spliter_panel .vspliter,
+body.arm-banner .spliter_panel .hspliter {
+    z-index: -101 !important;
+}
+div.arm-banner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1234567;       
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    background: #000;
+    opacity: 0.7;
+}
+div.arm-banner table {
+    color: white;
+    margin: auto;
+    font-size: large;
+    border-spacing: 10px;
+    border-collapse: separate;
+    /*width: 100%;*/
+    height: 100%;            
+}
+div.arm-banner table td {
+    vertical-align: middle;
+}
+
+
+/*common handsontable*/
+div.handsontable .htCheckboxRendererInput {
+    cursor: pointer;
+}
+
+div.handsontableInputHolder {
+    z-index: 9999;
+}
+
+div.handsontableInputHolder .handsontableEditor.handsontable.autocompleteEditor.listbox .ht_master.handsontable {
+    position: fixed !important;
+}
+
+.handsontable.listbox .ht_master table td:not(.current) {
+    background: wheat;
+}
+
+.handsontable.listbox .ht_master table td:hover {
+    background: #eee;
+    text-decoration: underline;
+}
+.handsontable td.htDimmed, .handsontable td.htDimmed.arm-modify {
+    background-color: whitesmoke;
+}
+
+.handsontable table.htCore {
+	border-bottom: 1px solid silver;
+}
+
+.ht_master.handsontable table td.listbox /*-there was- .ht_master.handsontable */ {
+    background-color: gainsboro;
+}
+
+.handsontable col.rowHeader {
+    width: 30px !important;    
+}
+.handsontable span.rowHeader {
+    font-size: x-small;
+    color: silver;
+}

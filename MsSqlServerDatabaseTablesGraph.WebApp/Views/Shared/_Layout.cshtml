@@ -1,0 +1,615 @@
+﻿@using MsSqlServerDatabaseTablesGraph.WebApp.Properties
+@{
+    var IsView1 = (Request.Path.IndexOf( "/V1", StringComparison.InvariantCultureIgnoreCase ) != -1);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>@this.GetTitle()</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <link rel="stylesheet" type="text/css" href="~/Content/_Layout.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+
+    @Styles.Render( "~/Content/css" )
+    @Styles.Render( "~/Content/jquery-ui/css" )
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Scripts/spliter/jquery.splitter.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/selectivity/selectivity-full.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/selectivity/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/notifications/css/notifications.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/view/commonArea.css?v@(HtmlConsts.JavascriptResourceVersion)"  />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/view/commonGraph.css?v@(HtmlConsts.JavascriptResourceVersion)"  />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/view/xzy-style.css?v@(HtmlConsts.JavascriptResourceVersion)"  />
+    <style id="-splitter-css" type="text/css">
+        .spliter_panel div.vspliter {
+            background: url('@Url.Content( "~/Scripts/spliter/spliter_bg.png" )') #e6e6e6;
+            border-left: 1px solid #8f8f8f;
+            border-right: 1px solid #8f8f8f;
+            width: 3px
+        }
+    </style>
+    <style id="-body-css" type="text/css">
+        #body {
+            height: 100%;
+            background-color: beige;
+        }
+        table.dal-params {
+            white-space: nowrap;
+            width: 100%;
+        }
+            table.dal-params tr {
+                border-bottom: 1px solid silver;
+            }
+                table.dal-params tr:first-child {
+                    border-top: 1px solid silver;
+                }
+            table.dal-params td {
+                padding: 0.25em 0em;
+            }                
+            table.dal-params td.width100 {
+                width: 100%
+            }
+            table.dal-params td.right {
+                text-align: right;
+                padding-right: 5px;
+                width: 1px;
+            }
+            /*table.dal-params td:nth-child(2n) {
+                width: 100%
+            }
+            table.dal-params td:nth-child(2n+1) {
+                text-align: right;
+                padding-right: 5px;
+            }*/
+        table.graph-params {
+           margin-top: 5px;
+        }
+            table.graph-params .caption {
+                color: gray;
+                text-align: right;
+                padding-right: 5px;
+                white-space: nowrap;
+            }
+                table.graph-params .caption label {
+                     white-space: nowrap;
+                }
+            table.graph-params #selectedLink {
+                padding: 0;
+            }
+        .border-top {
+            border-top: 1px solid silver;
+        }
+        .border-bottom {
+            border-bottom: 1px solid silver;
+        }
+        .navy {
+            color: white;
+            background-color: navy;
+        }
+        .width100 {
+            width: 100%
+        }
+
+        #TablesCount {
+            font-size: x-small;
+            color: gray;
+        }
+        #TablesSelect {
+            width: 100%;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        #TablesSelect .selectivity-dropdown {
+            width: auto !important;
+        }
+        /*#TablesSelect*/ div.selectivity-multiple-input-container {
+            padding: 0;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid #e2e2e2;
+        }
+        /*#TablesSelect*/ input.selectivity-multiple-input {
+            margin: 0;
+        }
+        .notification-dialog #ConnectionDialog span.selectivity-multiple-selected-item {
+            display: block;
+            margin-left: 2px;
+            margin-top: 2px;
+            background-color: transparent;
+            color: black;
+        }
+        div#DatabaseNameRequestError {
+            color: red; margin: 1px 0 0 0; overflow: auto; max-height: 50px; max-width: 312px; border: 1px solid;
+        }
+        .notification-dialog #ConnectionDialog span.requiredError {
+            color: red; margin: 0 5px; 
+        }
+        table.selected-link {
+            width: 100%;
+            margin: 0;
+        }
+            table.selected-link td {
+                padding: 3px;
+            }
+
+            table.selected-link #selectedLink_sourceFields,
+            table.selected-link #selectedLink_targetFields {
+                width: 50%;
+            }
+            table.selected-link #selectedLink_between {
+                border-left: 1px solid white;
+                border-right: 1px solid white;
+                padding: 1px;
+                width: 1px;
+                font-family: monospace;
+            }
+    </style>    
+    <style id="-view-css" type="text/css">
+        label.caption {
+            color: gray; display: inline-block; font-weight: normal;
+        }
+        button.command {
+            border-radius: 2px; 
+            float: right; font-size: inherit; font-weight: normal; padding: 0px 6px 2px 6px; margin: 0; background-color: silver; margin-left: 2px; opacity: 0.2;
+        }
+        button.command:hover {
+            opacity: 0.9;
+        }   
+        div.whitespace {
+            height: 30px;
+        }
+        .inline-block {
+            display: inline-block;
+        }
+        a.outline-style-none:focus {
+            outline-style: none;
+        }
+        #aliveGraph, label[ for='aliveGraph' ],
+        #useNodeMouseOverContrast, label[ for='useNodeMouseOverContrast' ] {
+            cursor: pointer;
+        }
+        #aliveGraphParams {
+            margin: 0;
+        }
+            #aliveGraphParams td {
+                padding: 0;
+                margin: 0;
+            }
+            #aliveGraphParams input {
+                padding: 1px 5px;
+                margin: 0 5px 0 2px;
+                /*width: 100%;*/
+                max-width: 45px;
+            }
+            #aliveGraphParams button {
+                padding: 2px;
+                margin: 0;
+                border-radius: 2px;
+                background-color: transparent;                
+                color: gray;
+                border-color: silver;
+                font-size: 0.8em;
+                font-weight: normal;                
+            }
+                #aliveGraphParams button:hover {
+                    color: black;
+                    border-color: gray;
+                }
+        #useNodeMouseOverContrastTr {
+            white-space: nowrap;
+            max-width: 170px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        h2.error {
+            color: red; margin: 10px; 
+        }
+            h2.error pre {
+                white-space: normal; border: 1px solid silver; overflow: scroll; height: 700px;
+            }
+            h2.error a {
+                color: gray; margin: 10px 25px; text-decoration: underline;
+            }
+                h2.error img {
+                    vertical-align: middle;
+                }   
+    </style>
+    @RenderSection("CssImport", false)
+
+    @Scripts.Render( "~/bundles/modernizr" )
+    @Scripts.Render( "~/bundles/jquery" )
+    @Scripts.Render( "~/bundles/jqueryui" )
+    <script type="text/javascript" src="~/Scripts/spliter/jquery.splitter.js"></script>
+    <script type="text/javascript" src="~/Scripts/selectivity/selectivity-full.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/d3js/d3.v3-5-17.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/notifications/notifications.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    <script type="text/javascript" src="~/Scripts/localStorage/localStorage.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    <script type="text/javascript" src="~/Scripts/_helpers_.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    <script type="text/javascript" src="~/Scripts/view/commonArea.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    <script type="text/javascript" src="~/Scripts/view/connectionDialog.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>    
+    <script id="razor-config" type="text/javascript">
+        var config = {
+            appRootPath            : '@Url.Content( "~/" )',
+            loadingImageUrl        : '@Url.Content("~/Images/loading.gif")',
+            connection2DBImageUrl  : '@Url.Content("~/Images/connection-to-db.png")',
+            noConnection2DBImageUrl: '@Url.Content("~/Images/no-connection-to-db.png")',
+            noGraphImageUrl        : '@Url.Content("~/Images/no-graph.png")',
+            tableImageUrl          : '@Url.Content("~/Images/table.gif")',
+            rollerImageUrl         : '@Url.Content( "~/Images/roller.gif" )',
+
+            URL_API_GET_DATABASES: '@Url.Content("~/api/Graph/GetDatabases")',
+            URL_API_GET_TABLES   : '@Url.Content("~/api/Graph/GetTables")',
+            URL_API_GET_REFS     : '@Url.Content("~/api/Graph/GetRefs")',
+            URL_V1               : '@Url.Content("~/GraphView/V1")',
+            URL_V2               : '@Url.Content("~/GraphView/V2")',
+
+            Model: {
+                ServerName    : '@Model.ServerName',
+                DatabaseName  : '@Model.DatabaseName',
+                UserName      : '@Model.UserName',
+                Password      : '@Model.Password',
+                RootTableNames: '@Model.RootTableNames'
+            }
+        };
+
+        _notification.setAppRootPath(config.appRootPath);
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            DAL.LoadFromLocalStorage();
+
+            //document.title = (DAL.RootTableNames() || "-= All Tables =-") + ": " + document.title;
+
+            $('#viewMode').click(function () {
+                var c = $(this).is(':checked');
+                setTimeout(function () {
+                    window.location = window.location.href.replaceAll(c ? config.URL_V2 : config.URL_V1,
+                                                                      c ? config.URL_V1 : config.URL_V2, true);
+                }, 250);
+            }).attr('checked', window.location.pathname.contains(config.URL_V1));
+
+            $(window).unload(function () {
+                if (!DAL.IsEmpty()) {
+                    DAL.SaveToLocalStorage();
+                }
+            });
+
+            if (!DAL.IsEmpty() && ((window.location.pathname == config.appRootPath) ||
+                                   (window.location.pathname.countOf('/') <= 2))) {
+                $('#viewMode').parent('div').hide();
+                showConnectionDialog();
+                return;
+            }
+
+            if (DAL.IsEmpty()) {
+                showConnectionDialog();
+            } else {
+                loadTables();
+
+                loadGraph();
+            }
+        });
+
+        function _GetReloadUrl() {
+            @if(IsView1) { <text>
+                return DAL.ToUrlV1(getGraphViewPortSize())
+            </text>} else {<text>
+                return DAL.ToUrlV2(getGraphViewPortSize())
+            </text>}
+        };
+        function loadTables() {
+            var rootTableNamesHashSet = DAL.getRootTableNamesHashSet(), 
+                rootTableNames        = DAL.RootTableNames(),
+                url                   = DAL.ToApiUrlGetTables();
+
+            $.getJSON(url, null, function (json) {
+                if (json.tables) {
+                    var selectTables = [];
+                    var tables = json.tables.map(function (table, index) {
+                        if (rootTableNamesHashSet[table.name]) {
+                            selectTables.push(table.name);
+                        }
+                        return (table.name);
+                    });
+                    $('#TablesCount').text('(total: ' + tables.length + ')');
+                    $('#TablesSelect').selectivity({
+                        items: tables,
+                        multiple: true,
+                        placeholder: ' -= All table in database =- ',
+                        value: selectTables
+                    })
+                    .attr('title', selectTables.join(','))
+                    .change(function () {
+                        var selectTables = $(this).selectivity('value');
+                        DAL.RootTableNames( selectTables.join(',') );
+                        window.location = _GetReloadUrl();
+                    });
+                } else {
+                    $('#TablesSelect').html( (rootTableNames ? ('<span style="white-space: normal;">\'' + rootTableNames + '\'</span><br/>') : '') +
+                        '<span style="color: red;white-space: normal;">Table list from database \'' + DAL.DatabaseName() + '\' is not loaded</span>');
+                    _notification.messageError("Table list from database '" + DAL.DatabaseName() + "' is not loaded", "Error loading tables list");
+                }
+            });
+        };
+        function loadGraph(successCallback) {
+            if(!successCallback) {
+                successCallback = graphCreator;
+            }
+
+            commonArea.banner.Show("Graph loading...", config.appRootPath);
+            $('#nodesCount, #linksCount').html('-');
+            $('#aliveGraphParams').hide();
+
+            var size = getGraphViewPortSize();
+
+            function load_graph_callback( data ) {
+                commonArea.banner.Hide();
+
+                if (!data || data.error) {
+                    d3.select("#svg_graph_div svg, #graph svg").remove();
+                    var h2 = d3.select("#svg_graph_div, #graph").append("h2");
+                    var a = h2.append("a");
+                    h2.attr("id", "connection-parameters")
+                        .attr("class", "error")
+                        .append("pre")
+                        .attr("style", "height: " + ((size.h / 2) - 100) + "px;")
+                        .html(((data && data.error) || "[Unknown server error]"));
+                    a.attr("href", '#')
+                        .attr("onclick", 'showConnectionDialog(); return (false);')
+                        .html("<img src='" + config.connection2DBImageUrl + "'/>" +
+                            "<span>Connection parameters</span>");
+                    if (data.errorType == 'LoginFailed' || data.errorType == 'CannotOpenDatabase') {
+                        showConnectionDialog();
+                    }
+                } else {
+                    $('#nodesCount').html(data.nodes.length);
+                    $('#linksCount').html(data.links.length);
+                    successCallback( data, size );
+                    $('#aliveGraphParams').toggle( $('#aliveGraph').is(':checked') );
+                }
+            };
+
+            var url = DAL.ToApiUrlGetRefs(size);
+            d3.json( url, load_graph_callback );
+        };
+        function showConnectionDialog() {
+            connectionDialog(DAL, config.rollerImageUrl).Show(
+                function (o) {
+                    DAL.SetConnectionParams( o );
+                },
+                function () {
+                    window.location = _GetReloadUrl(); //graphCreator,
+                },
+                function (success) {
+                    if (!success) {
+                        var selector = getGraphViewPortSelector();
+                        if (DAL.IsEmpty()) {
+                            if (!$(selector).find("h2#no-connection-parameters").length) {
+                                setTimeout(function () {
+                                    d3.select(selector)
+                                      .append("h2").attr("id", "no-connection-parameters").append("a")
+                                      .attr("style", "color: gray; margin: 10px 25px; text-decoration: underline;")
+                                      .attr("href", '#')
+                                      .attr("onclick", 'showConnectionDialog(); return (false);')
+                                      .html("<img src='" + config.noConnection2DBImageUrl + "' style='vertical-align: middle;'/>" +
+                                            "<span style='padding-left: 5px;'>No connection parameters</span>");
+                                }, 250);
+                            }
+                        }
+                        else if (!$(selector).find('svg g g g[ class ]').length) {
+                            if (!$(selector).find("h2#no-graph-loaded").length) {
+                                setTimeout(function () {
+                                    d3.select(selector)
+                                      .insert("h2", ":first-child")/*.append("h2")*/.attr("id", "no-graph-loaded").append("a")
+                                      .attr("style", "color: gray; margin: 10px 25px; text-decoration: underline;")
+                                      .attr("href", '#')
+                                      .attr("onclick", 'showConnectionDialog(); return (false);')
+                                      .html("<img src='" + config.noGraphImageUrl + "' style='vertical-align: middle;'/>" +
+                                            "<span style='padding-left: 5px;'>No graph loaded</span>");
+                                }, 250);
+                            }
+                        }
+                    }
+                });
+        };
+    </script>
+    <script type="text/javascript" src="~/Scripts/view/DAL.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    @RenderSection("JavascriptImport", false)
+</head>
+<body>
+    <noscript><div id="noscript">@Resource.NO_SCRIPT_CAPTION</div></noscript>
+    <!--[if lt IE 11 ]> <div id="ie-less-11">@Resource.IE_LESS_11_CAPTION</div> <![endif]-->
+    <!--[if lt IE 9]>
+    <script id="svg-support-ie" type="text/javascript">
+        if ( <!SvgNotImlpMessageWasShowed ) {
+            SvgNotImlpMessageWasShowed = true;
+            setTimeout( function() { alert("Ваш браузер не поддерживает отображение векторной графики.\n"+
+                                           "Пожалуйста воспользуйтесь более современным браузером"); }, 10 );
+        }
+    </script>
+    <![endif]-->
+    <script id="svg-support" type="text/javascript">
+        var SvgNotImlpMessageWasShowed = false;
+        if (!SvgNotImlpMessageWasShowed) {
+            if (!document.implementation || !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")) {
+                SvgNotImlpMessageWasShowed = true;
+                alert("Ваш браузер не поддерживает отображение векторной графики.\n" +
+                      "Пожалуйста воспользуйтесь более современным браузером");
+            }
+        }
+    </script>
+
+    <div id="main_spliter_panel">
+        <div id="left_side_div">
+            <div style="position: fixed; width: 100%; z-index: 100;">
+                <div id="logo_header" style="white-space: nowrap; transform: rotate(-90deg) translate(-45%, -1560%); text-align: right; padding-right: 43px;">
+                    <div style="display: inline-block; vertical-align: middle">
+                        <img src="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
+                    </div>
+                    <div style="display: inline-block; vertical-align: middle; white-space: nowrap">
+                        <h2 style="margin: 0">@Resource.LOGO_HEADER&nbsp;</h2>
+                    </div>
+                    <div id="logo_header_border"></div>
+                </div>
+            </div>
+
+            <div style="padding-left: 50px;">
+                <table class="dal-params">
+                    <tr>
+                        <td class="right">Server: </td>
+                        <td class="width100">
+                            <label id="ServerNameLabel"></label>
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                    <tr>
+                        <td class="right">Database: </td>
+                        <td class="width100">
+                            <label id="DatabaseNameLabel"></label>
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                    <tr>
+                        <td class="right">User: </td>
+                        <td class="width100">
+                            <label id="UserNameLabel"></label>
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                    <tr style="border-bottom: none">
+                        <td class="right">Root-Tables: </td>
+                        <td  class="width100"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="width100">
+                            <div id="TablesSelect">-@*<i style="font-size: small; color: gray">..loading...</i>*@</div>
+                            <div id="TablesCount"></div>
+                        </td>
+                    </tr>
+                </table>
+                <table class="dal-params">
+                    <tr>
+                        <td style="text-align: left">
+                            <a href="#" onclick="showConnectionDialog(); return (false);" title="Connection parameters">
+                                <img src='@Url.Content("~/Images/connection-to-db.png")' style='vertical-align: middle;' /><span style='padding-left: 2px;'>Connection parameters</span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="graph-params">
+                    <tr>
+                        <td colspan="2">
+                            <div class="xzy-style" data-radius="true" data-text="true">
+                                <input id="viewMode" type="checkbox" @(IsView1 ? "checked='checked'" : string.Empty)>
+                                <label for="viewMode"><i></i></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="border-top">
+                        <td id="useNodeMouseOverContrastTr" colspan="2">
+                            <input id="useNodeMouseOverContrast" type="checkbox" />
+                            <label for="useNodeMouseOverContrast" class="checkbox" title="contrast mouse over nodes">contrast mouse over nodes</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input id="aliveGraph" type="checkbox" />
+                            <label for="aliveGraph" class="checkbox">alive graph</label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <table id="aliveGraphParams">
+                                <tr>
+                                    <td><button id="distanceGraphReset" title="reset">x</button></td>
+                                    <td>
+                                        <input id="distanceGraph" type="text" />
+                                    </td>
+                                    <td>
+                                        <label for="distanceGraph" class="checkbox"> distance</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><button id="gravityGraphReset" title="reset">x</button></td>
+                                     <td>
+                                        <input id="gravityGraph" type="text" />
+                                    </td>
+                                    <td>
+                                        <label for="gravityGraph" class="checkbox"> gravity</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><button id="chargeGraphReset" title="reset">x</button></td>
+                                     <td>
+                                        <input id="chargeGraph" type="text" />
+                                    </td>
+                                    <td>
+                                        <label for="chargeGraph" class="checkbox"> charge</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr class="border-top">
+                        <td class="caption" style="width: 1px">graph nodes: </td>
+                        <td>
+                            <span id="nodesCount">-</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="caption" style="width: 1px">graph links: </td>
+                        <td>
+                            <span id="linksCount">-</span>
+                        </td>
+                    </tr>
+                    <tr id="selectedLinkCaption" class="border-top" style="display: none;">
+                        <td class="caption">selected link: </td>
+                        <td></td>
+                    </tr>
+                    <tr class="border-bottom navy">
+                        <td colspan="2" id="selectedLink" style="display: none;">
+                            <table class="selected-link">
+                                <tr>
+                                    <td id="selectedLink_source" colspan="3"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border-bottom: 1px solid blue;"></td>
+                                    <td colspan="2" style="border-bottom: 1px solid white;"></td>
+                                </tr>
+                                <tr>
+                                    <td id="selectedLink_sourceFields"></td>
+                                    <td id="selectedLink_between">=></td>
+                                    <td id="selectedLink_targetFields" style="text-align: right"></td>
+                                </tr>
+                                <tr>                                    
+                                    <td colspan="2" style="border-top: 1px solid white;"></td>
+                                    <td style="border-top: 1px solid blue;"></td>
+                                </tr>
+                                <tr>
+                                    <td id="selectedLink_target" colspan="3" style="text-align: right"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="main_side_div" style="z-index: 101;">
+            <div class="collapse-expand-button" title="collapsed" style="z-index: 102;"><img src="~/Images/leftArrow.gif" alt="" /></div>
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

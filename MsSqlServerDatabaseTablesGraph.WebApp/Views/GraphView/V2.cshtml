@@ -1,0 +1,87 @@
+﻿@using MsSqlServerDatabaseTablesGraph.WebApp.Models;
+@using MsSqlServerDatabaseTablesGraph.WebApp.Properties;
+
+@model DALGetRefsInputParams
+@{
+    if ( !string.IsNullOrWhiteSpace( Model.ServerName ) && !string.IsNullOrWhiteSpace( Model.DatabaseName ) ) {
+        ViewBag.Title = (!string.IsNullOrWhiteSpace( Model.RootTableNames ) ? Model.RootTableNames : "-= All tables =-") + ": " +
+                        Model.ServerName + "/" + Model.DatabaseName; 
+    }
+}
+@section JavascriptImport {
+    <script type="text/javascript" src="~/Scripts/view/V2/v2.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#aliveGraph').click(function () {
+                $('#aliveGraphParams').toggle( $(this).is(':checked') );
+                gvm.UseD3ForceRendering( $(this).is(':checked') );
+
+                loadGraph();
+            });
+
+            $('#distanceGraph').change(distanceGraphChange).keyup(distanceGraphChange).keydown(distanceGraphChange);
+            $('#gravityGraph').change(gravityGraphChange).keyup(gravityGraphChange).keydown(gravityGraphChange);
+            $('#chargeGraph').change(chargeGraphChange).keyup(chargeGraphChange).keydown(chargeGraphChange);
+            $('#distanceGraphReset').click(function () {
+                $('#distanceGraph').css("background-color", "").val( gvm.DistanceGraphReset() );
+            });
+            $('#gravityGraphReset').click(function () {
+                $('#gravityGraph').css("background-color", "").val( gvm.GravityGraphReset() );
+            });
+            $('#chargeGraphReset').click(function () {
+                $('#chargeGraph').css("background-color", "").val( gvm.ChargeGraphReset() );
+            });
+
+            $('#useNodeMouseOverContrast').click(function () {
+                gvm.UseNodeMouseOverContrast( $(this).is(':checked') );
+            });
+        });
+
+        function getGraphViewPortSize() {
+            var w = $("#svg_graph_div").innerWidth() * 2,
+                h = window.innerHeight * 2;
+            return ({ w: w, h: h });
+        };
+        function getGraphViewPortSelector() {
+            return ("#svg_graph_div");
+        };
+
+        function tryParseFloat(e, increment) {
+            var $this = $(this).css("background-color", ""),
+                v = $.trim( $this.val() ),
+                f = parseFloat(v);
+            if(isNaN(f) || (f != v)) {
+                $this.css("background-color", "red").val( (isNaN(f) ? v : f) );
+                /*_notification.dialogError('Wrong value: "' + v + '"', null, function () {
+                    $this.focus();
+                });*/
+                return (null);
+            }
+            if ((e.type == "keydown") && ((e.keyCode == 38/*up-arrow*/) || (e.keyCode == 40/*down-arrow*/))) {
+                f += ((e.keyCode == 38) ? 1 : -1) * increment;
+                v = increment.toString();
+                var i = v.indexOf('.');
+                v = f.toFixed(v.length - (i != -1 ? (i + 1) : v.length));
+                setTimeout(function () {
+                    $this.val(v);
+                }, 1);
+            }
+            return (f);
+        }
+        function distanceGraphChange(e) {
+            gvm.DistanceGraph(tryParseFloat.call(this, e, 10));
+        };
+        function gravityGraphChange(e) {
+            gvm.GravityGraph( tryParseFloat.call(this, e, 0.001) );
+        };
+        function chargeGraphChange(e) {
+            gvm.ChargeGraph( tryParseFloat.call(this, e, 10) );
+        };
+
+    </script>
+}
+
+<div id="body">
+    <div id="svg_graph_div" style="overflow: hidden;">
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+<style type="text/css">
+    /*body { 
+        margin: 0;
+        padding: 0;
+        background-color: whitesmoke;
+    }*/
+    div.rootHandleErrorInfo {
+        margin: 25px;
+        padding: 25px;
+        border: 1px solid maroon;
+        box-shadow: 0 0 10px black;
+    }
+    div.rootHandleErrorInfo table {
+        border-collapse: collapse;
+        background-color: lightgoldenrodyellow;
+    }
+    div.rootHandleErrorInfo table, div.rootHandleErrorInfo th, div.rootHandleErrorInfo td {            
+        border: 1px solid gray;
+    }
+    div.rootHandleErrorInfo td {
+        text-align: left;
+        vertical-align: top;
+        padding-left: 5px;
+    }
+    div.rootHandleErrorInfo td.no-wrap {
+        white-space: nowrap;
+        text-align: right;
+        vertical-align: top;
+    }
+</style>
+<div class="rootHandleErrorInfo">
+    <hgroup>
+        <h1>ERROR. <span style="color: gray; font-size: medium"> An error occurred while processing your request.</span></h1>
+    </hgroup>
+    <div>
+        <table>
+            <tr>
+                <td class="no-wrap">occured:</td>
+                <td><strong>@DateTime.Now.ToString("yyyy.MM.dd , HH:mm")</strong></td>
+            </tr>
+            <tr>
+                <td class="no-wrap">user-name:</td>
+                <td><strong>@(Request.IsAuthenticated ? User.Identity.Name : "-")</strong></td>
+            </tr>
+            <tr>
+                <td class="no-wrap">controller-name:</td>
+                <td><strong>@Model.ControllerName</strong></td>
+            </tr>
+            <tr>
+                <td class="no-wrap">action-name:</td>
+                <td><strong>@Model.ActionName</strong></td>
+            </tr>
+            <tr>
+                <td class="no-wrap">error:</td>
+                <td>
+                    <div style="max-height: 450px; color: red; overflow-y: auto">
+                        <strong>@Model.Exception</strong>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
