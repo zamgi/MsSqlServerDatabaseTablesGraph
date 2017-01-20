@@ -1,4 +1,4 @@
-del "*.suo" /Q 2> nul
+del "*.suo" /Q/A
 del "MsSqlServerDatabaseTablesGraph.WebApp\bin\*.pdb" /Q
 del "MsSqlServerDatabaseTablesGraph.WebApp\*.csproj.user" /Q
 rd "MsSqlServerDatabaseTablesGraph.WebApp\obj" /S/Q
