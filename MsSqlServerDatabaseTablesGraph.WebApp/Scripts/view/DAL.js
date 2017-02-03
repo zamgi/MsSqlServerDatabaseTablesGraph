@@ -80,7 +80,7 @@
             var p = "/?ServerName="  + encodeURIComponent(_.ServerName) +
                     "&DatabaseName=" + encodeURIComponent(_.DatabaseName);
             if (_.RootTableNames) {
-                p += "/" + encodeURIComponent(_.RootTableNames);
+                p += "&RootTableNames=" + encodeURIComponent(_.RootTableNames);
             }
             p += "&UserName=" + encodeURIComponent(_.UserName) +
                  "&Password=" + encodeURIComponent(_.Password);
