@@ -77,7 +77,7 @@
             return (!_.ServerName || !_.DatabaseName || !_.UserName);
         },
         ToUrlParams: function (size) {
-            var p = "/" + encodeURIComponent(_.ServerName) +
+            var p = "/" + encodeURIComponent(_.ServerName.replace('\\', '_XYZ_SLASH_ZYX_')) +
                     "/" + encodeURIComponent(_.DatabaseName);
             if (_.RootTableNames) {
                 p += "/" + encodeURIComponent(_.RootTableNames);
@@ -97,7 +97,7 @@
             return (p);
         },
         ToApiUrlGetDatabases: function (o) {
-            var p = "/" + encodeURIComponent((o || _).ServerName) +
+            var p = "/" + encodeURIComponent((o || _).ServerName.replace('\\', '_XYZ_SLASH_ZYX_')) +
                     "/?UserName=" + encodeURIComponent((o || _).UserName) +
                     "&Password=" + encodeURIComponent((o || _).Password);
             return (config.URL_API_GET_DATABASES + p);
@@ -153,7 +153,7 @@
             this.PutToView();
         },
         PutToView: function () {
-            $('#ServerNameLabel').text((_.ServerName || '-'));
+            $('#ServerNameLabel').text((_.ServerName || '-').replace('_XYZ_SLASH_ZYX_', '\\'));
             $('#DatabaseNameLabel').text((_.DatabaseName || '-'));
             $('#UserNameLabel').text((_.UserName || '-'));
             $('#RootTableNameLabel').html((_.RootTableNames || "<i>All table in database</i>"));

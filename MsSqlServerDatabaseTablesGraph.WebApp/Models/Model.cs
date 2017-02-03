@@ -27,10 +27,21 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         {
             if ( inputParams == null ) throw (new ArgumentNullException( "inputParams" ));
 
-            if ( string.IsNullOrWhiteSpace( inputParams.ServerName ) ) throw (new ArgumentNullException( "inputParams.ServerName" ));            
-            if ( string.IsNullOrWhiteSpace( inputParams.UserName   ) ) throw (new ArgumentNullException( "inputParams.UserName" ));
+            if ( string.IsNullOrWhiteSpace( inputParams.ServerName4DAL ) ) throw (new ArgumentNullException( "inputParams.ServerName" ));            
+            if ( string.IsNullOrWhiteSpace( inputParams.UserName ) ) throw (new ArgumentNullException( "inputParams.UserName" ));
         }
 
+        public string ServerName4DAL
+        {
+            get
+            {
+                if ( ServerName != null )
+                {
+                    return (ServerName.Replace( "_XYZ_SLASH_ZYX_", "\\" ));
+                }
+                return (ServerName);
+            }
+        }
         public string ServerName { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -42,7 +53,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             {
                 var builder = new SqlConnectionStringBuilder()
                 {
-                    DataSource = ServerName,
+                    DataSource = ServerName4DAL,
                     UserID     = UserName,
                     Password   = Password ?? string.Empty,
                 };
@@ -81,7 +92,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         {
             if ( inputParams == null ) throw (new ArgumentNullException( "inputParams" ));
 
-            if ( string.IsNullOrWhiteSpace( inputParams.ServerName   ) ) throw (new ArgumentNullException( "inputParams.ServerName" ));            
+            if ( string.IsNullOrWhiteSpace( inputParams.ServerName4DAL ) ) throw (new ArgumentNullException( "inputParams.ServerName" ));            
             if ( string.IsNullOrWhiteSpace( inputParams.UserName     ) ) throw (new ArgumentNullException( "inputParams.UserName" ));
             if ( string.IsNullOrWhiteSpace( inputParams.DatabaseName ) ) throw (new ArgumentNullException( "inputParams.DatabaseName" ));
         }
@@ -94,7 +105,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             {
                 var builder = new SqlConnectionStringBuilder()
                 {
-                    DataSource     = ServerName,
+                    DataSource     = ServerName4DAL,
                     InitialCatalog = DatabaseName ?? string.Empty,
                     UserID         = UserName,
                     Password       = Password ?? string.Empty,

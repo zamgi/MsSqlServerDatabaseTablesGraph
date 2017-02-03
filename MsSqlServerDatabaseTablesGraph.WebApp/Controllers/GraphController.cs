@@ -128,6 +128,10 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                 else
                 {
                     var rootTableName = refs.FirstOrDefault().ForeignTableName;
+                    if ( rootTableName.IsNullOrWhiteSpace() )
+                    {
+                        throw (new RefsNotFoundException( inputParams.RootTableNamesSet ));
+                    }
                     //var linksTotal = refs.Count( it => it.Level <= 2 && it.TableName == rootTableName );
                     var centerNode = new Node( node_id, rootTableName, true );
                     nodes.Add( centerNode.Name, centerNode );
