@@ -37,6 +37,7 @@
         table.dal-params {
             white-space: nowrap;
             width: 100%;
+            margin: 0;
         }
             table.dal-params tr {
                 border-bottom: 1px solid silver;
@@ -443,20 +444,23 @@
     </script>
 
     <div id="main_spliter_panel">
-        <div id="left_side_div">
-            <div style="position: fixed; width: 100%; z-index: 100;">
-                <div id="logo_header" style="white-space: nowrap; transform: rotate(-90deg) translate(-45%, -1560%); text-align: right; padding-right: 43px;">
-                    <div style="display: inline-block; vertical-align: middle">
-                        <img src="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
-                    </div>
-                    <div style="display: inline-block; vertical-align: middle; white-space: nowrap">
-                        <h2 style="margin: 0">@Resource.LOGO_HEADER&nbsp;</h2>
-                    </div>
-                    <div id="logo_header_border"></div>
+        <div id="left_side_div">            
+            <div id="logo_header" class="vertical-text">
+                <div id="logo_header_subheader">
+                    <img src="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
+                    <h3>@MsSqlServerDatabaseTablesGraph.WebApp.Properties.Resource.LOGO_HEADER</h3>
                 </div>
+                <!--
+                <div style="display: inline-block; vertical-align: middle;">
+                    <img src="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
+                </div>
+                <div style="display: inline-block; white-space: nowrap;">
+                    <h3>@Resource.LOGO_HEADER &nbsp;</h3>
+                </div>
+                -->
             </div>
 
-            <div style="padding-left: 50px;">
+            <div style="padding-left: 27px;">
                 <table class="dal-params">
                     <tr>
                         <td class="right">Server: </td>

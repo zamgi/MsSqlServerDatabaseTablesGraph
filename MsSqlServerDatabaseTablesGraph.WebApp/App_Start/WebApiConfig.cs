@@ -11,20 +11,18 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
         {
             /*config.Routes.MapHttpRoute(
                 name: "Graph",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );*/
-
-            config.Routes.MapHttpRoute(
-                name: "Graph",
                 routeTemplate: "api/{controller}/{action}/{ServerName}/{DatabaseName}/{RootTableNames}",
                 defaults: new { 
                       ServerName     = RouteParameter.Optional
                     , DatabaseName   = RouteParameter.Optional
                     , RootTableNames = RouteParameter.Optional
                 }
-            );
+            );*/
 
+            config.Routes.MapHttpRoute(
+                name: "Graph",
+                routeTemplate: "api/{controller}/{action}/"
+            );
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.

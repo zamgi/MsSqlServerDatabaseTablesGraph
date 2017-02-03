@@ -77,13 +77,13 @@
             return (!_.ServerName || !_.DatabaseName || !_.UserName);
         },
         ToUrlParams: function (size) {
-            var p = "/" + encodeURIComponent(_.ServerName.replace('\\', '_XYZ_SLASH_ZYX_')) +
-                    "/" + encodeURIComponent(_.DatabaseName);
+            var p = "/?ServerName="  + encodeURIComponent(_.ServerName) +
+                    "&DatabaseName=" + encodeURIComponent(_.DatabaseName);
             if (_.RootTableNames) {
                 p += "/" + encodeURIComponent(_.RootTableNames);
             }
-            p += "/?UserName=" + encodeURIComponent(_.UserName) +
-                    "&Password=" + encodeURIComponent(_.Password);
+            p += "&UserName=" + encodeURIComponent(_.UserName) +
+                 "&Password=" + encodeURIComponent(_.Password);
             if (size) {
                 p += "&GraphWidth=" + encodeURIComponent(parseInt(size.w)) +
                      "&GraphHeight=" + encodeURIComponent(parseInt(size.h));
@@ -97,8 +97,8 @@
             return (p);
         },
         ToApiUrlGetDatabases: function (o) {
-            var p = "/" + encodeURIComponent((o || _).ServerName.replace('\\', '_XYZ_SLASH_ZYX_')) +
-                    "/?UserName=" + encodeURIComponent((o || _).UserName) +
+            var p = "/?ServerName=" + encodeURIComponent((o || _).ServerName) +
+                    "&UserName=" + encodeURIComponent((o || _).UserName) +
                     "&Password=" + encodeURIComponent((o || _).Password);
             return (config.URL_API_GET_DATABASES + p);
         },
@@ -153,7 +153,7 @@
             this.PutToView();
         },
         PutToView: function () {
-            $('#ServerNameLabel').text((_.ServerName || '-').replace('_XYZ_SLASH_ZYX_', '\\'));
+            $('#ServerNameLabel').text((_.ServerName || '-'));
             $('#DatabaseNameLabel').text((_.DatabaseName || '-'));
             $('#UserNameLabel').text((_.UserName || '-'));
             $('#RootTableNameLabel').html((_.RootTableNames || "<i>All table in database</i>"));

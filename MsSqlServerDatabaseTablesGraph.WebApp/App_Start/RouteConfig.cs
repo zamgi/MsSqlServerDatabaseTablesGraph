@@ -14,12 +14,6 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
 
             /*routes.MapRoute(
                 name: "GraphView",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "GraphView", action = "Index", id = UrlParameter.Optional }
-            );*/
-
-            routes.MapRoute(
-                name: "GraphView",
                 url: "{controller}/{action}/{ServerName}/{DatabaseName}/{RootTableNames}",
                 defaults: new { 
                       controller     = "GraphView"
@@ -27,6 +21,15 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
                     , ServerName     = UrlParameter.Optional
                     , DatabaseName   = UrlParameter.Optional
                     , RootTableNames = UrlParameter.Optional
+                }
+            );*/
+
+            routes.MapRoute(
+                name: "GraphView",
+                url: "{controller}/{action}",
+                defaults: new { 
+                      controller = "GraphView"
+                    , action     = "Index"
                 }
             );
         }

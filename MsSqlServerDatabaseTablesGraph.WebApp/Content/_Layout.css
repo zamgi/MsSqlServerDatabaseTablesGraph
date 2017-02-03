@@ -66,14 +66,38 @@
     padding-right: 10px;    
     padding-top: 5px;
 }
-#logo_header_border {
-    background-color:  #e6e6e6;
-    height: 2px;
-    border-bottom: 1px solid #8f8f8f;
+.vertical-text {
+	-ms-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
+
+	-ms-transform-origin: left top 0;
+	-moz-transform-origin: left top 0;
+	-webkit-transform-origin: left top 0;
+	transform-origin: left top 0;
+
+	background: #E23737;
+	color: #fff;
+	margin-left: 25px;
+	border: 1px solid #ccc;	
+	box-shadow: 1px -1px 0px rgba(0, 0, 0, 0.1);
+
+	float: left;
 }
 #logo_header {
-    background-color: lightyellow; /*lightsteelblue;*/ /*lightblue;*/
+    background-color: lightyellow; /*lightsteelblue;*/ /*lightblue;*/    
+    white-space: nowrap;
+    width: 500px;
+    border-top-right-radius: 100px; /*border-radius: 0 100px 0 0;*/
+    position: fixed;
 }
+    #logo_header img {
+        width: 24px;
+    }
+    #logo_header h1, #logo_header h2, #logo_header h3, #logo_header h4 {
+        margin: 0;
+    }
 #logo_header.lists {
     background-color: lightblue; /*lightsteelblue*/
 }
