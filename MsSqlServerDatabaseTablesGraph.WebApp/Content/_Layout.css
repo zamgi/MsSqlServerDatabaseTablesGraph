@@ -91,6 +91,7 @@
     width: 500px;
     border-top-right-radius: 100px; /*border-radius: 0 100px 0 0;*/
     position: fixed;
+    z-index: 100;
 }
     #logo_header img {
         width: 24px;
