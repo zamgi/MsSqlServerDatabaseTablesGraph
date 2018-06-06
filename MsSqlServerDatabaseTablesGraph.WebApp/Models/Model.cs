@@ -11,24 +11,22 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
     /// </summary>
     public class DALInputParams
     {
-        public DALInputParams()
-        {
-        }
+        public DALInputParams() { }
         public DALInputParams( string connectionString )
         {
             var builder = new SqlConnectionStringBuilder( connectionString );
-            ServerName = builder.DataSource;            
-            UserName   = builder.UserID;
-            Password   = builder.Password;
+            ServerName     = builder.DataSource;            
+            UserName       = builder.UserID;
+            Password       = builder.Password;
             ConnectTimeout = builder.ConnectTimeout;
         }
 
         public static void ThrowIfWrong( DALInputParams inputParams, bool checkDatabaseName = true )
         {
-            if ( inputParams == null ) throw (new ArgumentNullException( "inputParams" ));
+            if ( inputParams == null ) throw (new ArgumentNullException( nameof(inputParams) ));
 
-            if ( string.IsNullOrWhiteSpace( inputParams.ServerName ) ) throw (new ArgumentNullException( "inputParams.ServerName" ));            
-            if ( string.IsNullOrWhiteSpace( inputParams.UserName   ) ) throw (new ArgumentNullException( "inputParams.UserName" ));
+            if ( string.IsNullOrWhiteSpace( inputParams.ServerName ) ) throw (new ArgumentNullException( nameof(inputParams.ServerName) ));            
+            if ( string.IsNullOrWhiteSpace( inputParams.UserName   ) ) throw (new ArgumentNullException( nameof(inputParams.UserName) ));
         }
 
         public string ServerName { get; set; }
@@ -54,10 +52,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             }
         }
 #if DEBUG
-        public override string ToString()
-        {
-            return (ConnectionString);
-        }
+        public override string ToString() => ConnectionString;
 #endif
     }
     /// <summary>
@@ -65,9 +60,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
     /// </summary>
     public class DALGetTablesInputParams : DALInputParams
     {
-        public DALGetTablesInputParams()
-        {
-        }
+        public DALGetTablesInputParams() { }
         public DALGetTablesInputParams( string connectionString )
         {
             var builder = new SqlConnectionStringBuilder( connectionString );
@@ -79,11 +72,11 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
 
         public static void ThrowIfWrong( DALGetTablesInputParams inputParams )
         {
-            if ( inputParams == null ) throw (new ArgumentNullException( "inputParams" ));
+            if ( inputParams == null ) throw (new ArgumentNullException( nameof(inputParams) ));
 
-            if ( string.IsNullOrWhiteSpace( inputParams.ServerName   ) ) throw (new ArgumentNullException( "inputParams.ServerName" ));            
-            if ( string.IsNullOrWhiteSpace( inputParams.UserName     ) ) throw (new ArgumentNullException( "inputParams.UserName" ));
-            if ( string.IsNullOrWhiteSpace( inputParams.DatabaseName ) ) throw (new ArgumentNullException( "inputParams.DatabaseName" ));
+            if ( string.IsNullOrWhiteSpace( inputParams.ServerName   ) ) throw (new ArgumentNullException( nameof(inputParams.ServerName) ));            
+            if ( string.IsNullOrWhiteSpace( inputParams.UserName     ) ) throw (new ArgumentNullException( nameof(inputParams.UserName) ));
+            if ( string.IsNullOrWhiteSpace( inputParams.DatabaseName ) ) throw (new ArgumentNullException( nameof(inputParams.DatabaseName) ));
         }
 
         public string DatabaseName { get; set; }
@@ -108,12 +101,8 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
     /// </summary>
     public sealed class DALGetRefsInputParams : DALGetTablesInputParams
     {
-        public DALGetRefsInputParams()
-        {
-        }
-        public DALGetRefsInputParams( string connectionString ) : base( connectionString )
-        {
-        }
+        public DALGetRefsInputParams() { }
+        public DALGetRefsInputParams( string connectionString ) : base( connectionString ) { }
 
         [JsonProperty("RootTableNames")] 
         public string RootTableNames { get; set; }
@@ -164,9 +153,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             CannotOpenDatabase,
         }
 
-        protected DALError()
-        {
-        }
+        protected DALError() { }
         protected DALError( Exception ex )
         {
             var sqlEx = ex as SqlException;
@@ -224,10 +211,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
 
         [JsonProperty("error")]     public string Error { get; private set; }
         [JsonIgnore]                public DALErrorTypeEnum? ErrorType { get; private set; }
-        [JsonProperty("errorType")] public string ErrorTypeAsString 
-        {
-            get { return (ErrorType.HasValue ? ErrorType.Value.ToString() : null); }
-        }
+        [JsonProperty("errorType")] public string ErrorTypeAsString => (ErrorType.HasValue ? ErrorType.Value.ToString() : null);
     }
 
     /// <summary>
@@ -237,7 +221,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
     {
         public Table( string name ) : this()
         {
-            if ( string.IsNullOrWhiteSpace( name ) ) throw (new ArgumentNullException( "name" ));
+            if ( string.IsNullOrWhiteSpace( name ) ) throw (new ArgumentNullException( nameof(name) ));
 
             Name = name;
         }
@@ -245,49 +229,30 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         [JsonProperty("name")]
         public string Name { get; private set; }
 #if DEBUG
-        public override string ToString()
-        {
-            return ( Name );
-        }
+        public override string ToString() => Name;
 #endif
-        public int Compare( Table x, Table y )
-        {
-            return ( string.Compare( x.Name, y.Name, true ));
-        }
+        public int Compare( Table x, Table y ) => string.Compare( x.Name, y.Name, true );
     }
     /// <summary>
     /// 
     /// </summary>    
     public sealed class TableCollection : DALError
     {
-        public TableCollection( ISet< Table > tables )
-        {
-            Tables = tables;
-        }
-        public TableCollection( Exception ex ) : base( ex )
-        {
-        }
+        public TableCollection( ISet< Table > tables ) => Tables = tables;
+        public TableCollection( Exception ex ) : base( ex ) { }
 
         [JsonProperty("tables")]
         public ISet< Table > Tables { get; private set; }
 
-        public bool Contains( string tableName )
-        {
-            return (Tables.Contains( new Table( tableName ) ));
-        }
+        public bool Contains( string tableName ) => Tables.Contains( new Table( tableName ) );
     }
     /// <summary>
     /// 
     /// </summary>    
     public sealed class DatabaseCollection : DALError
     {
-        public DatabaseCollection( ISet< string > databases )
-        {
-            Databases = databases;
-        }
-        public DatabaseCollection( Exception ex ) : base( ex )
-        {
-        }
+        public DatabaseCollection( ISet< string > databases ) => Databases = databases;
+        public DatabaseCollection( Exception ex ) : base( ex ) { }
 
         [JsonProperty( "databases" )]
         public ISet< string > Databases { get; private set; }

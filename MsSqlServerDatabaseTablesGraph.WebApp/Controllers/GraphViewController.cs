@@ -13,10 +13,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
     /// </summary>
     public class GraphViewController : Controller
     {
-        public ActionResult Index()
-        {
-            return View( "V1", new DALGetRefsInputParams() );
-        }
+        public ActionResult Index() => View( "V1", new DALGetRefsInputParams() );
 
         [HttpPost, HttpGet, NoCache, NoOutputCache]
         public ActionResult V1( [FromUri] DALGetRefsInputParams inputParams )
@@ -37,9 +34,6 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         }
 
         [HttpGet, NoCache, NoOutputCache]
-        public ActionResult HTTP404()
-        {
-            return View();
-        }
+        public ActionResult HTTP404() => View();
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using MsSqlServerDatabaseTablesGraph.WebApp.Controllers;
 using MsSqlServerDatabaseTablesGraph.WebApp.Models;
@@ -34,7 +32,7 @@ namespace TestApp
                 Console.WriteLine( g.Key );
                 foreach ( var it in g )
                 {
-                    Console.WriteLine( "\t" + it.TableName + '.' + it.Column + " - " + it.ForeignTableName + '.' + it.ForeignColumn );
+                    Console.WriteLine( $"\t{it.TableName}.{it.Column} - {it.ForeignTableName}.{it.ForeignColumn}" );
                 }
                 Console.WriteLine();
             }

@@ -1,7 +1,7 @@
 ﻿//общая функция ошибки запроса
 window.onerror = function (msg, url, line) {
     if (typeof (msg) != "string") msg = JSON.stringify(msg);
-    _notification.messageError(msg, "Error: graph.js::window.onerror");
+    _notification.messageError(msg, "Error: graphCreator.js::window.onerror");
 };
 
 function graphCreator(data, size) {

@@ -2,8 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -192,12 +190,12 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
             }
             catch ( TableNotExistsException ex )
             {
-                return (Graph.CreateError( "Table with name '" + ex.TableName + "' not exists" ));
+                return (Graph.CreateError( $"Table with name '{ex.TableName}' not exists" ));
             }
             catch ( RefsNotFoundException ex )
             {
                 var error = ex.RootTableNames.Any()
-                            ? ("Reference from table " + ex.RootTableNames.Join( '\'', '\'', "','" ) + " not found")
+                            ? ($"Reference from table {ex.RootTableNames.Join( '\'', '\'', "','" )} not found")
                             : "Any tables not found";
                 return (Graph.CreateError( error ));
             }
