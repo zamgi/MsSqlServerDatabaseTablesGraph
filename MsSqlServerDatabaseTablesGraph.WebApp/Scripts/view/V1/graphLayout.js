@@ -348,7 +348,7 @@ function ajaxError(data) {
     } catch (e) {
         msg = data;
     }
-    _notification.messageError($(msg).text(), "Error graphLayout.js::ajaxError");
+    _notification.messageError($(msg).text(), "Error GraphLayout.js::ajaxError");
 
 	if (console && console.log) {
 		console.log(data.responseText ? data.responseText : JSON.stringify(data));
@@ -358,5 +358,5 @@ function ajaxError(data) {
 //общая функция ошибки запроса
 window.onerror = function(msg, url, line) {
     if (typeof (msg) != "string") msg = JSON.stringify(msg);
-    _notification.messageError(msg, "Error: graphLayout.js::window.onerror");
+    _notification.messageError(msg, "Error: GraphLayout.js::window.onerror");
 };
