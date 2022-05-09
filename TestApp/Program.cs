@@ -22,7 +22,7 @@ namespace TestApp
                 RootTableNames = "Patient.Patients"
             };
             //var tables = DAL.GetTables( inputParams );
-            var refs   = DAL.GetRefs( inputParams );
+            var refs = DAL.GetRefs( inputParams );
             var grouped_refs = (from it in refs
                                 group it by it.FKName into g
                                 select g
