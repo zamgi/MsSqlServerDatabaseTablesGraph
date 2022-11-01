@@ -3,9 +3,8 @@
 
 @model DALGetRefsInputParams
 @{
-    if ( !string.IsNullOrWhiteSpace( Model.ServerName ) && !string.IsNullOrWhiteSpace( Model.DatabaseName ) ) {
-        ViewBag.Title = (!string.IsNullOrWhiteSpace( Model.RootTableNames ) ? Model.RootTableNames : "-= All tables =-") + ": " +
-                        Model.ServerName + "/" + Model.DatabaseName; 
+    if ( !Model.ServerName.IsNullOrWhiteSpace() && !Model.DatabaseName.IsNullOrWhiteSpace() ) {
+        ViewBag.Title = (!Model.RootTableNames.IsNullOrWhiteSpace() ? Model.RootTableNames : "-= All tables =-") + ": " + Model.ServerName + "/" + Model.DatabaseName;
     }
 }
 @section JavascriptImport {
@@ -38,13 +37,10 @@
         });
 
         function getGraphViewPortSize() {
-            var w = $("#svg_graph_div").innerWidth() * 2,
-                h = window.innerHeight * 2;
+            var w = $("#svg_graph_div").innerWidth() * 2, h = window.innerHeight * 2;
             return ({ w: w, h: h });
         };
-        function getGraphViewPortSelector() {
-            return ("#svg_graph_div");
-        };
+        function getGraphViewPortSelector() { return ("#svg_graph_div"); };
 
         function tryParseFloat(e, increment) {
             var $this = $(this).css("background-color", ""),
@@ -68,16 +64,9 @@
             }
             return (f);
         }
-        function distanceGraphChange(e) {
-            gvm.DistanceGraph(tryParseFloat.call(this, e, 10));
-        };
-        function gravityGraphChange(e) {
-            gvm.GravityGraph( tryParseFloat.call(this, e, 0.001) );
-        };
-        function chargeGraphChange(e) {
-            gvm.ChargeGraph( tryParseFloat.call(this, e, 10) );
-        };
-
+        function distanceGraphChange(e) { gvm.DistanceGraph(tryParseFloat.call(this, e, 10)); };
+        function gravityGraphChange(e) { gvm.GravityGraph( tryParseFloat.call(this, e, 0.001) ); };
+        function chargeGraphChange(e) { gvm.ChargeGraph( tryParseFloat.call(this, e, 10) ); };
     </script>
 }
 

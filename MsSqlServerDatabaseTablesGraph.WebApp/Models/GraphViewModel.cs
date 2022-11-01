@@ -34,11 +34,27 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         Directed = 1,
         Bidirectional = 2,
     }*/
+
     /// <summary>
     /// 
     /// </summary>    
     public sealed class Link
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public sealed class EqualityComparer : IEqualityComparer< Link >
+        {
+            public bool Equals( Link x, Link y ) => ((x.SourceNode == y.SourceNode && x.TargetNode == y.TargetNode) ||
+                                                     (x.SourceNode == y.TargetNode && x.TargetNode == y.SourceNode) &&
+                                                     (x.SourceFields == y.SourceFields && x.TargetFields == y.TargetFields) ||
+                                                     (x.SourceFields == y.TargetFields && x.TargetFields == y.SourceFields));
+
+            public int GetHashCode( Link obj ) => (obj.SourceNode.GetHashCode() ^ obj.TargetNode.GetHashCode() ^
+                                                   obj.SourceFields.GetHashCode() ^ obj.TargetFields.GetHashCode());
+
+        }
+
         public Link( int id ) => Id = id;
 
         [JsonProperty("id")]           public int Id;
@@ -48,26 +64,23 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         [JsonProperty("sourceFields")] public IEnumerable< string > SourceFields;
         [JsonProperty("targetFields")] public IEnumerable< string > TargetFields;
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    internal sealed class LinkEqualityComparer : IEqualityComparer< Link >
-    {
-        public bool Equals( Link x, Link y ) => ((x.SourceNode == y.SourceNode && x.TargetNode == y.TargetNode) ||
-                                                 (x.SourceNode == y.TargetNode && x.TargetNode == y.SourceNode) &&
-                                                 (x.SourceFields == y.SourceFields && x.TargetFields == y.TargetFields) ||
-                                                 (x.SourceFields == y.TargetFields && x.TargetFields == y.SourceFields));
 
-        public int GetHashCode( Link obj ) => (obj.SourceNode.GetHashCode() ^ obj.TargetNode.GetHashCode() ^
-                                               obj.SourceFields.GetHashCode() ^ obj.TargetFields.GetHashCode());
 
-    }
 
     /// <summary>
     /// 
     /// </summary>
     public sealed class Node
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public sealed class EqualityComparer : IEqualityComparer< Node >
+        {
+            public bool Equals( Node x, Node y ) => (x.Id == y.Id);
+            public int GetHashCode( Node obj ) => obj.Id;
+        }
+
         public Node( int id, string name, bool selected = false )
         {
             Id       = id;
@@ -80,13 +93,5 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         [JsonProperty("id")]       public int    Id;
         [JsonProperty("name")]     public string Name;
         [JsonProperty("selected")] public bool   Selected;
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    internal sealed class NodeEqualityComparer : IEqualityComparer< Node >
-    {
-        public bool Equals( Node x, Node y ) => (x.Id == y.Id);
-        public int GetHashCode( Node obj ) => obj.Id;
     }
 }

@@ -2,8 +2,8 @@
 @{
     Layout = null;
     ViewBag.Title = "HTTP 404";
-    var aspxerrorpath = Request[ "aspxerrorpath" ];
-    var missingUrl = !string.IsNullOrWhiteSpace( aspxerrorpath ) ? aspxerrorpath : Request.RawUrl;
+    var aspxErrorPath = Request[ "aspxerrorpath" ];
+    var missingUrl    = !aspxErrorPath.IsNullOrWhiteSpace() ? aspxErrorPath : Request.RawUrl;
 }
 <!DOCTYPE html>
 <html>

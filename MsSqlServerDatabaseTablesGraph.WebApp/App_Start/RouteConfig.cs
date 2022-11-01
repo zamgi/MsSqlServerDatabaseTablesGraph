@@ -27,10 +27,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
             routes.MapRoute(
                 name: "GraphView",
                 url: "{controller}/{action}",
-                defaults: new { 
-                      controller = "GraphView"
-                    , action     = "Index"
-                }
+                defaults: new { controller = "GraphView", action = "Index" }
             );
         }
     }

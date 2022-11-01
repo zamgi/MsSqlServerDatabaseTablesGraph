@@ -10,18 +10,9 @@ namespace MsSqlServerDatabaseTablesGraph
     internal sealed class RefsNotFoundException : Exception
     {
         public RefsNotFoundException( ICollection< string > rootTableNames )
-        {
-            if ( rootTableNames != null ) 
-            {
-                RootTableNames = rootTableNames.Where( _ => !string.IsNullOrWhiteSpace( _ ) ).Select( _ => _.Replace( "&apos;", "'" ).Replace( "&APOS;", "'" ) ).ToList();
-            }
-        }
+            => RootTableNames = rootTableNames?.Where( _ => !string.IsNullOrWhiteSpace( _ ) ).Select( _ => _.Replace( "&apos;", "'" ).Replace( "&APOS;", "'" ) ).ToList();
 
-        public ICollection< string > RootTableNames
-        {
-            get;
-            private set;
-        }
+        public ICollection< string > RootTableNames { get; }
     }
 
     /// <summary>
@@ -29,15 +20,7 @@ namespace MsSqlServerDatabaseTablesGraph
     /// </summary>
     internal sealed class TableNotExistsException : Exception
     {
-        public TableNotExistsException( string tableName )
-        {
-            TableName = (tableName != null) ? tableName.Replace( "&apos;", "'" ).Replace( "&APOS;", "'" ) : null;
-        }
-
-        public string TableName
-        {
-            get;
-            private set;
-        }
+        public TableNotExistsException( string tableName ) => TableName = (tableName != null) ? tableName.Replace( "&apos;", "'" ).Replace( "&APOS;", "'" ) : null;
+        public string TableName { get; }
     }
 }

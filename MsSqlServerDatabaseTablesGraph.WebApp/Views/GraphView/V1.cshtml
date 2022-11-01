@@ -3,9 +3,8 @@
 
 @model DALGetRefsInputParams
 @{
-    if ( !string.IsNullOrWhiteSpace( Model.ServerName ) && !string.IsNullOrWhiteSpace( Model.DatabaseName ) ) {
-        ViewBag.Title = (!string.IsNullOrWhiteSpace( Model.RootTableNames ) ? Model.RootTableNames : "-= All tables =-") + ": " +
-                        Model.ServerName + "/" + Model.DatabaseName; 
+    if ( !Model.ServerName.IsNullOrWhiteSpace() && !Model.DatabaseName.IsNullOrWhiteSpace() ) {
+        ViewBag.Title = (!Model.RootTableNames.IsNullOrWhiteSpace() ? Model.RootTableNames : "-= All tables =-") + ": " + Model.ServerName + "/" + Model.DatabaseName;
     }
 }
 @section CssImport {
@@ -93,13 +92,10 @@
         });
 
         function getGraphViewPortSize() {
-            var w = $("#graph").innerWidth(),
-                h = window.innerHeight;
+            var w = $("#graph").innerWidth(), h = window.innerHeight;
             return ({ w: w, h: h });
         };
-        function getGraphViewPortSelector() {
-            return ("#graph");
-        };
+        function getGraphViewPortSelector() { return ("#graph"); };
     </script>
 }
 

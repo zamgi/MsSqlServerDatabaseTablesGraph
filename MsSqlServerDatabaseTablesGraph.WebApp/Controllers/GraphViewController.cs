@@ -19,7 +19,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         public ActionResult V1( [FromUri] DALGetRefsInputParams inputParams )
         {
             inputParams.TryLoadFromCookies( System.Web.HttpContext.Current.Request );
-            DALGetRefsInputParams.ThrowIfWrong( inputParams );
+            DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
             return View( inputParams );
         }
@@ -28,7 +28,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         public ActionResult V2( [FromUri] DALGetRefsInputParams inputParams )
         {
             inputParams.TryLoadFromCookies( System.Web.HttpContext.Current.Request );
-            DALGetRefsInputParams.ThrowIfWrong( inputParams );
+            DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
             return View( inputParams );
         }

@@ -55,6 +55,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         public override string ToString() => ConnectionString;
 #endif
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -96,6 +97,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             }
         }
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -104,12 +106,10 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         public DALGetRefsInputParams() { }
         public DALGetRefsInputParams( string connectionString ) : base( connectionString ) { }
 
-        [JsonProperty("RootTableNames")] 
-        public string RootTableNames { get; set; }
-        [JsonIgnore] 
-        private ISet< string > _RootTableNamesSet;
-        [JsonIgnore] 
-        public ISet< string > RootTableNamesSet 
+        [JsonProperty("RootTableNames")]  public string RootTableNames { get; set; }
+
+        [JsonIgnore] private ISet< string > _RootTableNamesSet;
+        [JsonIgnore] public ISet< string > RootTableNamesSet 
         {
             get 
             {
@@ -217,8 +217,18 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
     /// <summary>
     /// 
     /// </summary>
-    public struct Table : IComparer< Table >
+    public struct Table 
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public sealed class Comparer : IComparer< Table >
+        {
+            public static Comparer Inst { get; } = new Comparer();
+            public Comparer() { }
+            public int Compare( Table x, Table y ) => string.Compare( x.Name, y.Name, true );
+        }
+
         public Table( string name ) : this()
         {
             if ( string.IsNullOrWhiteSpace( name ) ) throw (new ArgumentNullException( nameof(name) ));
@@ -226,13 +236,12 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             Name = name;
         }
 
-        [JsonProperty("name")]
-        public string Name { get; private set; }
+        [JsonProperty("name")] public string Name { get; private set; }
 #if DEBUG
         public override string ToString() => Name;
 #endif
-        public int Compare( Table x, Table y ) => string.Compare( x.Name, y.Name, true );
     }
+
     /// <summary>
     /// 
     /// </summary>    
@@ -241,11 +250,11 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         public TableCollection( ISet< Table > tables ) => Tables = tables;
         public TableCollection( Exception ex ) : base( ex ) { }
 
-        [JsonProperty("tables")]
-        public ISet< Table > Tables { get; private set; }
+        [JsonProperty("tables")] public ISet< Table > Tables { get; }
 
         public bool Contains( string tableName ) => Tables.Contains( new Table( tableName ) );
     }
+
     /// <summary>
     /// 
     /// </summary>    
@@ -254,8 +263,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         public DatabaseCollection( ISet< string > databases ) => Databases = databases;
         public DatabaseCollection( Exception ex ) : base( ex ) { }
 
-        [JsonProperty( "databases" )]
-        public ISet< string > Databases { get; private set; }
+        [JsonProperty("databases")] public ISet< string > Databases { get; }
     }    
 
     /// <summary>
@@ -271,15 +279,11 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         public string ForeignTableName { get; internal set; }
         public string ForeignColumn    { get; internal set; }
 
-        public static RefItem CreateForSingleTable( string tableName )
+        public static RefItem CreateForSingleTable( string tableName ) => new RefItem()
         {
-            var it = new RefItem()
-            {
-                Level            = 1,
-                TableName        = tableName,
-                ForeignTableName = tableName,
-            };
-            return (it);
-        }
+            Level            = 1,
+            TableName        = tableName,
+            ForeignTableName = tableName,
+        };
     }
 }

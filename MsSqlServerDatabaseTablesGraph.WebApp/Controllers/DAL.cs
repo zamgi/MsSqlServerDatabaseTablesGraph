@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 using MsSqlServerDatabaseTablesGraph.WebApp.Models;
 
@@ -156,6 +158,32 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
                 return (databases);
             }        
         }
+        public static async Task< ISet< string > > GetDatabases_Async( DALInputParams inputParams )
+        {
+            DALInputParams.ThrowIfWrong( inputParams, false );
+
+            inputParams.ConnectTimeout = CONNECT_TIMEOUT_3;
+
+            using ( var con = new SqlConnection( inputParams.ConnectionString ) )
+            using ( var cmd = con.CreateCommand() )
+            {
+                cmd.CommandType    = CommandType.Text;
+                cmd.CommandTimeout = COMMAND_TIMEOUT_5;
+                cmd.CommandText    = SQL_GET_DATABASES;
+
+                await con.OpenAsync().CAX();
+
+                var databases = new SortedSet< string >( StringComparer.Ordinal );
+                using ( var rd = await cmd.ExecuteReaderAsync().CAX() )
+                {
+                    for ( var idx = rd.GetOrdinal( "DatabaseName" ); rd.Read(); )
+                    {
+                        databases.Add( rd.GetString( idx ) );
+                    }
+                }
+                return (databases);
+            }        
+        }
 
         public static ISet< Table > GetTables( DALGetTablesInputParams inputParams )
         {            
@@ -170,8 +198,32 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
 
                 con.Open();
 
-                var tables = new SortedSet< Table >( default(Table) );
+                var tables = new SortedSet< Table >( Table.Comparer.Inst );
                 using ( var rd = cmd.ExecuteReader() )
+                {
+                    for ( var idx = rd.GetOrdinal( "TableName" ); rd.Read(); )
+                    {
+                        tables.Add( new Table( rd.GetString( idx ) ) );
+                    }
+                }
+                return (tables);
+            }
+        }
+        public static async Task< ISet< Table > > GetTables_Async( DALGetTablesInputParams inputParams )
+        {            
+            DALGetTablesInputParams.ThrowIfWrong( inputParams );
+
+            using ( var con = new SqlConnection( inputParams.ConnectionString ) )
+            using ( var cmd = con.CreateCommand() )
+            {
+                cmd.CommandType    = CommandType.Text;
+                cmd.CommandTimeout = COMMAND_TIMEOUT_15;
+                cmd.CommandText    = SQL_GET_TABLES;
+
+                await con.OpenAsync().CAX();
+
+                var tables = new SortedSet< Table >( Table.Comparer.Inst );
+                using ( var rd = await cmd.ExecuteReaderAsync().CAX() )
                 {
                     for ( var idx = rd.GetOrdinal( "TableName" ); rd.Read(); )
                     {
@@ -225,5 +277,52 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
                 return (refs);
             }
         }
+        public static async Task< ICollection< RefItem > > GetRefs_Async( DALGetRefsInputParams inputParams )
+        {
+            DALGetTablesInputParams.ThrowIfWrong( inputParams );
+
+            using ( var con = new SqlConnection( inputParams.ConnectionString ) )
+            using ( var cmd = con.CreateCommand() )
+            {
+                cmd.CommandType    = CommandType.Text;
+                cmd.CommandTimeout = inputParams.RootTableNamesSet.Any() ? COMMAND_TIMEOUT_60 : COMMAND_TIMEOUT_300;
+                cmd.CommandText    = string.Format( SQL_GET_REFS_BY_FOREIGN_TABLENAME
+                    , inputParams.RootTableNamesSet.Any() ? 0 : 1
+                    , '\'' + string.Join("','", inputParams.RootTableNamesSet.Select( table => table.Replace( "'", "''" ) )) + '\'' );
+
+                await con.OpenAsync().CAX();
+
+                var refs = new LinkedList< RefItem >();
+                using ( var rd = await cmd.ExecuteReaderAsync().CAX() )
+                {
+                    for ( int idx_1 = rd.GetOrdinal( "Level" ),
+                              idx_2 = rd.GetOrdinal( "IsSelfRefs" ),
+                              idx_3 = rd.GetOrdinal( "FKName" ),
+                              idx_4 = rd.GetOrdinal( "TableName" ),
+                              idx_5 = rd.GetOrdinal( "Column" ),
+                              idx_6 = rd.GetOrdinal( "ForeignTableName" ),
+                              idx_7 = rd.GetOrdinal( "ForeignColumn" ); 
+                          rd.Read(); )
+                    {
+                        var refItem = new RefItem()
+                        {
+                            Level            = rd.GetInt32( idx_1 ), 
+                            IsSelfRefs       = (rd.GetInt32( idx_2 ) != 0), 
+                            FKName           = rd.GetString( idx_3 ),
+                            TableName        = rd.GetString( idx_4 ),
+                            Column           = rd.GetString( idx_5 ),
+                            ForeignTableName = rd.GetString( idx_6 ),
+                            ForeignColumn    = rd.GetString( idx_7 ),
+                        };
+                        refs.AddLast( refItem );
+                    }
+                }
+                return (refs);
+            }
+        }
+
+
+        private static ConfiguredTaskAwaitable CAX( this Task t ) => t.ConfigureAwait( false );
+        private static ConfiguredTaskAwaitable< T > CAX< T >( this Task< T > t ) => t.ConfigureAwait( false );
     }
 }

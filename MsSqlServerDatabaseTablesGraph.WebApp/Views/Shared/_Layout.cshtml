@@ -1,6 +1,6 @@
 ﻿@using MsSqlServerDatabaseTablesGraph.WebApp.Properties
 @{
-    var IsView1 = (Request.Path.IndexOf( "/V1", StringComparison.InvariantCultureIgnoreCase ) != -1);
+    var IsView1 = Request.Path.ContainsEx( "/V1" );
 }
 <!DOCTYPE html>
 <html>
@@ -427,8 +427,7 @@
     <script id="svg-support-ie" type="text/javascript">
         if ( <!SvgNotImlpMessageWasShowed ) {
             SvgNotImlpMessageWasShowed = true;
-            setTimeout( function() { alert("Ваш браузер не поддерживает отображение векторной графики.\n"+
-                                           "Пожалуйста воспользуйтесь более современным браузером"); }, 10 );
+            setTimeout( function() { alert("Your browser does not support vector graphics.\nPlease use a more modern browser."); }, 10 );
         }
     </script>
     <![endif]-->
@@ -437,8 +436,7 @@
         if (!SvgNotImlpMessageWasShowed) {
             if (!document.implementation || !document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")) {
                 SvgNotImlpMessageWasShowed = true;
-                alert("Ваш браузер не поддерживает отображение векторной графики.\n" +
-                      "Пожалуйста воспользуйтесь более современным браузером");
+                alert("Your browser does not support vector graphics.\nPlease use a more modern browser.");
             }
         }
     </script>

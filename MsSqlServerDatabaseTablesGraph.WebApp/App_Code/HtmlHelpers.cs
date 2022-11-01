@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Web.Mvc.Html;
+﻿using MsSqlServerDatabaseTablesGraph.WebApp.Properties;
 
 namespace System.Web.Mvc
 {
@@ -16,8 +14,12 @@ namespace System.Web.Mvc
             {
                 title = page.ViewBag.Title + ", ";
             }
-            title += MsSqlServerDatabaseTablesGraph.WebApp.Properties.Resource.LOGO_HEADER;
+            title += Resource.LOGO_HEADER;
             return (new MvcHtmlString( title ));
         }
+        public static bool IsNullOrEmpty( this string s ) { return string.IsNullOrEmpty( s ); }
+        public static bool IsNullOrWhiteSpace( this string s ) { return string.IsNullOrWhiteSpace( s ); }
+        public static bool ContainsEx( this string s, string s2 ) { return (s != null) && (s.IndexOf( s2, StringComparison.InvariantCultureIgnoreCase ) != -1); }
+        
     }
 }

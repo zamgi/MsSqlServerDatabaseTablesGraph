@@ -55,7 +55,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
             try
             {
                 inputParams.TryLoadFromCookies( HttpContext.Current.Request );
-                DALGetRefsInputParams.ThrowIfWrong( inputParams );
+                DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
                 return (GetTablesInternal( inputParams ));
             }
@@ -71,7 +71,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
             try
             {
                 inputParams.TryLoadFromCookies( HttpContext.Current.Request );
-                DALGetRefsInputParams.ThrowIfWrong( inputParams );
+                DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
                 #region [.check exists root-tables.]
                 if ( inputParams.RootTableNamesSet.Any() )
@@ -108,7 +108,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
 
 
                 var nodes = new Dictionary< string, Node >();
-                var links = new HashSet< Link >( new LinkEqualityComparer() );
+                var links = new HashSet< Link >( new Link.EqualityComparer() );
 
                 #region [.create-graph-nodes-&-links.]
                 var node_id = 0;
