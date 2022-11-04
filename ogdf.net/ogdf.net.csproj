@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net48;net60</TargetFrameworks>
+    <AssemblyName>ogdf.net</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>    
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <LangVersion>latest</LangVersion>    
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <OutputPath>bin\</OutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net4.8'">
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  
+</Project>

@@ -10,19 +10,14 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
     /// </summary>    
     public sealed class Graph : DALError
     {
-        public Graph() { }
+        public Graph( ICollection< Node > nodes, ICollection< Link > links ) => (Nodes, Links) = (nodes, links);
         private Graph( Exception ex ) : base( ex ) { }
         private Graph( string errorMessage ) : base( errorMessage ) { }
         public static Graph CreateError( Exception ex ) => new Graph( ex );
         public static Graph CreateError( string errorMessage ) => new Graph( errorMessage );
 
-        public IEnumerable< Node > nodes;
-        public IEnumerable< Link > links;
-
-
-        public int nodesTotalCount;
-        public int linksTotalCount;
-        public IEnumerable< string > documents;
+        [JsonProperty("nodes")] public ICollection< Node > Nodes { get; }
+        [JsonProperty("links")] public ICollection< Link > Links { get; }
     }
 
     /*/// <summary>

@@ -7,8 +7,8 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 
-using MsSqlServerDatabaseTablesGraph.WebApp.Models;
 using ogdf;
+using MsSqlServerDatabaseTablesGraph.WebApp.Models;
 using HttpGet  = System.Web.Http.HttpGetAttribute;
 using HttpPost = System.Web.Http.HttpPostAttribute;
 
@@ -176,14 +176,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                 }
                 #endregion
 
-                var graph = new Graph()
-                {
-                    links           = links,
-                    nodes           = nodes.Values,
-                    documents       = new string[ 0 ], //model.Documents.Select( fi => fi.Name ),
-                    linksTotalCount = 0, //model.AllMTSTermLinksCount,
-                    nodesTotalCount = 0, //model.AllMTSTermsCount,
-                };
+                var graph = new Graph( nodes.Values, links );
 
                 CalcGraphCoords( graph, inputParams.GraphWidth, inputParams.GraphHeight );
                 return (graph);
@@ -207,27 +200,43 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
 
         private static void CalcGraphCoords( Graph graph, int width, int height )
         {
+            var links = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList( /*graph.Links.Count*/ );
+            var points = GraphLayout.CalcSizedGraphLayout( links, ProcessingCoordsMode.pcmFMMMLayout );
+
+            //const double X_SHIFT = 25; const double X_CUT = 100;
+            //const double Y_SHIFT = 25; const double Y_CUT = 100;
+            foreach ( var node in graph.Nodes )
+            {
+                var pt = points[ node.Id ];
+                node.X = pt.x * width;  //node.X = X_SHIFT + pt.x * (width  - X_CUT);
+                node.Y = pt.y * height; //node.Y = Y_SHIFT + pt.y * (height - Y_CUT);
+            }
+
+            #region comm. prev.
             //---------------------------------------------------------------------//      
-            var gl = new GraphLayout();
+            /*
+            var ogdf = new GraphLayout();
 
-            foreach ( var node in graph.nodes )
+            foreach ( var node in graph.Nodes )
             {
-                gl.AddVertex( node.Id.ToString() );
+                ogdf.AddVertex( node.Id.ToString() );
             }
-            foreach ( var link in graph.links )
+            foreach ( var link in graph.Links )
             {
-                gl.AddVertexLink( link.SourceNode.ToString(), link.TargetNode.ToString() );
+                ogdf.AddVertexLink( link.SourceNode.ToString(), link.TargetNode.ToString() );
             }
 
-            gl.ProcessingCoords( ProcessingCoordsMode.pcmFMMMLayout );
+            ogdf.ProcessingCoords( ProcessingCoordsMode.pcmFMMMLayout );
 
-            foreach ( var node in graph.nodes )
+            foreach ( var node in graph.Nodes )
             {
-                var pt = gl.GetVertexCoords( node.Id.ToString() );
-                node.X = pt.X * width;
-                node.Y = pt.Y * height;
+                var pt = ogdf.GetVertexCoords( node.Id.ToString() );
+                node.X = pt.x * width;
+                node.Y = pt.y * height;
             }
+            //*/
             //---------------------------------------------------------------------//
+            #endregion
         }
     }
 
