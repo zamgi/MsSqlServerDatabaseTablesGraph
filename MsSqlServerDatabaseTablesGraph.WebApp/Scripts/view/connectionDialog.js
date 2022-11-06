@@ -145,11 +145,11 @@
 
         var $s  = $d.find('#ServerName'),
             $td = $s.parent().next('td'),
-            cancel = ($.trim(_selectivityValue('#ServerName')) == '');
+            cancel = ($.trim(_selectivityValue('#ServerName')) === '');
         $td.html( (cancel ? requiredHtml : '') );
-        var $s  = $d.find('#UserName.real');
+            $s  = $d.find('#UserName.real');
             $td = $s.parent().next('td');
-            cancel = ($.trim($s.val()) == '');
+            cancel = ($.trim($s.val()) === '');
         $td.html( (cancel ? requiredHtml : '') );
         if (cancel) {
             e.preventDefault();
@@ -240,7 +240,5 @@
         });
     };
 
-    return ({
-        Show: _fnShow
-    });
+    return { Show: _fnShow };
 };

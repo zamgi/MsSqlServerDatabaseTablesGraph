@@ -31,9 +31,7 @@
             this_.messageRemove();
             this_.dialogLoginClose();
         };
-        var fnFail = function () {
-            this_.dialogLogin();
-        };
+        var fnFail = function () { this_.dialogLogin(); };
         _sessionKeepAliver.Test(fnSuccess, fnFail);
     };
 
@@ -46,19 +44,15 @@
         if (cfg.ajaxLoaderPath) ajaxLoaderPath = cfg.ajaxLoaderPath;
         if (cfg.imagesRelativePath) {
             imagesRelativePath = cfg.imagesRelativePath;
-            if (imagesRelativePath[imagesRelativePath.length - 1] == '/') {
+            if (imagesRelativePath[imagesRelativePath.length - 1] === '/') {
                 imagesRelativePath = imagesRelativePath.substring(0, imagesRelativePath.length - 1);
             }
         }
-        if (cfg.appRootPath) {
-            this.setAppRootPath(cfg.appRootPath);
-        }
+        if (cfg.appRootPath) this.setAppRootPath(cfg.appRootPath);
     };
     self.setAppRootPath = function (appRootPath) {
         _AppRootPath = appRootPath || '/';
-        if (_AppRootPath[_AppRootPath.length - 1] != '/') {
-            _AppRootPath += '/';
-        }
+        if (_AppRootPath[_AppRootPath.length - 1] !== '/') _AppRootPath += '/';
     };
 
     self.messageInfo = function (message, title, hideTimeoutValue) {
@@ -66,24 +60,16 @@
     };
     self.messageError = function (message, title, messageErrorID) {
         var $s = this._message(title || '', message, false);
-        if (messageErrorID) {
-            $s.attr('wtf-msg-id', messageErrorID);
-        }
+        if (messageErrorID)  $s.attr('wtf-msg-id', messageErrorID);
     };
-    self.messageErrorNoLoadData = function (title) {
-        this.messageErrorWithButtons(_ErrorNoLoadDataMsg, title, { showRefreshButton: true, refreshButtonText: 'Загрузить' });
-    };
-    self.messageErrorSaveData = function (message) {
-        this._message(_ErrorSaveDataTitle, message, false);
-    };
+    self.messageErrorNoLoadData = function (title) { this.messageErrorWithButtons(_ErrorNoLoadDataMsg, title, { showRefreshButton: true, refreshButtonText: 'Загрузить' }); };
+    self.messageErrorSaveData = function (message) { this._message(_ErrorSaveDataTitle, message, false); };
     self.messageErrorWithButtons = function (message, title, config) {
         config = config || { showRefreshButton: true };
         var btns = (config.showRefreshButton ? GetBtnRefreshHtml(config.refreshButtonText) : '') +
                    (config.showLoginButton ? GetBtnLoginHtml(config.loginButtonText) : '');
         var $s = this._message(title || '', message + btns, false);
-        if (config.messageErrorID) {
-            $s.attr('wtf-msg-id', config.messageErrorID);
-        }
+        if (config.messageErrorID) $s.attr('wtf-msg-id', config.messageErrorID);
     };
     self.messageIsVisible = function (messageErrorID) {
         if (messageErrorID) {
@@ -103,7 +89,7 @@
     self.messageClose = function () {
         $(".notification-message").hide('fast');
 
-        if (messageHideTimeoutID != null) {
+        if (messageHideTimeoutID !== null) {
             clearTimeout(messageHideTimeoutID);
             messageHideTimeoutID = null;
         }
@@ -140,15 +126,11 @@
                         "<tr> <td/> <td><span>...</span></td> <td/> </tr>" +
                     "</table></div>").appendTo($(document.body));
         }
-        $s.find("i").click(function () {
-            $s.hide('fast', function () {
-                $s.remove();
-            });
-        });
+        $s.find("i").click(function () { $s.hide('fast', function () { $s.remove(); }); });
 
         if (isInfo) {
             $s.addClass("notification-message-info");
-            if (typeof (hideTimeoutValue) == "undefined" || hideTimeoutValue === null) {
+            if (typeof (hideTimeoutValue) === "undefined" || hideTimeoutValue === null) {
                 hideTimeoutValue = messageHideTimeoutValue;
             } else {
                 hideTimeoutValue = parseInt(hideTimeoutValue);
@@ -170,7 +152,7 @@
     };
     self._message2Container = function (title, message, isInfo) {
         var $c = $(".notification-message-container");
-        if ($c.length == 0) {
+        if (!$c.length) {
             $c = $("<div class='notification-message-container'></div>").appendTo($(document.body));
         }
 
@@ -185,8 +167,7 @@
         $s.find("i").click(function () {
             $s.hide('fast', function () {
                 $s.remove();
-                if ($c.children().length == 0)
-                    $c.remove();
+                if (!$c.children().length) $c.remove();
             });
         });
 
@@ -203,7 +184,7 @@
     };
     var getOrCreateDialogBaseHtml = function (notificationDialogClass) {
         var $d = $('.' + notificationDialogClass);
-        if ($d.length == 0) {
+        if (!$d.length) {
             $d = $('<div class="notification-dialog ' + notificationDialogClass + '"><span>&nbsp;</span></div>');
             return { $d: $d, created: true };
         } else {
@@ -215,22 +196,13 @@
     self.dialogError = function (msg, title, fnClose) {
         var t = getOrCreateDialogBaseHtml('notification-dialog-error');
         t.$d.find("span").html(msg);
-        var buttons = {};
-        buttons[buttonOk] = function () {
-            $(this).dialog("close");
-        };
-
         return t.$d.dialog({
             minWidth: $(window).width() / 2,
-            title: title || "",
-            resizable: true,
-            modal: true,
-            buttons: buttons,
+            title: title || "", resizable: true, modal: true,
+            buttons: { buttonOk: function () { $(this).dialog("close"); } },
             close: function () {
-                if (fnClose != null) fnClose();
-                if (t.created) {
-                    t.$d.remove();
-                }
+                if (fnClose) fnClose();
+                if (t.created) t.$d.remove();
             }
         });
     };
@@ -238,78 +210,50 @@
     self.dialogInfo = function (msg, title, fnClose, size) {
         var t = getOrCreateDialogBaseHtml('notification-dialog-info');
         t.$d.find("span").html(msg);
-        var buttons = {};
-        buttons[buttonOk] = function () {
-            $(this).dialog("close");
-        };
-
         return t.$d.dialog({
-            title: title || "",
-            resizable: true,
-            modal: true,
+            title: title || "", resizable: true, modal: true,
             height: (size && size.height) ? size.height : undefined,
             width: (size && size.width) ? size.width : 550,
-            buttons: buttons,
+            buttons: { buttonOk: function () { $(this).dialog("close"); } },
             close: function () {
                 if (fnClose) fnClose();
-                if (t.created) {
-                    t.$d.remove();
-                }
+                if (t.created) t.$d.remove();
             }
         });
     };
     //Диалог ожидания
     self.dialogWait = function (title, fnCancel) {
         var t = getOrCreateDialogBaseHtml('notification-dialog-wait');
-        t.$d.get(0).close = function () {
-            t.$d.dialog("close");
-        };
-        var buttons = {};
-        if (fnCancel != null)
-            buttons[buttonCancel] = function () {
-                $(this).dialog("close");
-            };
-
+        t.$d.get(0).close = function () { t.$d.dialog("close"); };
         return t.$d.dialog({
             dialogClass: 'notification-dialog-wait-root',
-            title: title || "",
-            resizable: false,
-            modal: true,
-            buttons: buttons,
+            title: title || "", resizable: false, modal: true,
+            buttons: { buttonCancel: (fnCancel ? function () { $(this).dialog("close"); } : undefined) },
             close: function () {
-                if (fnCancel != null) fnCancel();
-                if (t.created) {
-                    t.$d.remove();
-                }
+                if (fnCancel) fnCancel();
+                if (t.created) t.$d.remove();
             }
         });
     };
     //Диалог -вопрос
     self.dialogQuest = function (msg, title, fnYes, fnNo, fnCancel, size, eventDialogOpen) {
-        var hasYes = false;
-        var hasNo = false;
+        var hasYes = false, hasNo = false;
 
         var t = getOrCreateDialogBaseHtml('notification-dialog-quest');
         t.$d.find("span").html(msg);
-        var buttons = {};
-        buttons[buttonYes] = function () {
-            hasYes = true;
-            $(this).dialog("close");
-        };
-        buttons[buttonNo] = function () {
-            hasNo = true;
-            $(this).dialog("close");
-        };
-
-        if (fnCancel)
-            buttons[buttonCancel] = function () {
+        var buttons = {
+            buttonYes: function () {
+                hasYes = true;
                 $(this).dialog("close");
-            };
-
+            },
+            buttonNo: function () {
+                hasNo = true;
+                $(this).dialog("close");
+            },
+            buttonCancel: (fnCancel ? function () { $(this).dialog("close"); } : undefined)
+        };
         return t.$d.dialog({
-            title: title || "",
-            resizable: true,
-            modal: true,
+            title: title || "", resizable: true, modal: true,
             open: eventDialogOpen || function () { },
             height: (size && size.height) ? size.height : undefined,
             width: (size && size.width) ? size.width : 400,
@@ -321,15 +265,13 @@
                     fnYes();
                 else if (fnCancel)
                     fnCancel();
-                if (t.created) {
-                    t.$d.remove();
-                }
+
+                if (t.created) t.$d.remove();
             }
         });
     };
     self.dialogConnection2DB = function (cfg) {
-        var hasYes = false;
-        var hasNo = false;
+        var hasYes = false, hasNo = false;
 
         var t = getOrCreateDialogBaseHtml('notification-dialog-connection-to-db');
         t.$d.find("span").html(cfg.msg);
@@ -356,15 +298,11 @@
         if (cfg.fnCancel)
             buttons[(cfg.buttonCancel || buttonCancel)] = {
                 text: (cfg.buttonCancel || buttonCancel), 'dialog-cancel-button': true,
-                click: function () {
-                    $(this).dialog("close");
-                }
+                click: function () { $(this).dialog("close"); }
             };
 
         return t.$d.dialog({
-            title: cfg.title || "",
-            resizable: true,
-            modal: true,
+            title: cfg.title || "", resizable: true, modal: true,
             open: cfg.eventDialogOpen || function () { },
             height: (cfg.size && cfg.size.height) ? cfg.size.height : undefined,
             width: (cfg.size && cfg.size.width) ? cfg.size.width : 400,
@@ -378,9 +316,7 @@
                     cfg.fnYes();
                 else if (cfg.fnCancel)
                     cfg.fnCancel();
-                if (t.created) {
-                    t.$d.remove();
-                }
+                if (t.created) t.$d.remove();
             }
         });
     };
@@ -389,8 +325,8 @@
         var data = { UserName: userName, Password: password };
 
         $.post(_AppRootPath + _UserLoginAjaxUrl, data)
-         .done(function (resp, textStatus, jqXHR) {
-             if (typeof resp != 'object') {
+         .done(function (resp) {
+             if (typeof (resp) !== 'object') {
                  fnFail("Ошибка входа => [typeof resp != 'object']");
              } else if (resp.Success) {
                  fnSuccess();
@@ -398,31 +334,26 @@
                  fnFail(resp.Exception);
              }
          })
-         .fail(function (jqXHR, textStatus, errorThrown) {
-             fnFail('Сетевая ошибка - приложение не доступно по сети');
-         });
+         .fail(function () { fnFail('Сетевая ошибка - приложение не доступно по сети'); });
     };
     self.dialogLogin = function () {
         $.showModalDialog({
-            dialogID: _DialogLoginID,
-            url: _AppRootPath + _UserLoginUrl + '?r=' + Math.random(),
+            dialogID: _DialogLoginID, url: _AppRootPath + _UserLoginUrl + '?r=' + Math.random(),
             showButtons: false, height: 370, width: 480, iframe_padding_bottom: 0,
             open: function (event, ui) {
                 var $frame = $(this);
                 $frame.load(function () {
                     var $form = $(this.contentWindow.document.body).find('form');
                     $form.find('input[type="submit"]').click(function () {
-                        var user = $form.find('input#UserName').val();
-                        var password = $form.find('input#Password').val();
+                        var user = $form.find('input#UserName').val(),
+                            password = $form.find('input#Password').val();
 
                         var $btn = $(this); $btn.hide();
                         _notification.showLoader($form);
                         $form.find('label#error-msg').remove();
 
                         makeLogin(user, password,
-                            function () {
-                                $frame.dialog('close');
-                            },
+                            function () { $frame.dialog('close'); },
                             function (msg) {
                                 $('<label id="error-msg" style="color: red">' + msg + '</label>').appendTo($form);
                                 $btn.show();
@@ -437,11 +368,9 @@
     };
     self.dialogLoginClose = function () {
         var $s = $('div#' + _DialogLoginID);
-        if ($s.dialog) { $s.dialog('close'); }
+        if ($s.dialog) $s.dialog('close');
     }
-    self.dialogLoginIsVisible = function () {
-        return (0 < $('div#' + _DialogLoginID).length);
-    };
+    self.dialogLoginIsVisible = function () { return (0 < $('div#' + _DialogLoginID).length); };
 
     //Отображение индикатора загрузки
     self.showLoader = function (selector, showMany) {
@@ -450,13 +379,9 @@
         }
     };
     //проверка наличия индикатора загрузки
-    self.isLoaderVisible = function (selector) {
-        return (0 < $(selector).find(".ajax-loader").length);
-    };
+    self.isLoaderVisible = function (selector) { return (0 < $(selector).find(".ajax-loader").length); };
     //Скрытие индикатора загрузки
-    self.hideLoader = function (selector) {
-        $(selector).find(".ajax-loader").remove();
-    };
+    self.hideLoader = function (selector) { $(selector).find(".ajax-loader").remove(); };
 
     return (self);
 })();

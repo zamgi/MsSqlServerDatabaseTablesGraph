@@ -130,20 +130,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\GraphData.cs" />
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\GraphFrame.aspx.cs">
-      <DependentUpon>GraphFrame.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </None>
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\Layout.ashx.cs">
-      <DependentUpon>Layout.ashx</DependentUpon>
-    </None>
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\SvgGraph.aspx.cs">
-      <DependentUpon>SvgGraph.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </None>
     <Content Include="App_Code\HtmlConsts.cs" />
     <Compile Include="App_MatchCode\Extensions.cs" />
+    <Compile Include="App_MatchCode\Locker.cs" />
+    <Compile Include="App_MatchCode\Sync_primitives.cs" />
     <Compile Include="Controllers\DAL.cs" />
     <Compile Include="Controllers\GraphController.cs" />
     <Compile Include="Models\GraphViewModel.cs" />
@@ -213,19 +203,16 @@
     <Content Include="Content\view\V1\graphLayout\graph.css" />
     <Content Include="Content\view\V1\graphLayout\minimap.css" />
     <Content Include="Content\view\V1\graphLayout\style.css" />
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\GraphFrame.aspx" />
     <Content Include="Images\home.png" />
     <Content Include="Content\view\V1\graphLayout\minimap.png" />
     <Content Include="Content\view\V1\graphLayout\plus.gif" />
     <Content Include="Scripts\view\V1\graphLayout.js" />
     <Content Include="Scripts\view\V1\minimap.js" />
     <Content Include="Scripts\view\V1\overlapRemoval.js" />
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\SvgGraph.aspx" />
     <Content Include="Scripts\view\commonArea.js" />
     <Content Include="Content\_Layout.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\selectivity\fontawesome-webfont.woff.css" />
-    <None Include="Scripts\%28ak.graph%29\GraphLayout\Layout.ashx" />
     <None Include="Scripts\jquery\1.8.2\jquery.intellisense.js" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\refresh.png" />
@@ -246,16 +233,8 @@
     <Content Include="Scripts\_helpers_.js" />
     <Content Include="Scripts\jquery\1.8.2\jquery.js" />
     <Content Include="Scripts\jquery\1.8.2\jquery.min.js" />
-    <None Include="Scripts\jquery-val\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui\jquery.ui.datepicker-ru.js" />
-    <Content Include="Scripts\jquery-val\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery-val\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery-val\jquery.validate.js" />
-    <Content Include="Scripts\jquery-val\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery-val\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery-val\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\localStorage\localStorage.js" />
-    <Content Include="Scripts\modernizr\modernizr-2.6.2.js" />
     <Content Include="Scripts\spliter\jquery.splitter.css" />
     <Content Include="Scripts\spliter\jquery.splitter.js" />
     <Content Include="Scripts\spliter\spliter_bg.png" />

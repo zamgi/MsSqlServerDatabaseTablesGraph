@@ -6,7 +6,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
     /// <summary>
     /// 
     /// </summary>
-    public sealed class RouteConfig
+    public static class RouteConfig
     {
         public static void RegisterRoutes( RouteCollection routes )
         {

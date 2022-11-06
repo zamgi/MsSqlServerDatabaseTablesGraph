@@ -134,7 +134,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
 
         public static ISet< string > GetDatabases( DALInputParams inputParams )
         {
-            DALInputParams.ThrowIfWrong( inputParams, false );
+            DALInputParams.ThrowIfWrong( inputParams );
 
             inputParams.ConnectTimeout = CONNECT_TIMEOUT_3;
 
@@ -160,7 +160,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
         }
         public static async Task< ISet< string > > GetDatabases_Async( DALInputParams inputParams )
         {
-            DALInputParams.ThrowIfWrong( inputParams, false );
+            DALInputParams.ThrowIfWrong( inputParams );
 
             inputParams.ConnectTimeout = CONNECT_TIMEOUT_3;
 
@@ -320,7 +320,6 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
                 return (refs);
             }
         }
-
 
         private static ConfiguredTaskAwaitable CAX( this Task t ) => t.ConfigureAwait( false );
         private static ConfiguredTaskAwaitable< T > CAX< T >( this Task< T > t ) => t.ConfigureAwait( false );

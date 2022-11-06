@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
@@ -47,6 +49,23 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
                     if ( t == null )
                     {
                         t = getFunc();
+                        cache[ key ] = t;
+                    }
+                }
+            }
+            return (t);
+        }
+        public static async Task< T > Get_Async< T >( this Cache cache, string key, Func< Task< T > > getFunc ) where T : class
+        {
+            var t = (T) cache[ key ];
+            if ( t == null )
+            {
+                using ( await LockerAsync.By_Key( key ).CAX() )
+                {
+                    t = (T) cache[ key ];
+                    if ( t == null )
+                    {
+                        t = await getFunc().CAX();
                         cache[ key ] = t;
                     }
                 }
@@ -211,5 +230,8 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
             sex.DatabaseUserId = userId;
         }
         public static void SetDateTimeMarkerNow( this HttpSessionStateBase session ) => session[ MsSqlServerDatabaseTablesGraph.WebApp.SessionEX.DATETIME_MARKER_SESSION_KEY ] = DateTime.Now;
+
+        public static ConfiguredTaskAwaitable CAX( this Task t ) => t.ConfigureAwait( false );
+        public static ConfiguredTaskAwaitable< T > CAX<T>( this Task< T > t ) => t.ConfigureAwait( false );
     }
 }

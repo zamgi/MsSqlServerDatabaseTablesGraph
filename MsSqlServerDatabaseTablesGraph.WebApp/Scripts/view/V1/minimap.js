@@ -14,8 +14,7 @@
 		scaleCmb, stdScales, scaleOptVisible,
 		//размеры миникарты
 		mapWidth = 250,
-		mapHeight = 200,
-		t;
+		mapHeight = 200;
 
     map.create = function (graphObj, scaleBoxSelector) {
         graph = graphObj;

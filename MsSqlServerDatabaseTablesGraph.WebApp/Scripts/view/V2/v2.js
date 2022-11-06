@@ -140,7 +140,7 @@ function graphCreator(data, size) {
     };
 
     function node_dblclick(d) {
-        DAL.RootTableNames((typeof (d) == "object") ? d.name : d);
+        DAL.RootTableNames((typeof (d) === "object") ? d.name : d);
         //graphCreator();
 
         window.location = DAL.ToUrlV2(getGraphViewPortSize());
@@ -266,13 +266,13 @@ function graphCreator(data, size) {
                     .size([size.w, size.h]);
 
         if (_.UseD3ForceRendering) {
-            function force_dragstart(d) {
+            var force_dragstart = function (d) {
                 d3.select(this).classed("fixed", d.fixed = true);
             };
 
             _.ForceDrag = _.Force.drag().on("dragstart", force_dragstart);
         } else {
-            function getBBox() {
+            var getBBox = function() {
                 var box = _.SvgRect.node().getBBox();
                 return {
                     w: (box.width  - 70),// * graphScale,
@@ -281,7 +281,7 @@ function graphCreator(data, size) {
                 };
             };
             //вызывается при перетаскивании узла графа
-            function onDragEvent(d) {
+            var onDragEvent = function(d) {
                 d.x = d3.event.x;
                 d.y = d3.event.y;
                 var box = getBBox();
@@ -399,7 +399,7 @@ function graphCreator(data, size) {
     };
 
     function update(scale) {
-        if (typeof (scale) == "undefined") {
+        if (typeof (scale) === "undefined") {
             scale = 1.0;
         }
 
@@ -537,11 +537,11 @@ function graphCreator(data, size) {
             .text(function(d) { return (d.source + ' - ' + d.target); });
         */
         _.d3Links.on("mouseover", function (d) {
-                all_nodes_mouseover();
-                link_mouseover(d3.select(this));
-                var $nodes = d3.selectAll("#n-" + d.source.id + ",#n-" + d.target.id);
-                node_mouseover($nodes);
-            })
+                    all_nodes_mouseover();
+                    link_mouseover(d3.select(this));
+                    var $nodes = d3.selectAll("#n-" + d.source.id + ",#n-" + d.target.id);
+                    node_mouseover($nodes);
+                })
                  .on("mouseout", function (d) {
                      all_nodes_mouseout();
                      link_mouseout(d3.select(this));

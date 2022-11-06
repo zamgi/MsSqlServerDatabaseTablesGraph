@@ -1,16 +1,12 @@
-﻿String.prototype.trimText = function () {
-    return ((this + '').replace(/(^\s+)|(\s+$)/g, ''));
-};
-String.prototype._isEmpty_ = function () {
-    return ((this + '').replace(/(^\s+)|(\s+$)/g, '') == '');
-};
+﻿String.prototype.trimText = function () { return ((this + '').replace(/(^\s+)|(\s+$)/g, '')); };
+String.prototype._isEmpty_ = function () { return ((this + '').replace(/(^\s+)|(\s+$)/g, '') === ''); };
 String.prototype.insert = function (index, s) {
     if (0 < index)
         return (this.substring(0, index) + s + this.substring(index, this.length));
     return (s + this);
 };
 String.prototype.replaceAll = function (token, newToken, ignoreCase) {
-    var _token, s = this + '', i = -1;
+    var s = this + '', i = -1;
     if (typeof token === 'string') {
         if (ignoreCase) {
             token = token.toLowerCase();
@@ -26,12 +22,8 @@ String.prototype.substringEx = function (max) {
     if (!max) max = 497; var s = (this + '');
     return (((max + 3) < s.length) ? (s.substring(0, max) + '...') : s);
 };
-String.prototype.countOf = function (token) {
-    return (this.toUpperCase().split(token.toUpperCase()).length - 1);
-}
-String.prototype.contains = function (token) {
-    return (this.toLowerCase().indexOf(token.toLowerCase()) != -1);
-}
+String.prototype.countOf = function (token) { return (this.toUpperCase().split(token.toUpperCase()).length - 1); }
+String.prototype.contains = function (token) { return (this.toLowerCase().indexOf(token.toLowerCase()) !== -1); }
 String.prototype.insertByStep = function (token, step) {
     var i = 0, s = this.substr(i, step);
     for (i = step; i < this.length; i += step) {
@@ -42,7 +34,7 @@ String.prototype.trimEnd = function (token) {
     token = (token || ' ');    
     for (var s = this; token.length <= s.length;) {
         var end = s.substr(s.length - token.length, token.length);
-        if (end == token) {
+        if (end === token) {
             s = s.substr(0, s.length - token.length);
         } else {
             break;
@@ -79,24 +71,14 @@ var browserScrollSize = {
 };
 
 (function ($) {
-    $.fn.hasScrollBar = function () {
-        var e = this.get(0); return ({ vertical: (e.scrollHeight > e.clientHeight), horizontal: (e.scrollWidth  > e.clientWidth) });
-    };
-    $.fn.firstOrNull = function () {
-        return (this.length ? this.get(0) : null);
-    };
-    $.fn.focusByTimeout = function (timeout) {
-        var $t = this; setTimeout(function () { $t.focus(); }, timeout || 50); return ($t);
-    };
+    $.fn.hasScrollBar = function () { var e = this.get(0); return ({ vertical: (e.scrollHeight > e.clientHeight), horizontal: (e.scrollWidth  > e.clientWidth) }); };
+    $.fn.firstOrNull = function () { return (this.length ? this.get(0) : null); };
+    $.fn.focusByTimeout = function (timeout) { var $t = this; setTimeout(function () { $t.focus(); }, timeout || 50); return ($t); };
     $.fn.appendAtTitleAttr = function (title) {
-        $.each(this, function (_, o) {
-            var $o = $(o); var t = $o.attr('title'); $o.attr('title', (t || '') + title);
-        });
+        $.each(this, function (_, o) { var $o = $(o); var t = $o.attr('title'); $o.attr('title', (t || '') + title); });
         return (this);
     };
-    $.fn.getValueAndClear = function () {
-        var v = this.val(); this.val(''); return (v);
-    };
+    $.fn.getValueAndClear = function () { var v = this.val(); this.val(''); return (v); };
     $.fn.pushCancelButton4DialogByEscape = function (dialogID) {
         return this.keydown(function (ev) {
             if (((ev || event).keyCode === 27) && (window.self !== window.parent) && (window.parent.document)) { //ESCAPE; in dialog
@@ -105,40 +87,6 @@ var browserScrollSize = {
                 return (commonArea.CancelKeydownEvent(ev || event));
             }
         });
-    };
-    $.fn.pushOkButton4DialogReadonlyByEnter_CreateHTHandler = function (dialogID) {
-        return function (ev) {
-            if ((ev.keyCode === 13) && (window.self !== window.parent) && (window.parent.document)) { //ENTER; in dialog
-                $('#' + dialogID + ' .ui-dialog-buttonset button[ dialog-ok-button ]', window.parent.document).click();
-                ev.isImmediatePropagationEnabled = false;
-                return (commonArea.CancelKeydownEvent(ev));
-            }
-        };
-    };
-    $.fn.pushButtons4DialogByEnterAndEscape_CreateHTHandler = function (dialogID) { //ENTER & ESCAPE; in dialog
-        return function (ev) { /*this == htInstance*/
-            switch (ev.keyCode) {
-                case 13: //ENTER; in dialog
-                    if ((window.self !== window.parent) && (window.parent.document)) { 
-                        var e = this.getActiveEditor();
-                        if (e && !e._opened) {
-                            $('#' + dialogID + ' .ui-dialog-buttonset button[ dialog-ok-button ]', window.parent.document).click();
-                            ev.isImmediatePropagationEnabled = false;
-                            return (commonArea.CancelKeydownEvent(ev));
-                        }
-                    } break;
-                case 27: //ESCAPE; in dialog
-                    var e = this.getActiveEditor();
-                    if (e && e._opened) {
-                        //--important!--// ev.isImmediatePropagationEnabled = false;
-                        return (commonArea.CancelKeydownEvent(ev));
-                    } /*else if ((window.self !== window.parent) && (window.parent.document)) {
-                        $('#' + dialogID + ' .ui-dialog-buttonset button[ dialog-cancel-button ]', window.parent.document).click();
-                        return (commonArea.CancelKeydownEvent(ev));
-                    }*/
-                    break;
-            }
-        };
     };
 
     $.extend({
@@ -167,22 +115,13 @@ var browserScrollSize = {
             // other browser
             return false;
         },
-        detectFireFox: function () {
-            return (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1);
-        },
-        sumArray: function (array) {
-            var sum = 0; $.each(array, function (index, value) { sum += value; }); return (sum);
-        },
+        detectFireFox: function () { return (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1); },
+        sumArray: function (array) { var sum = 0; $.each(array, function (index, value) { sum += value; }); return (sum); },
         firstOrNull: function (array, propertyName) {
-            if (array && array.length != 0) {
+            if (array && array.length) {
                 return (propertyName ? array[0][propertyName] : array[0]);
             } return (null);
         },
-        deepCopyArray: function (array) {
-            var copy = []; $.each(array, function (i, a) { copy.push($.extend({}, a)); }); return (copy);
-        }
+        deepCopyArray: function (array) { var copy = []; $.each(array, function (i, a) { copy.push($.extend({}, a)); }); return (copy); }
     });
 })(jQuery);
-// do so that the plugin can be called $.pushOkButton4DialogReadonlyByEnter_CreateHTHandler(dialogID) instead of $().pushOkButton4DialogReadonlyByEnter_CreateHTHandler(dialogID)
-jQuery.pushOkButton4DialogReadonlyByEnter_CreateHTHandler = function (dialogID) { return (jQuery().pushOkButton4DialogReadonlyByEnter_CreateHTHandler(dialogID)); };
-jQuery.pushButtons4DialogByEnterAndEscape_CreateHTHandler = function (dialogID) { return (jQuery().pushButtons4DialogByEnterAndEscape_CreateHTHandler(dialogID)); };

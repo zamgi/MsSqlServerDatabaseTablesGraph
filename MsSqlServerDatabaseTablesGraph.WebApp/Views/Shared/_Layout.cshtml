@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>@this.GetTitle()</title>
     <link rel="shortcut icon" type="image/x-icon" href="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
-    <link rel="stylesheet" type="text/css" href="~/Content/_Layout.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <link rel="stylesheet"    type="text/css"     href="~/Content/_Layout.css?v@(HtmlConsts.JavascriptResourceVersion)" />
 
     @Styles.Render( "~/Content/css" )
     @Styles.Render( "~/Content/jquery-ui/css" )
@@ -219,7 +219,6 @@
     </style>
     @RenderSection("CssImport", false)
 
-    @Scripts.Render( "~/bundles/modernizr" )
     @Scripts.Render( "~/bundles/jquery" )
     @Scripts.Render( "~/bundles/jqueryui" )
     <script type="text/javascript" src="~/Scripts/spliter/jquery.splitter.js"></script>
@@ -446,7 +445,7 @@
             <div id="logo_header" class="vertical-text">
                 <div id="logo_header_subheader">
                     <img src="~/Images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
-                    <h3>@MsSqlServerDatabaseTablesGraph.WebApp.Properties.Resource.LOGO_HEADER</h3>
+                    <h3>@Resource.LOGO_HEADER</h3>
                 </div>
             </div>
 

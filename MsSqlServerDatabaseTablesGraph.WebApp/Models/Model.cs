@@ -21,7 +21,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             ConnectTimeout = builder.ConnectTimeout;
         }
 
-        public static void ThrowIfWrong( DALInputParams inputParams, bool checkDatabaseName = true )
+        public static void ThrowIfWrong( DALInputParams inputParams )
         {
             if ( inputParams == null ) throw (new ArgumentNullException( nameof(inputParams) ));
 
@@ -29,9 +29,9 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             if ( string.IsNullOrWhiteSpace( inputParams.UserName   ) ) throw (new ArgumentNullException( nameof(inputParams.UserName) ));
         }
 
-        public string ServerName { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public string ServerName     { get; set; }
+        public string UserName       { get; set; }
+        public string Password       { get; set; }
         public int?   ConnectTimeout { get; set; }
 
         public virtual string ConnectionString
@@ -156,8 +156,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
         protected DALError() { }
         protected DALError( Exception ex )
         {
-            var sqlEx = ex as SqlException;
-            if ( sqlEx == null )
+            if ( !(ex is SqlException sqlEx) )
             {
                 Error     = ex.ToString();
                 ErrorType = DALErrorTypeEnum.Common;
@@ -209,9 +208,9 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             ErrorType = DALErrorTypeEnum.Common;
         }
 
-        [JsonProperty("error")]     public string Error { get; private set; }
-        [JsonIgnore]                public DALErrorTypeEnum? ErrorType { get; private set; }
-        [JsonProperty("errorType")] public string ErrorTypeAsString => (ErrorType.HasValue ? ErrorType.Value.ToString() : null);
+        [JsonProperty("error")]     public string            Error     { get; }
+        [JsonIgnore]                public DALErrorTypeEnum? ErrorType { get; }
+        [JsonProperty("errorType")] public string            ErrorTypeAsString => (ErrorType.HasValue ? ErrorType.Value.ToString() : null);
     }
 
     /// <summary>
@@ -236,7 +235,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             Name = name;
         }
 
-        [JsonProperty("name")] public string Name { get; private set; }
+        [JsonProperty("name")] public string Name { get; }
 #if DEBUG
         public override string ToString() => Name;
 #endif

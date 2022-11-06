@@ -1,5 +1,5 @@
 ﻿function ModBanner() {
-    var _n2 = function (n) { n = n.toString(); return ((n.length == 1) ? ('0' + n) : n); };
+    var _n2 = function (n) { n = n.toString(); return ((n.length === 1) ? ('0' + n) : n); };
     var _getElapsed = function (timeSpan) {
         var days = Math.floor(timeSpan / (1000 * 60 * 60 * 24));
         timeSpan -= days * (1000 * 60 * 60 * 24);
@@ -68,13 +68,8 @@ var commonArea = {
     },
 
     animate: {
-        opacity: function ($s) {
-            return ($s.css({ opacity: '0.2' }).animate({ opacity: '1' }, 'slow'));
-        },
-        backgroundColor: function ($s) {
-            return ($s.css({ 'background-color': '#90EE90' })
-                      .animate({ 'background-color': 'white' }, 'slow', function () { $s.css('background-color', ''); }));
-        }
+        opacity: function ($s) { return ($s.css({ opacity: '0.2' }).animate({ opacity: '1' }, 'slow')); },
+        backgroundColor: function ($s) { return ($s.css({ 'background-color': '#90EE90' }).animate({ 'background-color': 'white' }, 'slow', function () { $s.css('background-color', ''); })); }
     },
 
     banner: new ModBanner(),
@@ -92,7 +87,7 @@ var commonArea = {
         commonArea.banner.Hide();
     },
     GetAjaxFailMessage: function (textStatus, errorThrown) {
-        if (textStatus === "parsererror" && errorThrown && errorThrown.toString() == "SyntaxError: Unexpected token <") {
+        if (textStatus === "parsererror" && errorThrown && errorThrown.toString() === "SyntaxError: Unexpected token <") {
             return (commonArea.LOST_SESSION_MESSAGE);
         }
         return (textStatus + (errorThrown ? (" - " + errorThrown) : ""));
@@ -106,10 +101,10 @@ var commonArea = {
          .done( function (resp, textStatus, jqXHR) {
              this_.EndSubmit();
 
-             if (typeof resp != "object") {
+             if (typeof (resp) !== "object") {
                 _notification.messageErrorSaveData( this_.LOST_SESSION_MESSAGE );
              } else if (resp.Success) {
-                 if (typeof successFunc == "function") {
+                 if (typeof (successFunc) === "function") {
                      successFunc( resp.data );
                  } else {
                      window.location.reload(true);

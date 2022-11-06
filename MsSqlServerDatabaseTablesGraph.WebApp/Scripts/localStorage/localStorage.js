@@ -1,26 +1,4 @@
-﻿if (typeof localStorage !== 'object') {
-    localStorage = {};
-}
-
-(function () {
-    'use strict';
-
-    if (typeof localStorage.getItem === 'undefined') {
-        localStorage.getItem = function (key) {
-            //$.get(...)
-            return (localStorageArray[key]);
-        }
-    }
-
-    if (typeof localStorage.setItem === 'undefined') {
-        localStorage.setItem = function (key, data) {
-            //$.post(...)
-            localStorageArray[key] = data;
-        }
-    }
-}());
-
-var localStorageEx = {
+﻿var localStorageEx = {
     verticalSpliter: {
         position: function (pos) {
             if (pos) {
@@ -32,7 +10,7 @@ var localStorageEx = {
         },
         isCollapsed: function (collapsed) {
             if (collapsed !== undefined) {
-                if (!!collapsed)
+                if (collapsed)
                     localStorage.setItem(this.KEY_ISCOLLAPSED, true);
                 else
                     localStorage.removeItem(this.KEY_ISCOLLAPSED);
@@ -51,9 +29,7 @@ var localStorageEx = {
                 return (null);
             }
         },
-        save: function (o) {
-            localStorage.setItem(this.KEY, JSON.stringify(o));
-        },
+        save: function (o) { localStorage.setItem(this.KEY, JSON.stringify(o)); },
         KEY: "sql-graph-vm"
     },
     DAL: {
@@ -64,9 +40,7 @@ var localStorageEx = {
                 return (null);
             }
         },
-        save: function (o) {
-            localStorage.setItem(this.KEY, JSON.stringify(o));
-        },
+        save: function (o) { localStorage.setItem(this.KEY, JSON.stringify(o)); },
         KEY: "sql-graph-dal"
     }
 };

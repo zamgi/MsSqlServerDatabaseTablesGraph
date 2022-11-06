@@ -1,21 +1,10 @@
 ﻿//общая функция ошибки запроса
 window.onerror = function (msg, url, line) {
-    if (typeof (msg) != "string") msg = JSON.stringify(msg);
+    if (typeof (msg) !== "string") msg = JSON.stringify(msg);
     _notification.messageError(msg, "Error: graphCreator.js::window.onerror");
 };
 
 function graphCreator(data, size) {
-    //разбор ответа сервера
-    //Поля ClusterNode:
-    //int id;
-    //string[] CatList;
-    //Guid[] DocList;
-    //string Name;
-
-    //Поля ClusterLink:
-    //int FromNodeID;
-    //int ToNodeID;
-    //string[] KeyWords;
     function parseSomeNet(data) {
         APP.SomeNet = {
             Nodes: data.Graph.Nodes,

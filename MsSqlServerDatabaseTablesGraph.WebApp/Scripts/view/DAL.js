@@ -49,11 +49,11 @@
             var a = [];
             for (var p in _Servers) {
                 var server = $.trim(p);
-                if (server != '') {
+                if (server !== '') {
                     a.push(server);
                 }
             }
-            if (_.ServerName && a.indexOf(_.ServerName) == -1) {
+            if (_.ServerName && a.indexOf(_.ServerName) === -1) {
                 a.push(_.ServerName);
             }
             if (!_Servers[_.ServerName]) { _Servers[_.ServerName] = {}; }
@@ -124,7 +124,7 @@
                     if (!_.UserName)     _.UserName     = (o.ActiveServer.UserName     || '').toString();
                     if (!_.Password)     _.Password     = (o.ActiveServer.Password     || '').toString();
                 }
-                if (typeof (o.Servers) == 'object') _Servers = o.Servers;
+                if (typeof (o.Servers) === 'object') _Servers = o.Servers;
                 /*if (!_.RootTableNames) {
                     var rootTableNames = (_Servers[_.ServerName] || {})[_.DatabaseName];
                     if (rootTableNames) {

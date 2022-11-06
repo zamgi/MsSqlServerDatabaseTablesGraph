@@ -7,9 +7,9 @@ using System.Web.Routing;
 
 namespace MsSqlServerDatabaseTablesGraph.WebApp
 {
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class WebApiApplication : HttpApplication
     {
         internal const string RETURN_URL = "returnUrl";

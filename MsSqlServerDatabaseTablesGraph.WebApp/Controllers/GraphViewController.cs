@@ -3,6 +3,7 @@ using System.Web.Mvc;
 
 using MsSqlServerDatabaseTablesGraph.WebApp.Models;
 
+using _HttpContext_ = System.Web.HttpContext;
 using HttpPost = System.Web.Http.HttpPostAttribute;
 using HttpGet  = System.Web.Http.HttpGetAttribute;
 
@@ -18,7 +19,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         [HttpPost, HttpGet, NoCache, NoOutputCache]
         public ActionResult V1( [FromUri] DALGetRefsInputParams inputParams )
         {
-            inputParams.TryLoadFromCookies( System.Web.HttpContext.Current.Request );
+            inputParams.LoadFromCookies( _HttpContext_.Current.Request );
             DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
             return View( inputParams );
@@ -27,7 +28,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         [HttpPost, HttpGet, NoCache, NoOutputCache]
         public ActionResult V2( [FromUri] DALGetRefsInputParams inputParams )
         {
-            inputParams.TryLoadFromCookies( System.Web.HttpContext.Current.Request );
+            inputParams.LoadFromCookies( _HttpContext_.Current.Request );
             DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
             return View( inputParams );

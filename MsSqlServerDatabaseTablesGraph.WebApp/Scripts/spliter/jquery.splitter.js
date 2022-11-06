@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-(function ($, undefined) {
+(function ($) {
     var count = 0;
     var spliter_id = null;
     var spliters = [];
@@ -35,11 +35,11 @@
         }, options || {});
         var cls;
         var children = this.children();
-        if (settings.orientation == 'vertical') {
+        if (settings.orientation === 'vertical') {
             panel_1 = children.first().addClass('left_panel');
             panel_2 = panel_1.next().addClass('right_panel');
             cls = 'vspliter';
-        } else if (settings.orientation == 'horizontal') {
+        } else if (settings.orientation === 'horizontal') {
             panel_1 = children.first().addClass('top_panel')
             panel_2 = panel_1.next().addClass('bottom_panel');
             cls = 'hspliter';
@@ -56,7 +56,7 @@
         var position;
         var self = $.extend(this, {
             position: (function () {
-                if (settings.orientation == 'vertical') {
+                if (settings.orientation === 'vertical') {
                     return function (n) {
                         if (n === undefined) {
                             return position;
@@ -68,7 +68,7 @@
                             panel_2.width(self.width() - n - sw);
                         }
                     };
-                } else if (settings.orientation == 'horizontal') {
+                } else if (settings.orientation === 'horizontal') {
                     return function (n) {
                         if (n === undefined) {
                             return position;
@@ -93,10 +93,10 @@
             destroy: function () {
                 spliter.unbind('mouseenter');
                 spliter.unbind('mouseleave');
-                if (settings.orientation == 'vertical') {
+                if (settings.orientation === 'vertical') {
                     panel_1.removeClass('left_panel');
                     panel_2.removeClass('right_panel');
-                } else if (settings.orientation == 'horizontal') {
+                } else if (settings.orientation === 'horizontal') {
                     panel_1.removeClass('top_panel');
                     panel_2.removeClass('bottom_panel');
                 }
@@ -121,10 +121,10 @@
 
         self.bind('spliter.resize', function () {
             var pos = self.position();
-            if (self.orientation == 'vertical' &&
+            if (self.orientation === 'vertical' &&
                 pos > self.width()) {
                 pos = self.width() - self.limit - 1;
-            } else if (self.orientation == 'horizontal' &&
+            } else if (self.orientation === 'horizontal' &&
                        pos > self.height()) {
                 pos = self.height() - self.limit - 1;
             }
@@ -134,7 +134,7 @@
         //inital position of spliter
         var m = settings.position.match(/^([0-9]+)(%)?$/);
         var pos;
-        if (settings.orientation == 'vertical') {
+        if (settings.orientation === 'vertical') {
             if (m[2]) {
                 pos = (width * +m[1]) / 100;
             } else {
@@ -143,7 +143,7 @@
             if (pos > width - settings.limit) {
                 pos = width - settings.limit;
             }
-        } else if (settings.orientation == 'horizontal') {
+        } else if (settings.orientation === 'horizontal') {
             //position = height/2;
             if (m[2]) {
                 pos = (height * +m[1]) / 100;
@@ -158,14 +158,14 @@
             pos = settings.limit;
         }
         self.position(pos);
-        if (spliters.length == 0) { // first time bind events to document
+        if (!spliters.length) { // first time bind events to document
             $(document.documentElement).bind('mousedown.spliter', function (e) {
                 if (spliter_id !== null) {
                     current_spliter = spliters[spliter_id];
                     $('<div class="splitterMask"></div>').insertAfter(current_spliter);
-                    if (current_spliter.orientation == 'horizontal') {
+                    if (current_spliter.orientation === 'horizontal') {
                         $('body').css('cursor', 'row-resize');
-                    } else if (current_spliter.orientation == 'vertical') {
+                    } else if (current_spliter.orientation === 'vertical') {
                         $('body').css('cursor', 'col-resize');
                     }
                     current_spliter.settings.onDragStart(e);
@@ -174,7 +174,7 @@
             }).bind('mouseup.spliter', function (e) {
                 $('div.splitterMask').remove();
                 $('body').css('cursor', 'auto');
-                if (current_spliter != null) {
+                if (current_spliter) {
                     current_spliter.settings.onDragEnd(e);
                     current_spliter = null;
                 }
@@ -184,7 +184,7 @@
                 if (current_spliter !== null) {
                     var limit = current_spliter.limit;
                     var offset = current_spliter.offset();
-                    if (current_spliter.orientation == 'vertical') {
+                    if (current_spliter.orientation === 'vertical') {
                         var x = e.pageX - offset.left;
                         if (x <= current_spliter.limit) {
                             x = current_spliter.limit + 1;
@@ -199,7 +199,7 @@
                             current_spliter.find('.spliter_panel').trigger('spliter.resize');
                             return false;
                         }
-                    } else if (current_spliter.orientation == 'horizontal') {
+                    } else if (current_spliter.orientation === 'horizontal') {
                         var y = e.pageY - offset.top;
                         if (y <= current_spliter.limit) {
                             y = current_spliter.limit + 1;

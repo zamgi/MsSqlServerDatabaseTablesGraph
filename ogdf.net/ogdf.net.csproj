@@ -15,5 +15,9 @@
   <ItemGroup Condition="'$(TargetFramework)'=='net4.8'">
     <Reference Include="System.Core" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
   
 </Project>

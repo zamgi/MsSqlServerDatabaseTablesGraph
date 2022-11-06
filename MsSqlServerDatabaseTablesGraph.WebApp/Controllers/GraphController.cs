@@ -3,12 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 
 using ogdf;
 using MsSqlServerDatabaseTablesGraph.WebApp.Models;
+
 using HttpGet  = System.Web.Http.HttpGetAttribute;
 using HttpPost = System.Web.Http.HttpPostAttribute;
 
@@ -19,17 +21,42 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
     /// </summary>
     public class GraphController : ApiController
     {
+#if USE_CACHE
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public DatabaseCollection GetDatabases( [FromUri] DALInputParams inputParams )
+        public Task< DatabaseCollection > GetDatabases( [FromUri] DALInputParams inputParams )
+        {
+            try
+            {
+                DALInputParams.ThrowIfWrong( inputParams );
+                return (HttpContext.Current.Cache.Get_Async( inputParams.ConnectionString + "-databases", 
+                        async () =>
+                        {
+                            var databases = await DAL.GetDatabases_Async( inputParams ).CAX();
+                            return (new DatabaseCollection( databases ));
+                        }));
+            }
+            catch ( Exception ex )
+            {
+                return (Task.FromResult( new DatabaseCollection( ex ) ));
+            }
+        }
+#else
+        [HttpPost, HttpGet, NoCache, NoOutputCache]
+        public async Task< DatabaseCollection > GetDatabases( [FromUri] DALInputParams inputParams )
         {
             try
             {
                 DALInputParams.ThrowIfWrong( inputParams );
 #if USE_CACHE
-                return (HttpContext.Current.Cache.Get( inputParams.ConnectionString + "-databases"
-                        , () => new DatabaseCollection( DAL.GetDatabases( inputParams ) ) ));
+                return (HttpContext.Current.Cache.Get_Async( inputParams.ConnectionString + "-databases", 
+                        async () =>
+                        {
+                            var databases = await DAL.GetDatabases_Async( inputParams );
+                            return (new DatabaseCollection( databases ));
+                        }));
 #else
-                return (new DatabaseCollection( DAL.GetDatabases( inputParams ) ));
+                var databases = await DAL.GetDatabases_Async( inputParams );
+                return (new DatabaseCollection( databases ));
 #endif
             }
             catch ( Exception ex )
@@ -37,46 +64,71 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                 return (new DatabaseCollection( ex ));
             }
         }
-
-        private TableCollection GetTablesInternal( DALGetTablesInputParams inputParams )
-        {
-#if USE_CACHE
-            return (HttpContext.Current.Cache.Get( inputParams.ConnectionString + "-tables"
-                        , () => new TableCollection( DAL.GetTables( inputParams ) ) ));
-#else
-            return (new TableCollection( DAL.GetTables( inputParams ) ));
 #endif
 
+#if USE_CACHE
+        private Task< TableCollection > GetTablesInternal_Async( DALGetTablesInputParams inputParams )
+            => HttpContext.Current.Cache.Get_Async( inputParams.ConnectionString + "-tables", 
+                        async () =>
+                        {
+                            var tables = await DAL.GetTables_Async( inputParams ).CAX();
+                            return new TableCollection( tables );
+                        });
+#else
+        private async Task< TableCollection > GetTablesInternal_Async( DALGetTablesInputParams inputParams )
+        {
+            var tables = await DAL.GetTables_Async( inputParams ).CAX();
+            return (new TableCollection( tables ));
         }
+#endif
 
+#if USE_CACHE
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public TableCollection GetTables( [FromUri] DALGetTablesInputParams inputParams )
+        public Task< TableCollection > GetTables( [FromUri] DALGetTablesInputParams inputParams )
         {
             try
             {
                 inputParams.TryLoadFromCookies( HttpContext.Current.Request );
                 DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
-                return (GetTablesInternal( inputParams ));
+                return (GetTablesInternal_Async( inputParams ));
             }
             catch ( Exception ex )
             {
-                return (new TableCollection( ex ));
+                return (Task.FromResult( new TableCollection( ex ) ));
             }
         }
-
+#else
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public Graph GetRefs( [FromUri] DALGetRefsInputParams inputParams )
+        public Task< TableCollection > GetTables( [FromUri] DALGetTablesInputParams inputParams )
         {
             try
             {
-                inputParams.TryLoadFromCookies( HttpContext.Current.Request );
+                inputParams.LoadFromCookies( HttpContext.Current.Request );
+                DALGetTablesInputParams.ThrowIfWrong( inputParams );
+
+                return (GetTablesInternal_Async( inputParams ));
+            }
+            catch ( Exception ex )
+            {
+                return (Task.FromResult( new TableCollection( ex ) ));
+            }
+        }
+#endif
+
+
+        [HttpPost, HttpGet, NoCache, NoOutputCache]
+        public async Task< Graph > GetRefs( [FromUri] DALGetRefsInputParams inputParams )
+        {
+            try
+            {
+                inputParams.LoadFromCookies( HttpContext.Current.Request );
                 DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
                 #region [.check exists root-tables.]
                 if ( inputParams.RootTableNamesSet.Any() )
                 {
-                    var tableCollection = GetTablesInternal( inputParams );
+                    var tableCollection = await GetTablesInternal_Async( inputParams );
                     foreach ( var rootTableName in inputParams.RootTableNamesSet )
                     {
                         if ( !tableCollection.Contains( rootTableName ) )
@@ -87,11 +139,11 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                 }
                 #endregion
 #if USE_CACHE
-                var refs = HttpContext.Current.Cache.Get( 
+                var refs = await HttpContext.Current.Cache.Get_Async( 
                     inputParams.ConnectionString + '-' + inputParams.RootTableNames
-                    , () => DAL.GetRefs( inputParams ) );
+                    , () => DAL.GetRefs_Async( inputParams ) );
 #else
-                var refs = DAL.GetRefs( inputParams );
+                var refs = await DAL.GetRefs_Async( inputParams );
 #endif
                 if ( !refs.Any() )
                 {
@@ -245,7 +297,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
     /// </summary>
     internal static class GraphApiControllerExtensions
     {
-        public static void TryLoadFromCookies( this DALGetTablesInputParams inputParams, HttpRequest request )
+        public static void LoadFromCookies( this DALGetTablesInputParams inputParams, HttpRequest request )
         {
             if ( inputParams.UserName.IsNullOrWhiteSpace() )
             {
@@ -256,9 +308,9 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                 inputParams.Password = request.GetCookieString( "Password" );
             }
         }
-        public static void TryLoadFromCookies( this DALGetRefsInputParams inputParams, HttpRequest request )
+        public static void LoadFromCookies( this DALGetRefsInputParams inputParams, HttpRequest request )
         {
-            ((DALGetTablesInputParams) inputParams).TryLoadFromCookies( request );
+            ((DALGetTablesInputParams) inputParams).LoadFromCookies( request );
 
             if ( inputParams.GraphHeight == 0 )
             {

@@ -5,7 +5,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
     /// <summary>
     /// 
     /// </summary>
-    public sealed class FilterConfig
+    public static class FilterConfig
     {
         public static void RegisterGlobalFilters( GlobalFilterCollection filters ) => filters.Add( new HandleErrorAttribute() );
     }

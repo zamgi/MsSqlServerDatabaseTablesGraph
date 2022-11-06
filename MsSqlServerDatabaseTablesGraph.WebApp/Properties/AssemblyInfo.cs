@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("zamgi")]
 [assembly: AssemblyProduct("MsSqlServerDatabaseTablesGraph.WebApp")]
-[assembly: AssemblyCopyright( "Copyright © zamgi 2016" )]
+[assembly: AssemblyCopyright("Copyright © zamgi 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
