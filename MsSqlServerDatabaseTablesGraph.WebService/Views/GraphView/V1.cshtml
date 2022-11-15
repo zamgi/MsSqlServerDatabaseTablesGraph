@@ -1,0 +1,116 @@
+﻿@using MsSqlServerDatabaseTablesGraph.WebService.Models;
+@using MsSqlServerDatabaseTablesGraph.WebService.Properties;
+
+@model DALGetRefsInputParams
+@{
+    if ( !Model.ServerName.IsNullOrWhiteSpace() && !Model.DatabaseName.IsNullOrWhiteSpace() ) {
+        ViewBag.Title = (!Model.RootTableNames.IsNullOrWhiteSpace() ? Model.RootTableNames : "-= All tables =-") + ": " + Model.ServerName + "/" + Model.DatabaseName;
+    }
+}
+@section CssImport {
+    @*<link rel="stylesheet" type="text/css" href="~/css/view/V1/graphLayout/style.css?v@(HtmlConsts.JavascriptResourceVersion)" />*@
+	@*<link rel="stylesheet" type="text/css" href="~/css/view/V1/graphLayout/form.css?v@(HtmlConsts.JavascriptResourceVersion)" />*@
+    <style type="text/css">
+        #scaleBox {
+	        position: absolute; 
+	        bottom: 3px; 
+	        right: 25px; 
+	        /*width: 100px;*/
+	        text-align: right;
+            font: 8pt Arial;
+        }
+        #graph {
+	        overflow: hidden;
+        }
+        .full-height {
+	        height: 100%;
+        }
+        .navButtons {
+	        position: absolute;
+	        top: 0;
+	        left: 20px;
+        }
+            .navButtons img {
+                width: 24px;
+                height: 24px;
+            }
+        .SemiTransparent {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+            .SemiTransparent:hover {
+                opacity: 1;
+            }
+    </style>
+    <link rel="stylesheet" type="text/css" href="~/css/view/V1/graphLayout/graph.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <link rel="stylesheet" type="text/css" href="~/css/view/V1/graphLayout/minimap.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+}
+@section JavascriptImport {
+    <script type="text/javascript" src="~/js/view/V1/d3.layout.xyz.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+	<script type="text/javascript" src="~/js/view/V1/minimap.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+	@*<script type="text/javascript" src="~/js/view/V1/overlapRemoval.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>*@
+    <script type="text/javascript" src="~/js/view/V1/graphLayout.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>
+    <script type="text/javascript" src="~/js/view/V1/graphCreator.js?v@(HtmlConsts.JavascriptResourceVersion)"></script>  
+    <script type="text/javascript">
+        $(function () {
+            $('#aliveGraph, #aliveGraphParams').parent('td').parent('tr').remove();
+
+            $('#useNodeMouseOverContrast').click(function () {
+                graph.useNodeMouseOverContrast( $(this).is(':checked') );
+            });            
+
+            $(window).resize(function () {
+                var size = getGraphViewPortSize();
+                d3.select("#graph svg").attr("width", size.w).attr("height", size.h);
+            });
+            $(window).trigger('resize');
+
+
+            $('body').on('graphNodeClick', function (e, d) {
+                console.log('graphNodeClick-event: ' + d);
+            })
+            .on('graphNodeDblclick', function (e, d) {
+                DAL.RootTableNames((typeof (d) == "object") ? d.title : d);
+
+                window.location = DAL.ToUrlV1(getGraphViewPortSize());
+                if (d3 && d3.event) { d3.event.cancelBubble = true; }
+            })
+            .on('graphLinkClick', function (e, d) {
+                $('#selectedLink_source').html("'" + d.source.title.replace(".", "<wbr/>.")/*.insertByStep("<wbr/>", 10)*/ + "'");
+                $('#selectedLink_target').html("'" + d.target.title.replace(".", "<wbr/>.") + "'");
+                $('#selectedLink_sourceFields').html(d.sourceFields.join("<br/>"));
+                $('#selectedLink_targetFields').html(d.targetFields.join("<br/>"));
+                $('#selectedLinkCaption').show();
+                commonArea.animate.opacity($('#selectedLink').show());
+            })
+            .on('graphLinkDblclick', function (e, d) {
+                console.log('graphLinkDblclick-event: ' + d);
+            });            
+        });
+
+        function getGraphViewPortSize() {
+            var w = $("#graph").innerWidth(), h = window.innerHeight;
+            return ({ w: w, h: h });
+        };
+        function getGraphViewPortSelector() { return ("#graph"); };
+    </script>
+}
+
+<div id="body">
+	<div id="graph">
+		<div class="navButtons">
+			<img id="BtHome" alt="" title="Reset zoom" class="SemiTransparent" src="~/images/home.png" />
+		</div>
+		<div id="scaleBox">
+			<select class="ui-widget ui-widget-content ui-corner-all">
+				<option value="0">100%</option>
+				<option value="1">100%</option>
+				<option value="1.5">150%</option>
+				<option value="2">200%</option>
+				<option value="3">300%</option>
+				<option value="5">500%</option>
+				<option value="10">1000%</option>
+			</select>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,44 @@
+﻿@using MsSqlServerDatabaseTablesGraph.WebService.Properties
+@{
+    Layout = null;
+    ViewBag.Title = "HTTP 404";
+    var aspxErrorPath = (string) this.Context.Request.Query[ "aspxerrorpath" ];
+    var missingUrl = !aspxErrorPath.IsNullOrWhiteSpace() ? aspxErrorPath : (string) this.Context.Request.Path;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>@this.GetTitle()</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <link rel="stylesheet" type="text/css" href="~/css/_Layout.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css?v@(HtmlConsts.JavascriptResourceVersion)" />
+    <script type="text/javascript" src="~/js/jquery-1.9.1.js"></script>
+</head>
+<body>
+    <noscript><div id="noscript">@Resource.NO_SCRIPT_CAPTION</div></noscript>
+    <div id="logo_header" class="vertical-text">
+        <div id="logo_header_subheader">
+            <img src="~/images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
+            <h3>@Resource.LOGO_HEADER</h3>
+        </div>
+    </div>
+
+    <div style="width: 50%; margin: auto; padding: 25px; text-align: center">
+        <div style="font-size: large">
+            <span style="color: red; font-weight: bold;">HTTP 404</span>            
+            <span> - страница не найдена</span>            
+        </div>
+        <div style="height: 10px;"></div>
+        <div>
+            <span> URL: <span style="text-decoration: underline; background-color: silver">@missingUrl</span></span>
+        </div>
+        <div style="height: 30px;"></div>
+        <div>
+            <a href="@Url.Content("~/")">На главную станицу</a>
+        </div>
+    </div>
+</body>
+</html>

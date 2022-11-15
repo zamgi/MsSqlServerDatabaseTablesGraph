@@ -1,0 +1,200 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
+	font: 8pt Arial;
+}
+
+.full-height {
+	height: 100%;
+}
+
+.center-screen {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
+.loader-icon {
+	margin-top: -50px;
+	margin-left: -125px;
+	width: 250px;
+	text-align: center;
+}
+
+.messageBlock {
+	width: 400px;
+	border: 1px solid #022f68;
+	padding: 2px;
+	margin: -100px 0 0 -200px;
+}
+
+.messageHeader {
+	font-family:tahoma;
+	color:White;
+	background-color:#022f68;
+	padding: 6px 10px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#messageText {
+	padding: 20px 10px;
+	text-align: center;
+}
+
+.messageLink {
+	padding-bottom: 20px;
+	text-align: center;
+}
+
+
+#graph {
+	overflow: hidden;
+}
+
+.panel {
+	overflow: auto;
+	padding: 5px;
+}
+
+.vsplitbar {
+	width: 6px;
+	background: #ccc;
+}
+
+/* Классы для левого меню */
+#leftMenu {
+	background: #eeffff
+}
+.menuHeader {
+	position: absolute;
+	overflow: hidden;
+	height: 71px;
+	width: 100%
+}
+#menuTitle {
+	background: #008 url("../Images/BackGrnd.gif") repeat-x;
+	height: 30px;
+	padding: 5px 0 0 0;
+}
+#menuTitle .titleText {
+	padding: 0 5px;
+	color: white;
+	font: bold 13px Arial;
+}
+.menuToolbarWrap {
+	height:34px;
+	overflow:hidden;
+	width:100%;
+}
+.menuToolbarWrap.bottom {
+	position: absolute;
+	bottom: 0;
+}
+.menuToolbar {
+	color: #483d8b;
+	background-color: #F0F8FF;
+	border: 1px solid #008;
+	padding: 0 3px;
+}
+.menuToolbarArea {
+	position: relative;
+	overflow: hidden;
+}
+.menuInner {
+	width: 150%;
+}
+#menuContent {
+	position: absolute;
+	top:70px;
+	bottom: 0px;
+	width: 100%
+}
+#menuContent.bottom {
+	bottom:35px;
+}
+#menuRows {
+	overflow:auto;
+	height: 100%
+}
+.navButtons {
+	position: absolute;
+	top: 5px;
+	left: 10px;
+}
+
+#scaleBox {
+	position: absolute; 
+	bottom: 3px; 
+	right: 25px; 
+	width: 100px; 
+	text-align: right
+}
+
+.ListItemImg {
+	margin-bottom: -3px;
+}
+
+.dialogHolder {
+	padding: 1px 0;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	position: absolute;
+}
+
+.SemiTransparent {
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+	cursor: pointer;
+}
+.SemiTransparent:hover {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	cursor: pointer;
+}
+
+.ThemeRow {
+	/*white-space: nowrap; */
+}
+.ThemeRow.selected {
+	background-color: #c1e0ff;
+}
+.ThemeRow.highlight {
+	background-color: #FFeeee;
+}
+.ThemeRow.selected.highlight {
+	background-color: #c1e0ff;
+}
+
+.Theme, .ThemePlatform {
+    font-size: 8pt;
+    cursor: pointer;
+    font-family: Arial;
+    text-align: left;
+    color: black;
+}
+.ThemePlatform {
+	color: Silver;
+}
+.ThemStat {
+    font-size: 8pt;
+    font-family: Arial;
+    text-align: left;
+    color: blue;
+}
+.ListItemImg {
+    width: 16px;
+    height: 16px;
+}
+.CombTheme {
+    font-size: 8pt;
+    cursor: pointer;
+    font-family: Arial;
+    text-align: left;
+    color: #000080;
+    font-style: italic;
+    font-weight: bold;
+}

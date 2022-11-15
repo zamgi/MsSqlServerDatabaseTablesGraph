@@ -1,0 +1,76 @@
+/* Стиль оформления экранных форм */
+.form {
+	font-size: 8pt;
+	font-family: Verdana, Arial, sans-serif;	
+}
+.form .head  {
+	font-size:14px;
+	font-weight:bold;
+	margin-bottom:8px;
+}
+.form .descr {
+	font-size:11px;
+	color:#666666;
+	margin-bottom:20px;
+	border-bottom:solid 1px #b7ddf2;
+	padding-bottom:10px;
+}
+.form .formRow {
+	clear:both;
+	overflow: hidden;
+}
+.form .label {
+	display:block;
+	text-align:right;
+	width:200px;
+	float:left;
+	clear:both;
+	font-family: Verdana, Arial, sans-serif;	
+	padding: 5px 10px 0 0;
+}
+.form .input,.form .element {
+	padding: 4px 2px;
+	width:250px;
+	background: white;
+}
+.form .fset {
+	font-size: 8pt;
+}
+.form .input {
+	margin:2px 5px 10px 0px;
+	float: left;
+}
+.form select.input {
+	width:256px;
+}
+.form .input.checkbox {
+	width: auto;
+	margin-top: 6px;
+	border: none;
+}
+.form .ui-spinner-input {
+	margin: 0;
+	background: none;
+}
+.form .ui-spinner {
+	margin:2px 5px 10px 0px;
+	float: left;
+}
+
+.form .radio {
+	float: left;
+	margin-left: 0px;
+}
+.form .radioLabel {
+	float:left;
+	font-size: 8pt;
+	font-weight:bold;
+	margin: 3px 0 0 3px;
+}
+
+.form .error {
+	color: red;
+}
+.form .picker {
+	width: 100px;
+}

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ogdf.net", "ogdf.net\ogdf.net.csproj", "{013778D7-D08B-475D-AB4D-ABACA81FC172}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsSqlServerDatabaseTablesGraph.WebService", "MsSqlServerDatabaseTablesGraph.WebService\MsSqlServerDatabaseTablesGraph.WebService.csproj", "{5D1E6EF6-D9FB-4F50-9D67-FCF42A543065}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{013778D7-D08B-475D-AB4D-ABACA81FC172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013778D7-D08B-475D-AB4D-ABACA81FC172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013778D7-D08B-475D-AB4D-ABACA81FC172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D1E6EF6-D9FB-4F50-9D67-FCF42A543065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D1E6EF6-D9FB-4F50-9D67-FCF42A543065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D1E6EF6-D9FB-4F50-9D67-FCF42A543065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D1E6EF6-D9FB-4F50-9D67-FCF42A543065}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

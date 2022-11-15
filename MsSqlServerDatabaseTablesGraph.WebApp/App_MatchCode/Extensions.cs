@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
-using System.Web.SessionState;
 using System.Web.UI;
-
-using Newtonsoft.Json.Converters;
 
 namespace MsSqlServerDatabaseTablesGraph.WebApp
 {
@@ -84,12 +81,15 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
 
         public static string GetCookieString( this HttpRequest request, string cookieName ) => request.Cookies[ cookieName ]?.Value;
         public static int?   GetCookieInt32 ( this HttpRequest request, string cookieName ) => (int.TryParse( request.Cookies[ cookieName ]?.Value, out var v ) ? v : null);
-        public static bool?  GetCookieBoolean( this HttpRequest request, string cookieName ) => (bool.TryParse( request.Cookies[ cookieName ]?.Value, out var v ) ? v : null);
+        //public static bool?  GetCookieBoolean( this HttpRequest request, string cookieName ) => (bool.TryParse( request.Cookies[ cookieName ]?.Value, out var v ) ? v : null);
 
         public static bool IsNullOrEmpty( this string s ) => string.IsNullOrEmpty( s );
         public static bool IsNullOrWhiteSpace( this string s ) => string.IsNullOrWhiteSpace( s );
-        public static string Join( this ICollection< string > strings, string left, string right, string separator ) => (left + string.Join( separator, strings ) + right);
+        //public static string Join( this ICollection< string > strings, string left, string right, string separator ) => (left + string.Join( separator, strings ) + right);
         public static string Join( this ICollection< string > strings, char left, char right, string separator ) => (left + string.Join( separator, strings ) + right);
+
+        public static ConfiguredTaskAwaitable CAX( this Task t ) => t.ConfigureAwait( false );
+        public static ConfiguredTaskAwaitable< T > CAX< T >( this Task< T > t ) => t.ConfigureAwait( false );
     }
 
     /// <summary>
@@ -110,6 +110,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
             base.OnResultExecuting( filterContext );
         }
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -122,116 +123,5 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
             Location = OutputCacheLocation.None;
             NoStore  = true;
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class dd_MM_yyyy_DateTimeConverter : IsoDateTimeConverter
-    {
-        private static dd_MM_yyyy_DateTimeConverter _Inst;
-        public static dd_MM_yyyy_DateTimeConverter Inst
-        {
-            get
-            {
-                if ( _Inst == null )
-                {
-                    lock ( typeof(dd_MM_yyyy_DateTimeConverter) )
-                    {
-                        if ( _Inst == null )
-                        {
-                            _Inst = new dd_MM_yyyy_DateTimeConverter();
-                        }
-                    }
-                }
-                return (_Inst); 
-            }
-        }
-
-        public dd_MM_yyyy_DateTimeConverter() => DateTimeFormat = "dd.MM.yyyy";
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    internal struct SessionEX
-    {
-        internal const string DATABASE_USERID_SESSION_KEY = "DatabaseUserId";
-        internal const string DATETIME_MARKER_SESSION_KEY = "DateTimeMarker";
-
-        private HttpSessionStateBase _Session;
-        public SessionEX( HttpSessionStateBase session ) => _Session = session;
-        public int  DatabaseUserId
-        {
-            get => int.Parse( Convert.ToString( _Session[ DATABASE_USERID_SESSION_KEY ] ) );
-            set => _Session[ DATABASE_USERID_SESSION_KEY ] = value;
-        }
-        public bool HasDatabaseUserId
-        {
-            get 
-            {
-                var uid = Convert.ToString( _Session[ DATABASE_USERID_SESSION_KEY ] );
-                return (int.TryParse( uid, out var id ) && (0 <= id));
-            }
-        }
-        public DateTime DateTimeMarker
-        {
-            get => Convert.ToDateTime( _Session[ DATETIME_MARKER_SESSION_KEY ] );
-            set => _Session[ DATETIME_MARKER_SESSION_KEY ] = value;
-        }
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    internal static class HttpContextSessionExtensions
-    {
-        private const string MISSING_DATABASE_USERID = "Отсутствует идентификатор пользователя базы данных. Возможно на сервере завершен сеанс. (MISSING_DATABASE_USERID).";
-
-        public static SessionEX SessionEX( this HttpContextBase httpContext ) => new SessionEX( httpContext.Session );
-        public static SessionEX AsSessionEX( this HttpSessionStateBase session ) => new SessionEX( session );
-
-        public static bool HasDatabaseUserId( this HttpSessionState session )
-        {
-            //if ( session != null )
-            //{
-                var uid = Convert.ToString( session[ MsSqlServerDatabaseTablesGraph.WebApp.SessionEX.DATABASE_USERID_SESSION_KEY ] );
-                return (int.TryParse( uid, out var id ) && (0 <= id));
-            //}
-            //return (false);
-        }
-        /*public static bool TryGetDatabaseUserId( this HttpSessionStateBase session, out int databaseUserId )
-        {
-            if ( session == null )
-            {
-                databaseUserId = default(int);
-                return (false);
-            }
-
-            var uid = Convert.ToString( session[ MsSqlServerDatabaseTablesGraph.WebApp.SessionEX.DATABASE_USERID_SESSION_KEY ] );
-            return (int.TryParse( uid, out databaseUserId ) && (0 <= databaseUserId));
-        }*/
-        public static int  GetDatabaseUserIdThrowIfMissing( this HttpSessionStateBase session )
-        {
-            if ( session == null )
-            {
-                throw (new InvalidOperationException( MISSING_DATABASE_USERID ));
-            }
-
-            var uid = Convert.ToString( session[ MsSqlServerDatabaseTablesGraph.WebApp.SessionEX.DATABASE_USERID_SESSION_KEY ] );
-            if ( !int.TryParse( uid, out var databaseUserId ) || (databaseUserId <= 0) )
-            {
-                throw (new InvalidOperationException( MISSING_DATABASE_USERID ));                
-            }
-            return (databaseUserId);
-        }
-        public static void SetDatabaseUserId( this HttpContextBase httpContext, int userId )
-        {
-            var sex = httpContext.SessionEX();
-            sex.DatabaseUserId = userId;
-        }
-        public static void SetDateTimeMarkerNow( this HttpSessionStateBase session ) => session[ MsSqlServerDatabaseTablesGraph.WebApp.SessionEX.DATETIME_MARKER_SESSION_KEY ] = DateTime.Now;
-
-        public static ConfiguredTaskAwaitable CAX( this Task t ) => t.ConfigureAwait( false );
-        public static ConfiguredTaskAwaitable< T > CAX<T>( this Task< T > t ) => t.ConfigureAwait( false );
     }
 }

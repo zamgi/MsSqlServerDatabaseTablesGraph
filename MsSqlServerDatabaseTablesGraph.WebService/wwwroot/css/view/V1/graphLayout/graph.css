@@ -1,0 +1,44 @@
+﻿/** Классы графа */
+.xyz_background {
+	fill: white;
+	stroke: gray;
+	stroke-width: 1;
+	stroke-dasharray: 1, 2;
+}
+.xyz_selection_box {
+	fill: blue;
+	fill-opacity: 0.2;
+	stroke: blue;
+	stroke-width: 1;
+}
+.xyz_node_selection {
+    pointer-events: none; 
+	stroke: blue;
+	stroke-width: 2;
+	fill: none;
+	display: none;
+}
+.xyz_node.selected .xyz_node_selection {
+	display: inline;
+}
+.xyz_link  {
+    stroke: #ccc; 
+    cursor: pointer;
+	fill: none;
+}
+.xyz_link.hover .xyz_link_path {
+    stroke: violet;
+}
+.xyz_node {
+    cursor: pointer;
+}
+.xyz_label {
+    /* pointer-events: none; */
+    font: 10px sans-serif;
+    fill: black;
+	padding: 0 5px;
+}
+.spacer {
+	clear: both;
+	height: 1px;
+}
