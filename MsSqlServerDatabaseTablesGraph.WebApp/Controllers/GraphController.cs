@@ -253,7 +253,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         private static void CalcGraphCoords( Graph graph, int width, int height )
         {
             var links = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList( /*graph.Links.Count*/ );
-            var points = GraphLayout.CalcSizedGraphLayout( links, ProcessingCoordsMode.pcmFMMMLayout );
+            var points = GraphLayout.CalcSizedGraphLayout( links, graph.Nodes.Count, ProcessingCoordsMode.FMMMLayout );
 
             //const double X_SHIFT = 25; const double X_CUT = 100;
             //const double Y_SHIFT = 25; const double Y_CUT = 100;

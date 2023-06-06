@@ -61,7 +61,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -154,11 +154,28 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\jquery-ui\themes-smoothness\jquery-ui.min.css" />
+    <Content Include="Content\jquery-ui\themes-smoothness\theme.css" />
     <Content Include="Content\view\commonArea.css" />
     <Content Include="Content\view\commonGraph.css" />
     <Content Include="Content\view\xzy-style.css" />
     <Content Include="Images\graph.png" />
     <Content Include="Images\no-graph.png" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery\jquery-3.6.4.min.js" />
     <Content Include="Scripts\view\DAL.js" />
     <Content Include="Scripts\view\V2\v2.js" />
     <Content Include="Views\GraphView\V2.cshtml" />
@@ -173,22 +190,6 @@
     <Content Include="Images\no-connection-to-db.png" />
     <Content Include="Images\rightArrow.gif" />
     <Content Include="Images\table.gif" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\jquery-ui.css" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\jquery-ui.min.css" />
-    <Content Include="Content\jquery-ui\1.11.4\themes\smoothness\theme.css" />
     <Content Include="Images\busy.gif" />
     <Content Include="Images\loading.gif" />
     <Content Include="Content\notifications\css\notifications.css" />
@@ -213,7 +214,6 @@
     <Content Include="Content\_Layout.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\selectivity\fontawesome-webfont.woff.css" />
-    <None Include="Scripts\jquery\1.8.2\jquery.intellisense.js" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\refresh.png" />
     <Content Include="Images\roller.gif" />
@@ -221,19 +221,10 @@
     <Content Include="Scripts\view\connectionDialog.js" />
     <Content Include="Scripts\d3js\d3.v3-5-17.js" />
     <Content Include="Scripts\d3js\d3.v3-5-17.min.js" />
-    <Content Include="Scripts\jquery-ui\1.11.4\dialogextend\jquery.dialogextend.js" />
-    <Content Include="Scripts\jquery-ui\1.11.4\jquery-ui.js" />
-    <Content Include="Scripts\jquery-ui\1.11.4\jquery-ui.min.js" />
-    <Content Include="Scripts\jquery-ui\1.11.4\dialogextend\jquery.dialogextend.min.js" />
-    <Content Include="Scripts\jquery-ui\1.11.4\jquery.showModalDialog.js" />
-    <Content Include="Scripts\jquery\jquery.cookie.js" />
     <Content Include="Scripts\notifications\notifications.js" />
     <Content Include="Content\selectivity\selectivity-full.min.css" />
     <Content Include="Scripts\selectivity\selectivity-full.min.js" />
     <Content Include="Scripts\_helpers_.js" />
-    <Content Include="Scripts\jquery\1.8.2\jquery.js" />
-    <Content Include="Scripts\jquery\1.8.2\jquery.min.js" />
-    <Content Include="Scripts\jquery-ui\jquery.ui.datepicker-ru.js" />
     <Content Include="Scripts\localStorage\localStorage.js" />
     <Content Include="Scripts\spliter\jquery.splitter.css" />
     <Content Include="Scripts\spliter\jquery.splitter.js" />

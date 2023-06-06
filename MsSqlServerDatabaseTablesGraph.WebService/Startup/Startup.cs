@@ -104,7 +104,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService
 
                 if ( address != null )
                 {
-                    using ( Process.Start( new ProcessStartInfo( address.TrimEnd('/') + "/index.html" /*"http://localhost:1234"*/ ) { UseShellExecute = true } ) ) { };
+                    using ( Process.Start( new ProcessStartInfo( address.TrimEnd('/') + '/'  ) { UseShellExecute = true } ) ) { };
                 }                
             }
             #endregion

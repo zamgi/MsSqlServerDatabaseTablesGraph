@@ -1,5 +1,4 @@
-﻿//Разметка графа по требования сервиса АК
-d3.layout.xyz = function() {
+﻿d3.layout.xyz = function() {
     var graph = {},
         event = d3.dispatch(
             'nodeClick',  //клик по узлу графа
@@ -64,9 +63,7 @@ d3.layout.xyz = function() {
     };
     
     //возврат списка SVG элементов ребер графа
-    graph.getLinkElems = function() {
-        return linkElems;
-    };
+    graph.getLinkElems = function() { return linkElems; };
     
     //задать/считать список ребер графа
     //поля элементов:
@@ -468,21 +465,20 @@ d3.layout.xyz = function() {
                         mouseover_node_ids.push( "#n-" + link.source.id );
                     }
                 }
-                link_mouseover( d3.selectAll(mouseover_link_ids.join(",")) );
-                node_mouseover( d3.selectAll(mouseover_node_ids.join(",")) );
+                if (mouseover_link_ids.length) link_mouseover( d3.selectAll(mouseover_link_ids.join(",")) );
+                if (mouseover_node_ids.length) node_mouseover( d3.selectAll(mouseover_node_ids.join(",")) );
             })
             .on("mouseout", function (d) {
                 all_nodes_mouseout();
                 node_mouseout( d3.select(this) ); 
-                link_mouseout( d3.selectAll(mouseover_link_ids.join(",")) );
-                node_mouseout( d3.selectAll(mouseover_node_ids.join(",")) );
+                if (mouseover_link_ids.length) link_mouseout( d3.selectAll(mouseover_link_ids.join(",")) );
+                if (mouseover_node_ids.length) node_mouseout( d3.selectAll(mouseover_node_ids.join(",")) );
             });
             //.on("mouseover.graph", onMouseOver)
             //.on("mouseout.graph", onMouseOut)
         d.attr("id", function (d) { return ("n-" + d.id); }); //---function (d) { return d.id ? d.id : "n" + d.index; });
         //иконка узла
-        enter.append("svg:image")
-            .attr("class", "xyz_icon");
+        enter.append("svg:image").attr("class", "xyz_icon");
         d.select("image.xyz_icon")
             .attr("transform", function (d) { 
                 return d.scale == 1 ? null : "scale(" + d.scale + ")"; 
@@ -772,7 +768,7 @@ d3.layout.xyz = function() {
                 d3.select(this)
                     .append("svg:image")
                     .classed("xyz_marker", true)
-                    .attr("xlink:href", config.appRootPath + "Content/view/V1/graphLayout/plus.gif")
+                    .attr("xlink:href", config.appRootPath + "css/view/V1/graphLayout/plus.gif")
                     .attr("x", d.iconWidth / 2 + 2)
                     .attr("y", -d.iconHeight / 2 - 3)
                     .attr("width", "9")

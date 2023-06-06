@@ -12,8 +12,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="~/images/favicon.ico?v@(HtmlConsts.JavascriptResourceVersion)" />
     <link rel="stylesheet"    type="text/css"     href="~/css/_Layout.css?v@(HtmlConsts.JavascriptResourceVersion)" />
     <link rel="stylesheet"    type="text/css"     href="~/css/site.css?v@(HtmlConsts.JavascriptResourceVersion)" />
-    <link rel="stylesheet" type="text/css" href="~/css/jquery-ui/1.11.4/themes/smoothness/jquery-ui.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/jquery-ui/1.11.4/themes/smoothness/theme.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/jquery-ui/themes-smoothness/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/jquery-ui/themes-smoothness/theme.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="~/js/spliter/jquery.splitter.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/selectivity/selectivity-full.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/selectivity/font-awesome.css" />
@@ -30,67 +30,28 @@
         }
     </style>
     <style id="-body-css" type="text/css">
-        #body {
-            height: 100%;
-            background-color: beige;
-        }
-        table.dal-params {
-            white-space: nowrap;
-            width: 100%;
-            margin: 0;
-        }
-            table.dal-params tr {
-                border-bottom: 1px solid silver;
-            }
-                table.dal-params tr:first-child {
-                    border-top: 1px solid silver;
-                }
-            table.dal-params td {
-                padding: 0.25em 0em;
-            }                
-            table.dal-params td.width100 {
-                width: 100%
-            }
-            table.dal-params td.right {
-                text-align: right;
-                padding-right: 5px;
-                width: 1px;
-            }
-            /*table.dal-params td:nth-child(2n) {
-                width: 100%
-            }
-            table.dal-params td:nth-child(2n+1) {
-                text-align: right;
-                padding-right: 5px;
-            }*/
-        table.graph-params {
-           margin-top: 5px;
-        }
+        #body { height: 100%; background-color: beige; }
+        table.dal-params { white-space: nowrap; width: 100%; margin: 0; }
+            table.dal-params tr { border-bottom: 1px solid silver; }
+                table.dal-params tr:first-child { border-top: 1px solid silver; }
+            table.dal-params td { padding: 0.25em 0em; }
+            table.dal-params td.width100 { width: 100% }
+            table.dal-params td.right { text-align: right; padding-right: 5px; width: 1px; }
+            /*table.dal-params td:nth-child(2n) { width: 100% }
+            table.dal-params td:nth-child(2n+1) { text-align: right; padding-right: 5px; }*/
+        table.graph-params { margin-top: 5px; }
             table.graph-params .caption {
                 color: gray;
                 text-align: right;
                 padding-right: 5px;
                 white-space: nowrap;
             }
-                table.graph-params .caption label {
-                     white-space: nowrap;
-                }
-            table.graph-params #selectedLink {
-                padding: 0;
-            }
-        .border-top {
-            border-top: 1px solid silver;
-        }
-        .border-bottom {
-            border-bottom: 1px solid silver;
-        }
-        .navy {
-            color: white;
-            background-color: navy;
-        }
-        .width100 {
-            width: 100%
-        }
+                table.graph-params .caption label { white-space: nowrap; }
+            table.graph-params #selectedLink { padding: 0; }
+        .border-top { border-top: 1px solid silver; }
+        .border-bottom { border-bottom: 1px solid silver; }
+        .navy { color: white; background-color: navy; }
+        .width100 { width: 100% }
 
         #TablesCount {
             font-size: x-small;
@@ -102,17 +63,13 @@
             font-size: 1.2em;
             font-weight: 600;
         }
-        #TablesSelect .selectivity-dropdown {
-            width: auto !important;
-        }
+        #TablesSelect .selectivity-dropdown { width: auto !important; }
         /*#TablesSelect*/ div.selectivity-multiple-input-container {
             padding: 0;
             background-color: rgb(255, 255, 255);
             border: 1px solid #e2e2e2;
         }
-        /*#TablesSelect*/ input.selectivity-multiple-input {
-            margin: 0;
-        }
+        /*#TablesSelect*/ input.selectivity-multiple-input { margin: 0; }
         .notification-dialog #ConnectionDialog span.selectivity-multiple-selected-item {
             display: block;
             margin-left: 2px;
@@ -120,24 +77,13 @@
             background-color: transparent;
             color: black;
         }
-        div#DatabaseNameRequestError {
-            color: red; margin: 1px 0 0 0; overflow: auto; max-height: 50px; max-width: 312px; border: 1px solid;
-        }
-        .notification-dialog #ConnectionDialog span.requiredError {
-            color: red; margin: 0 5px; 
-        }
-        table.selected-link {
-            width: 100%;
-            margin: 0;
-        }
-            table.selected-link td {
-                padding: 3px;
-            }
+        div#DatabaseNameRequestError { color: red; margin: 1px 0 0 0; overflow: auto; max-height: 50px; max-width: 312px; border: 1px solid; }
+        .notification-dialog #ConnectionDialog span.requiredError { color: red; margin: 0 5px; }
+        table.selected-link { width: 100%; margin: 0; }
+            table.selected-link td { padding: 3px; }
 
             table.selected-link #selectedLink_sourceFields,
-            table.selected-link #selectedLink_targetFields {
-                width: 50%;
-            }
+            table.selected-link #selectedLink_targetFields { width: 50%; }
             table.selected-link #selectedLink_between {
                 border-left: 1px solid white;
                 border-right: 1px solid white;
@@ -204,24 +150,14 @@
             text-overflow: ellipsis;
         }
 
-        h2.error {
-            color: red; margin: 10px; 
-        }
-            h2.error pre {
-                white-space: normal; border: 1px solid silver; overflow: scroll; height: 700px;
-            }
-            h2.error a {
-                color: gray; margin: 10px 25px; text-decoration: underline;
-            }
-                h2.error img {
-                    vertical-align: middle;
-                }   
+        h2.error { color: red; margin: 10px; }
+            h2.error pre { white-space: normal; border: 1px solid silver; overflow: scroll; height: 700px; }
+            h2.error a { color: gray; margin: 10px 25px; text-decoration: underline; }
+                h2.error img { vertical-align: middle; }   
     </style>
     @RenderSection("CssImport", false)
-
-    <script type="text/javascript" src="~/js/jquery/1.8.2/jquery.min.js"></script>
-    <script type="text/javascript" src="~/js/jquery-ui/1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="~/js/jquery-ui/1.11.4/jquery.showModalDialog.js"></script>
+    <script type="text/javascript" src="~/js/jquery/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/js/spliter/jquery.splitter.js"></script>
     <script type="text/javascript" src="~/js/selectivity/selectivity-full.min.js"></script>
     <script type="text/javascript" src="~/js/d3js/d3.v3-5-17.min.js"></script>
@@ -272,7 +208,7 @@
                 }, 250);
             }).attr('checked', window.location.pathname.contains(config.URL_V1));
 
-            $(window).unload(function () {
+            $(window).on("beforeunload", function() { 
                 if (!DAL.IsEmpty()) {
                     DAL.SaveToLocalStorage();
                 }

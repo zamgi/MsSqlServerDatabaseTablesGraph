@@ -1,13 +1,14 @@
-namespace ogdf;
-
-/// <summary>
-/// 
-/// </summary>
-public enum ProcessingCoordsMode
+﻿namespace ogdf
 {
-	pcmFMMMLayout,
-	pcmSpringEmbedderFR,
-	pcmGEMLayout,
-	pcmDavidsonHarelLayout,
-	pcmOrthoLayout
+    /// <summary>
+    /// 
+    /// </summary>
+	public enum ProcessingCoordsMode : int
+	{
+		FMMMLayout	        = 0,
+		SpringEmbedderFR    = 1,
+		GEMLayout           = 2,
+		DavidsonHarelLayout = 3,
+		OrthoLayout         = 4,
+	};
 }

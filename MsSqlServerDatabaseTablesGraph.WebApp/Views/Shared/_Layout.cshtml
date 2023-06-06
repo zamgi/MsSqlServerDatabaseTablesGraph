@@ -271,7 +271,7 @@
                 }, 250);
             }).attr('checked', window.location.pathname.contains(config.URL_V1));
 
-            $(window).unload(function () {
+            $(window).on("beforeunload", function () { 
                 if (!DAL.IsEmpty()) {
                     DAL.SaveToLocalStorage();
                 }

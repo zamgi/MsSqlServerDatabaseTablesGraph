@@ -89,5 +89,6 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Models
         [JsonProperty("id")]       public int    Id       { get; set; }
         [JsonProperty("name")]     public string Name     { get; set; }
         [JsonProperty("selected")] public bool   Selected { get; set; }
+        public override string ToString() => $"Id={Id}, Name={Name}, (X={X}, Y={Y})";
     }
 }

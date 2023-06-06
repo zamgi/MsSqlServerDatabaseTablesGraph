@@ -207,7 +207,7 @@
             msg: $d,
             title: 'Connection to Database', buttonYes: 'Ok', buttonNo: 'Cancel',
             fnCheckYes: function () {
-                return (_fnCheckYes( fnCheckYes ));
+                return _fnCheckYes( fnCheckYes );
             },
             fnYes: fnYes, 
             fnClose: function () {
@@ -216,6 +216,7 @@
             size: { height: 480, width: 640 },
             eventDialogOpen: function (event, ui) {
                 var $this = $(this);
+                $this.parent().find('button.ui-dialog-titlebar-close').contents().filter(function () { return (this.nodeType == 3); }).remove();
                 if (!_selectivityValue('#ServerName')) {
                     $this.find('#ServerName input.selectivity-multiple-input').css('width', '');
                 }
