@@ -39,13 +39,12 @@ ORDER BY TableName;
 
         private const string SQL_GET_REFS_BY_FOREIGN_TABLENAME = @"
 DECLARE @AllTables BIT = {0};
-/*DECLARE @ForeignTableName VARCHAR(255) = {0}; --'Patient.Patients'; --'Cases.Sessions'; --'Cases.Cases';*/
 ---------------------------------------------------------------------------------------------------
 
 BEGIN TRY DROP TABLE #Refs; END TRY BEGIN CATCH END CATCH;
 CREATE TABLE #Refs(FKName VARCHAR(255), TableName VARCHAR(255), [Column] VARCHAR(255), ForeignTableName VARCHAR(255), ForeignColumn VARCHAR(255));
 --CREATE NONCLUSTERED INDEX #IDX_1_Refs ON #Refs(ForeignTableName ASC, ForeignColumn ASC);
-DECLARE @TBALE TABLE(ID INT IDENTITY, [Level] INT, [IsSelfRefs] INT, FKName VARCHAR(255), TableName VARCHAR(255), [Column] VARCHAR(255), ForeignTableName VARCHAR(255), ForeignColumn VARCHAR(255));
+DECLARE @TABLE TABLE(ID INT IDENTITY, [Level] INT, [IsSelfRefs] INT, FKName VARCHAR(255), TableName VARCHAR(255), [Column] VARCHAR(255), ForeignTableName VARCHAR(255), ForeignColumn VARCHAR(255));
 
 INSERT INTO #Refs
 SELECT (FKName + '-' + TableName + '-' + ForeignTableName) FKName
@@ -94,7 +93,7 @@ recurrent([Level], [IsSelfRefs], FKName, TableName, [Column], ForeignTableName, 
                         and refs.ForeignTableName  = refs.TableName
                         and refs.ForeignColumn    != refs.[Column]
 )
-INSERT INTO @TBALE(
+INSERT INTO @TABLE(
       [Level]
     , [IsSelfRefs]
     , FKName
@@ -121,7 +120,7 @@ SELECT MIN(ID) ID
     , [Column]
     , ForeignTableName
     , ForeignColumn
-FROM @TBALE 
+FROM @TABLE 
 GROUP BY 
       [IsSelfRefs]
     , FKName

@@ -32,10 +32,10 @@ namespace TestApp
             var inputParams = new DALGetRefsInputParams()
             {
                 ServerName     = "(local)",
-                DatabaseName   = "OrdInv",
-                UserName       = "sa",
-                Password       = "12qwQW12",
-                RootTableNames = "LQA.Reports"
+                DatabaseName   = "xz",
+                UserName       = "xz",
+                Password       = "xz",
+                RootTableNames = "xz.xz"
             };
             //var tables = DAL.GetTables( inputParams );
             var refs = await DAL.GetRefs_Async( inputParams ).ConfigureAwait( false );
