@@ -21,8 +21,8 @@ namespace ogdf
 
         private const string DLL_NAME_WIN_x64 = "ogdf_x64.dll";
         private const string DLL_NAME_WIN_x86 = "ogdf_x86.dll";
-        private const string DLL_NAME_LIN_x64   = "libogdf.so";
-        private const string DLL_NAME_LIN_x86   = DLL_NAME_LIN_x64;
+        private const string DLL_NAME_LIN_x64 = "libogdf.so";
+        private const string DLL_NAME_LIN_x86 = DLL_NAME_LIN_x64;
 		
         private const string OGDFCore_AllocMapNodes_name    = "OGDFCore_AllocMapNodes";
         private const string OGDFCore_FreeMapNodes_name     = "OGDFCore_FreeMapNodes";
@@ -34,7 +34,7 @@ namespace ogdf
         public delegate IntPtr OGDFCore_AllocMapNodes_Delegate   ( int count );
         public delegate void   OGDFCore_FreeMapNodes_Delegate    ( IntPtr data );
         public delegate void   OGDFCore_AddNodesPair_Delegate    ( IntPtr data, int nodeIndex1, int nodeIndex2 );
-        public delegate void   OGDFCore_ProcessingCoords_Delegate( IntPtr data, [MarshalAs(UnmanagedType.I4)] ProcessingCoordsMode eMode );
+        public delegate void   OGDFCore_ProcessingCoords_Delegate( IntPtr data, [MarshalAs(UnmanagedType.I4)] ProcessingCoordsMode mode );
         public delegate bool   OGDFCore_GetNodeCoords_Delegate   ( IntPtr data, int nodeIndex, out double x, out double y );
         public delegate bool   OGDFCore_SetNodeSize_Delegate     ( IntPtr data, int nodeIndex, double width, double height );
 

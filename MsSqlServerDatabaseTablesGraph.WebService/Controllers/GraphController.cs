@@ -143,10 +143,10 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
 #endif
                 if ( !refs.Any() )
                 {
-                    if ( ip.RootTableNamesSet.Any() )
-                    {
-                        throw (new RefsNotFoundException( ip.RootTableNamesSet ));
-                    }
+                    //if ( ip.RootTableNamesSet.Any() )
+                    //{
+                    //    throw (new RefsNotFoundException( ip.RootTableNamesSet ));
+                    //}
 
                     foreach ( var rootTableName in ip.RootTableNamesSet )
                     {
@@ -200,6 +200,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
                     }
                 }
                 var grouped_refs = from it in refs
+                                    where (!it.FKName.IsNullOrEmpty())
                                     group it by it.FKName into g
                                    select g;
                 foreach ( var g in grouped_refs )

@@ -32,6 +32,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService
             services.AddControllers().AddJsonOptions( options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.NumberHandling         = JsonNumberHandling.AllowNamedFloatingPointLiterals;
                 options.JsonSerializerOptions.Converters.Add( new JsonStringEnumConverter() );
             });
 

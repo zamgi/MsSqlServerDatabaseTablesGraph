@@ -147,10 +147,10 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
 #endif
                 if ( !refs.Any() )
                 {
-                    if ( inputParams.RootTableNamesSet.Any() )
-                    {
-                        throw (new RefsNotFoundException( inputParams.RootTableNamesSet ));
-                    }
+                    //if ( inputParams.RootTableNamesSet.Any() )
+                    //{
+                    //    throw (new RefsNotFoundException( inputParams.RootTableNamesSet ));
+                    //}
 
                     foreach ( var rootTableName in inputParams.RootTableNamesSet )
                     {
@@ -204,7 +204,8 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                     }
                 }
                 var grouped_refs = from it in refs
-                                    group it by it.FKName into g
+                                    where (!it.FKName.IsNullOrEmpty())
+                                    group it by it.FKName into g                                    
                                    select g;
                 foreach ( var g in grouped_refs )
                 {

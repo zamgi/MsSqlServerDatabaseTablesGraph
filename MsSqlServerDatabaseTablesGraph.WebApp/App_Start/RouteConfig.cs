@@ -12,18 +12,6 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
         {
             routes.IgnoreRoute( "{resource}.axd/{*pathInfo}" );
 
-            /*routes.MapRoute(
-                name: "GraphView",
-                url: "{controller}/{action}/{ServerName}/{DatabaseName}/{RootTableNames}",
-                defaults: new { 
-                      controller     = "GraphView"
-                    , action         = "Index"
-                    , ServerName     = UrlParameter.Optional
-                    , DatabaseName   = UrlParameter.Optional
-                    , RootTableNames = UrlParameter.Optional
-                }
-            );*/
-
             routes.MapRoute(
                 name: "GraphView",
                 url: "{controller}/{action}",
