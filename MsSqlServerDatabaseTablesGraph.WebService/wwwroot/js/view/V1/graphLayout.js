@@ -5,7 +5,6 @@ var graph = d3.layout.xyz();
 //Данные для построения страницы
 var APP = {};
 
-
 jQuery(function ($) {
     graph
         .setIcon("/images/PersonInfo.png")
@@ -14,9 +13,7 @@ jQuery(function ($) {
         d3.layout.minimap().create(graph);
         graph.simpleZoom(true);
     }
-    $('#BtHome').click(function() {
-        graph.resetZoom();
-    });
+    $('#BtHome').click(function() { graph.resetZoom(); });
     var resizeTimeoutID = null;
     $(window).bind("resize.splitter", function () {
         if (resizeTimeoutID) clearTimeout(resizeTimeoutID);
@@ -54,9 +51,7 @@ var graphLayout = (function() {
         createGraph();
         graph.resetZoom();
         APP.Loaded = true;
-        setTimeout(function() {
-            $('body').trigger('dataLoad');
-        }, 1);
+        setTimeout(function() { $('body').trigger('dataLoad'); }, 1);
     };
 
     //полная перезагрузка графа
@@ -165,10 +160,9 @@ var graphLayout = (function() {
         //var usedLinkFields = ["source", "target", "type", "title", "width", "color"];
         
         //инициализация графа
-        graph
-            .nodes(APP.Nodes)
-            .links(APP.Links)
-            .bind();
+        graph.nodes(APP.Nodes)
+             .links(APP.Links)
+             .bind();
         /*---graph.clearSelection();*/
         
         //удалить старые маркеры

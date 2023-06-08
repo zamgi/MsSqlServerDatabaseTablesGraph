@@ -46,7 +46,7 @@
         showButton.append("svg:image")
 			.attr("width", "20").attr("height", "18")
 			.attr("x", "2").attr("y", "1")
-			.attr("xlink:href", config.appRootPath + "Content/view/V1/graphLayout/minimap.png");
+            .attr("xlink:href", config.appRootPath + "Content/view/V1/graphLayout/minimap.png");
         mapArea = svg.append("g")
 			.classed("xyz_minimap", true)
 			.style("display", "none");
@@ -62,14 +62,14 @@
         drawGraph();
     }
 
-    function linkSelfArc(d, bx, by) {
+    function linkSelfArc(d, bx, by, X_OFFSET, Y_OFFSET) {
         var rx = 5,
             ry = 5,
             dx = 2 * rx,
             rx2 = rx / 2 + 1,
             ry2 = ry / 2 + 1,
-            cx = d.target.x * bx - rx2,
-            cy = d.target.y * by - ry2;
+            cx = X_OFFSET + d.target.x * bx - rx2,
+            cy = Y_OFFSET + d.target.y * by - ry2;
         var path = "M" + (cx - rx).toString() + "," + cy.toString() +
                    "a" + rx.toString() + "," + ry.toString() + " 0 1,0 " + dx.toString() + ",0" +
                    "a" + rx.toString() + "," + ry.toString() + " 0 1,0 " + -dx.toString() + ",0";
@@ -111,6 +111,9 @@
 			links = graph.links();
         if (!nodes || !nodes.length) return;
 
+        const X_OFFSET =  4;
+        const Y_OFFSET = 10;
+        const Y_SCALE_CUT = 0.0025;
         //связи
         if (!links) links = [];
         var d = canvas.selectAll("path").data(links);
@@ -118,12 +121,13 @@
 			.append("svg:path")
 			.attr("class", "xyz_minimap_link");
         var bx = mapWidth / graphBox.width,
-			by = mapHeight / graphBox.height;
+            by = mapHeight / graphBox.height - Y_SCALE_CUT;
         d.attr("d", function (d) {
             if (d.source == d.target) {
-                return (linkSelfArc(d, bx, by));
+                return (linkSelfArc(d, bx, by, X_OFFSET, Y_OFFSET));
             }
-            return ("M" + d.source.x * bx + "," + d.source.y * by + "L" + d.target.x * bx + "," + d.target.y * by);
+            return ("M" + (X_OFFSET + d.source.x * bx) + "," + (Y_OFFSET + d.source.y * by) +
+                    "L" + (X_OFFSET + d.target.x * bx) + "," + (Y_OFFSET + d.target.y * by));
         });
         d.exit().remove();
 
@@ -133,9 +137,8 @@
 			.append("svg:circle")
 			.attr("class", "xyz_minimap_node")
 			.attr("r", 1.5);
-        d
-			.attr("cx", function (d) { return d.x * bx; })
-			.attr("cy", function (d) { return d.y * by; });
+        d.attr("cx", function (d) { return X_OFFSET + d.x * bx; })
+            .attr("cy", function (d) { return Y_OFFSET + d.y * by; });
         d.exit()
 			.remove();
     }
@@ -146,7 +149,8 @@
     }
 
     function showMinimap() {
-        /*always redraw possible new node positions*/drawGraph();
+        /*always redraw possible new node positions*/
+        drawGraph();
 
         d3.select(window)
 			.on("mouseup.minimap", hideMinimap)

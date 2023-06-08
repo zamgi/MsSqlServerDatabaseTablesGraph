@@ -5,18 +5,14 @@ var graph = d3.layout.xyz();
 //Данные для построения страницы
 var APP = {};
 
-
 jQuery(function ($) {
-    graph
-        .setIcon("../SocNet/Images/PersonInfo.png")
+    graph.setIcon("/images/PersonInfo.png")
         .create("#graph");
     if (d3.layout.minimap) {
         d3.layout.minimap().create(graph);
         graph.simpleZoom(true);
     }
-    $('#BtHome').click(function() {
-        graph.resetZoom();
-    });
+    $('#BtHome').click(function() { graph.resetZoom(); });
     var resizeTimeoutID = null;
     $(window).bind("resize.splitter", function () {
         if (resizeTimeoutID) clearTimeout(resizeTimeoutID);
@@ -31,13 +27,12 @@ jQuery(function ($) {
 
 var graphLayout = (function() {
     var self = {},
-        loadTimeoutId = null,
         loadCancelCallback = null;
     //перезагружает данные графа с сервера
     self.loadData = function(json) {
-        if (typeof json == "string" || json.error || !json.Settings) {
+        if (typeof json === "string" || json.error || !json.Settings) {
             //todo отладочный вывод ошибок
-            console.log(typeof json == "string" ? json : json.error);
+            console.log(typeof json === "string" ? json : json.error);
             return;
         }
         APP.Settings = json.Settings;
@@ -45,7 +40,7 @@ var graphLayout = (function() {
         APP.Links = json.Links;
         self.bindData();
         //алгоритм минимизации пересечений узлов графа
-        if (typeof RemoveGraphOverlaps != "undefined") {
+        if (typeof RemoveGraphOverlaps !== "undefined") {
             RemoveGraphOverlaps(graph, APP);
         }
     };
@@ -55,9 +50,7 @@ var graphLayout = (function() {
         createGraph();
         graph.resetZoom();
         APP.Loaded = true;
-        setTimeout(function() {
-            $('body').trigger('dataLoad');
-        }, 1);
+        setTimeout(function() { $('body').trigger('dataLoad'); }, 1);
     };
 
     //полная перезагрузка графа
@@ -128,7 +121,7 @@ var graphLayout = (function() {
     //чекбокс "выделить все" включается только когда все выделено
     function updateCbAll() {
         $('body').trigger('graphSelectionChanged');
-        $('#acbAll').prop('checked', $("input.ThemeCheckbox").length == $("input.ThemeCheckbox:checked").length);
+        $('#acbAll').prop('checked', $("input.ThemeCheckbox").length === $("input.ThemeCheckbox:checked").length);
     };
 
     //создает граф в основной части страницы
@@ -166,10 +159,9 @@ var graphLayout = (function() {
         //var usedLinkFields = ["source", "target", "type", "title", "width", "color"];
         
         //инициализация графа
-        graph
-            .nodes(APP.Nodes)
-            .links(APP.Links)
-            .bind();
+        graph.nodes(APP.Nodes)
+             .links(APP.Links)
+             .bind();
         /*---graph.clearSelection();*/
         
         //удалить старые маркеры

@@ -9,13 +9,15 @@ namespace ogdf
     /// </summary>
     public static class GraphLayout
     {
-        private static void StowageCoords2ZeroOneRange( IList< (double x, double y) > coords, double xy_NaN = 0.5, double xy_NaN_offset = 0.01 )
+        private static void StowageCoords2ZeroOneRange( (double x, double y)[] coords, in (int width, int height) layoutFieldSize, 
+            double xy_NaN = 0.5, double xy_NaN_offset = 0.01 )
         {
             double min_x = double.MaxValue, min_y = double.MaxValue;
             double max_x = 0.0, max_y = 0.0;
 
-            foreach ( var pt in coords )
+            for ( int i = 0, len = coords.Length; i < len; i++ )
             {
+                ref readonly var pt = ref coords[ i ];
                 if ( pt.x < min_x ) min_x = pt.x;
                 if ( pt.y < min_y ) min_y = pt.y;
 
@@ -23,30 +25,57 @@ namespace ogdf
                 if ( max_y < pt.y ) max_y = pt.y;
             }
 
-            for ( int i = 0, len = coords.Count; i < len; i++ )
+            var x_NaN = xy_NaN;
+            var y_NaN = xy_NaN;
+
+            double get_x( double x )
             {
-                var pt      = coords[ i ];
-                var x_d     = (max_x - min_x);
-                var x_n     = (x_d == 0) ? xy_NaN : (pt.x - min_x) / x_d;
-                var y_d     = (max_y - min_y);
-                var y_n     = (y_d == 0) ? xy_NaN : (pt.y - min_y) / y_d;
-                coords[ i ] = (x_n, y_n);
-                if ( (x_d == 0) || (y_d == 0) )
+                var x_d = (max_x - min_x);
+
+                double x_n;
+                if ( x_d == 0 )
                 {
-                    xy_NaN += xy_NaN_offset;
+                    x_n = x_NaN;
+                    x_NaN += xy_NaN_offset;
                 }
+                else
+                {
+                    x_n = (x - min_x) / x_d;
+                }
+                return (x_n);
+            }
+            double get_y( double y )
+            {
+                var y_d = (max_y - min_y);
+
+                double y_n;
+                if ( y_d == 0 )
+                {
+                    y_n = y_NaN;
+                    y_NaN += xy_NaN_offset;
+                }
+                else
+                {
+                    y_n = (y - min_y) / y_d;
+                }
+                return (y_n);
+            }
+
+            for ( int i = 0, len = coords.Length; i < len; i++ )
+            {
+                ref /*readonly*/ var pt = ref coords[ i ];
+
+                var x_n = get_x( pt.x ) * layoutFieldSize.width;
+                var y_n = get_y( pt.y ) * layoutFieldSize.height;
+
+                pt = (x_n, y_n);
+                //coords[ i ] = (x_n * layoutFieldSize.width, y_n * layoutFieldSize.height);
             }
         }
 
-        /// <summary>
-        /// Быстрый расчет координат узлов с учетом их 
-        /// </summary>
-        /// <param name="nodeSizes">Список узлов с указанием их размеров</param>
-        /// <param name="links">Список связей</param>
-        /// <param name="processingCoordsMode">Вид раскладки</param>
-        /// <returns>Список координат узлов</returns>
         public static IReadOnlyDictionary< int, (double x, double y) > CalcSizedGraphLayout( 
-            IList< (int nodeIndex1, int nodeIndex2) > links, int nodeCount, ProcessingCoordsMode processingCoordsMode )
+            IList< (int nodeIndex1, int nodeIndex2) > links, int nodeCount, 
+            CoordsLayoutMode coordsLayoutMode, in (int width, int height) layoutFieldSize )
         {
             nodeCount = Math.Max( nodeCount, links.GetMaxNodeIndex() + 1 );
 
@@ -57,30 +86,30 @@ namespace ogdf
                 {
                     Native.OGDFCore_AddNodesPair( handle, nodeIndex1, nodeIndex2 );
                 }
-                Native.OGDFCore_ProcessingCoords( handle, processingCoordsMode );
+                Native.OGDFCore_ProcessingCoords( handle, coordsLayoutMode );
 
-                var coords = new List< (double x, double y) >( nodeCount );
+                var coords = new (double x, double y)[ nodeCount ];
                 for ( var i = 0; i < nodeCount; i++ )
                 {
                     if ( Native.OGDFCore_GetNodeCoords( handle, i, out var x, out var y ) )
                     {                    
-                        coords.Add( (x, y) );
+                        coords[ i ] = (x, y);
                     }
                 }
-                StowageCoords2ZeroOneRange( coords );
+                StowageCoords2ZeroOneRange( coords, layoutFieldSize );
 
                 var dict = new Dictionary< int, (double x, double y) >( nodeCount );
                 for ( var i = 0; i < nodeCount; i++ )
                 {
                     dict[ i ] = coords[ i ];
-                }            
+                }
                 return (dict);
             }
             finally
             {
                 Native.OGDFCore_FreeMapNodes( handle );
             }
-        }
+        }        
 
         private static int GetMaxNodeIndex( this IList< (int nodeIndex1, int nodeIndex2) > links )
             => (links != null) && (0 < links.Count) ? links.Max( t => Math.Max( t.nodeIndex1, t.nodeIndex2 ) ) : 0;

@@ -33,7 +33,6 @@
         simpleSelection = true, //использовать упрощеннный режим выделения узлов
         simpleZoom = false, //не использовать зум и перетаскивание по умолчанию, только через миникарту
         isIE = /*@cc_on!@*/false,
-        t,
         SCALE_LEFT_BORDER = 0.5,
         SCALE_RIGHT_BORDER = 50,
         _useNodeMouseOverContrast = false;
@@ -98,9 +97,7 @@
         return graph;
     };
 
-    /*function putToView() {
-        $('#useNodeMouseOverContrast').attr('checked', _useNodeMouseOverContrast);
-    };*/
+    /*function putToView() { $('#useNodeMouseOverContrast').attr('checked', _useNodeMouseOverContrast); };*/
     graph.loadFromLocalStorage = function () {
         var o = localStorageEx.gvm.load();
         if (o) {
@@ -114,9 +111,7 @@
         if (o) {
             o.UseNodeMouseOverContrast = !!_useNodeMouseOverContrast;
         } else {
-            o = {
-                UseNodeMouseOverContrast: !!_useNodeMouseOverContrast
-            };
+            o = { UseNodeMouseOverContrast: !!_useNodeMouseOverContrast };
         }
         localStorageEx.gvm.save(o);
     };
@@ -183,9 +178,9 @@
         var box = bgRect.node().getBBox();
         return {
             w: (box.width  - 70) * graphScale,
-            h: (box.height - 30 /*70*/) * graphScale,
-            x: 35,
-            y: 10
+            h: (box.height - 10 /*70*/) * graphScale,
+            x: 0,//35,
+            y: 0,//10
         };
     }
     
@@ -815,11 +810,6 @@
         }
         
         if (nearest) {
-            /*console.log(nearest.node.name + " - [ " + nearest.x0 + ", " + nearest.y0 + " ]");*/
-
-            //var tr = d3.transform(d3.select(this).attr("transform")).translate;
-            //tx = tr[0] - (nearest.node.x - nearest.x0);
-            //ty = tr[1] - (nearest.node.y - nearest.y0);
             tx -= nearest.node.x - nearest.x0;
             ty -= nearest.node.y - nearest.y0;
 
@@ -835,13 +825,14 @@
     }
     
     function checkTranslateBBox(point) {
-        var cbox = canvas.node().getBBox(),
-            bbox = bgRect.node().getBBox(),
-            pad = 0,
-            x1 = bbox.width  - cbox.width  - cbox.x - pad,
-            y1 = bbox.height - cbox.height - cbox.y - pad,
-            x2 = -cbox.x + pad,
-            y2 = -cbox.y + pad;
+        var cbox  = canvas.node().getBBox(),
+            bbox  = bgRect.node().getBBox(),
+            pad_x = 0,
+            pad_y = 15,
+            x1 = bbox.width  - cbox.width  - cbox.x - pad_x,
+            y1 = bbox.height - cbox.height - cbox.y - pad_y,
+            x2 = -cbox.x + pad_x,
+            y2 = -cbox.y + pad_y;
         if (cScale < 1) {
             x1 *= cScale;
             y1 *= cScale;
@@ -886,7 +877,7 @@
     //в режиме простого масштабирования масштабирование происходит только через миникарту
     graph.simpleZoom = function(value) {
         //cast to bool
-        value = value ? true : false;
+        value = !!value;
         simpleZoom = value;
         setZoom(!value);
     }

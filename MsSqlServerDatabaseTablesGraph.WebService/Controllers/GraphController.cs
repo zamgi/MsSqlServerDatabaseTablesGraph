@@ -249,43 +249,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
 
         private static void CalcGraphCoords( Graph graph, int width, int height )
         {
-            var links = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList( /*graph.Links.Count*/ );
-            var points = GraphLayout.CalcSizedGraphLayout( links, graph.Nodes.Count, ProcessingCoordsMode.FMMMLayout );
+            const int X_CUT = 50;
+            const int Y_CUT = 30;
+            const double SCALE = 0.95;
+            /*const CoordsLayoutMode*/ var layoutMode = CoordsLayoutMode.SpringEmbedderFR;
 
-            //const double X_SHIFT = 25; const double X_CUT = 100;
-            //const double Y_SHIFT = 25; const double Y_CUT = 100;
+            var links = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList( /*graph.Links.Count*/ );
+            var points = GraphLayout.CalcSizedGraphLayout( links, graph.Nodes.Count, layoutMode, (width - X_CUT, height - Y_CUT) );
+     
             foreach ( var node in graph.Nodes )
             {
                 var pt = points[ node.Id ];
-                node.X = pt.x * width;  //node.X = X_SHIFT + pt.x * (width  - X_CUT);
-                node.Y = pt.y * height; //node.Y = Y_SHIFT + pt.y * (height - Y_CUT);
+                node.X = pt.x * SCALE;
+                node.Y = pt.y * SCALE;
             }
-
-            #region comm. prev.
-            //---------------------------------------------------------------------//      
-            /*
-            var ogdf = new GraphLayout();
-
-            foreach ( var node in graph.Nodes )
-            {
-                ogdf.AddVertex( node.Id.ToString() );
-            }
-            foreach ( var link in graph.Links )
-            {
-                ogdf.AddVertexLink( link.SourceNode.ToString(), link.TargetNode.ToString() );
-            }
-
-            ogdf.ProcessingCoords( ProcessingCoordsMode.pcmFMMMLayout );
-
-            foreach ( var node in graph.Nodes )
-            {
-                var pt = ogdf.GetVertexCoords( node.Id.ToString() );
-                node.X = pt.x * width;
-                node.Y = pt.y * height;
-            }
-            //*/
-            //---------------------------------------------------------------------//
-            #endregion
         }
     }
 

@@ -34,7 +34,7 @@ namespace ogdf
         public delegate IntPtr OGDFCore_AllocMapNodes_Delegate   ( int count );
         public delegate void   OGDFCore_FreeMapNodes_Delegate    ( IntPtr data );
         public delegate void   OGDFCore_AddNodesPair_Delegate    ( IntPtr data, int nodeIndex1, int nodeIndex2 );
-        public delegate void   OGDFCore_ProcessingCoords_Delegate( IntPtr data, [MarshalAs(UnmanagedType.I4)] ProcessingCoordsMode mode );
+        public delegate void   OGDFCore_ProcessingCoords_Delegate( IntPtr data, [MarshalAs(UnmanagedType.I4)] CoordsLayoutMode mode );
         public delegate bool   OGDFCore_GetNodeCoords_Delegate   ( IntPtr data, int nodeIndex, out double x, out double y );
         public delegate bool   OGDFCore_SetNodeSize_Delegate     ( IntPtr data, int nodeIndex, double width, double height );
 
@@ -50,7 +50,7 @@ namespace ogdf
         private extern static void OGDFCore_AddNodesPair_win_x64( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
         [DllImport(DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
-        private extern static void OGDFCore_ProcessingCoords_win_x64( IntPtr data, [MarshalAs( UnmanagedType.I4 )] ProcessingCoordsMode eMode );
+        private extern static void OGDFCore_ProcessingCoords_win_x64( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
 
         [DllImport( DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
         private extern static bool OGDFCore_GetNodeCoords_win_x64( IntPtr data, int nodeIndex, out double x, out double y );
@@ -70,7 +70,7 @@ namespace ogdf
         private extern static void OGDFCore_AddNodesPair_win_x86( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
         [DllImport(DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
-        private extern static void OGDFCore_ProcessingCoords_win_x86( IntPtr data, [MarshalAs( UnmanagedType.I4 )] ProcessingCoordsMode eMode );
+        private extern static void OGDFCore_ProcessingCoords_win_x86( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
 
         [DllImport( DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
         private extern static bool OGDFCore_GetNodeCoords_win_x86( IntPtr data, int nodeIndex, out double x, out double y );
@@ -92,7 +92,7 @@ namespace ogdf
         private extern static void OGDFCore_AddNodesPair_lin_x64( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
         [DllImport(DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
-        private extern static void OGDFCore_ProcessingCoords_lin_x64( IntPtr data, [MarshalAs( UnmanagedType.I4 )] ProcessingCoordsMode eMode );
+        private extern static void OGDFCore_ProcessingCoords_lin_x64( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
 
         [DllImport( DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
         private extern static bool OGDFCore_GetNodeCoords_lin_x64( IntPtr data, int nodeIndex, out double x, out double y );
@@ -112,7 +112,7 @@ namespace ogdf
         private extern static void OGDFCore_AddNodesPair_lin_x86( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
         [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name )]
-        private extern static void OGDFCore_ProcessingCoords_lin_x86( IntPtr data, [MarshalAs( UnmanagedType.I4 )] ProcessingCoordsMode eMode );
+        private extern static void OGDFCore_ProcessingCoords_lin_x86( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
 
         [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
         private extern static bool OGDFCore_GetNodeCoords_lin_x86( IntPtr data, int nodeIndex, out double x, out double y );

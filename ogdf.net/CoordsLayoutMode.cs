@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-	public enum ProcessingCoordsMode : int
+	public enum CoordsLayoutMode : int
 	{
 		FMMMLayout	        = 0,
 		SpringEmbedderFR    = 1,
