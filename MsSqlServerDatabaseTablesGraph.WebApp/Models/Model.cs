@@ -284,5 +284,8 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             TableName        = tableName,
             ForeignTableName = tableName,
         };
+
+        public override string ToString() => $"[{TableName}].[{Column}] => [{ForeignTableName}].[{ForeignColumn}]" +
+                                             (IsSelfRefs ? " (Self-Ref)" : null);
     }
 }

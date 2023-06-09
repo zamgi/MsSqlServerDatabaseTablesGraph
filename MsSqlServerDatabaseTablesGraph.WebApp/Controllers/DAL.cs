@@ -131,7 +131,7 @@ GROUP BY
 ORDER BY ID, [IsSelfRefs], FKName, TableName;";
         #endregion
 
-        public static ISet< string > GetDatabases( DALInputParams inputParams )
+        public static ISet< string > GetDatabases_( DALInputParams inputParams )
         {
             DALInputParams.ThrowIfWrong( inputParams );
 
@@ -157,7 +157,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
                 return (databases);
             }        
         }
-        public static async Task< ISet< string > > GetDatabases_Async( DALInputParams inputParams )
+        public static async Task< ISet< string > > GetDatabases( DALInputParams inputParams )
         {
             DALInputParams.ThrowIfWrong( inputParams );
 
@@ -184,7 +184,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
             }        
         }
 
-        public static ISet< Table > GetTables( DALGetTablesInputParams inputParams )
+        public static ISet< Table > GetTables_( DALGetTablesInputParams inputParams )
         {            
             DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
@@ -208,7 +208,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
                 return (tables);
             }
         }
-        public static async Task< ISet< Table > > GetTables_Async( DALGetTablesInputParams inputParams )
+        public static async Task< ISet< Table > > GetTables( DALGetTablesInputParams inputParams )
         {            
             DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
@@ -233,7 +233,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
             }
         }
 
-        public static ICollection< RefItem > GetRefs( DALGetRefsInputParams inputParams )
+        public static ICollection< RefItem > GetRefs_( DALGetRefsInputParams inputParams )
         {
             DALGetTablesInputParams.ThrowIfWrong( inputParams );
 
@@ -276,7 +276,7 @@ ORDER BY ID, [IsSelfRefs], FKName, TableName;";
                 return (refs);
             }
         }
-        public static async Task< ICollection< RefItem > > GetRefs_Async( DALGetRefsInputParams inputParams )
+        public static async Task< ICollection< RefItem > > GetRefs( DALGetRefsInputParams inputParams )
         {
             DALGetTablesInputParams.ThrowIfWrong( inputParams );
 

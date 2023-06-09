@@ -18,7 +18,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
         [HttpPost, HttpGet/*, NoCache, NoOutputCache*/, Route("V1")]
         public ActionResult V1( [FromQuery] DALGetRefsInputParams ip )
         {
-            Request.LoadFromCookies( ip );
+            Request.LoadFromCookies_2( ip );
             DALGetTablesInputParams.ThrowIfWrong( ip );
 
             return View( ip );
@@ -27,7 +27,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
         [HttpPost, HttpGet/*, NoCache, NoOutputCache*/, Route("V2")]
         public ActionResult V2( [FromQuery] DALGetRefsInputParams ip )
         {
-            Request.LoadFromCookies( ip );
+            Request.LoadFromCookies_2( ip );
             DALGetTablesInputParams.ThrowIfWrong( ip );
 
             return View( ip );

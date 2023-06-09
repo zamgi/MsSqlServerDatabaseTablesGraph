@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
+using JsonProperty = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 
-namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
+namespace MsSqlServerDatabaseTablesGraph.WebService.Models
 {
     /// <summary>
     /// 
@@ -18,6 +19,9 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
 
         [JsonProperty("nodes")] public ICollection< Node > Nodes { get; }
         [JsonProperty("links")] public ICollection< Link > Links { get; }
+
+        public override string ToString() => ((Error != null) ? $"Error: {Error}, " : null) +
+                                             $"Nodes={Nodes?.Count}, Links={Links?.Count}";
     }
 
     /*/// <summary>
@@ -52,12 +56,12 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
 
         public Link( int id ) => Id = id;
 
-        [JsonProperty("id")]           public int Id;
-        [JsonProperty("source")]       public int SourceNode;
-        [JsonProperty("target")]       public int TargetNode;
-        [JsonProperty("type")]         public int LinkType = 1; //LINK_TYPE_DIRECTED
-        [JsonProperty("sourceFields")] public IEnumerable< string > SourceFields;
-        [JsonProperty("targetFields")] public IEnumerable< string > TargetFields;
+        [JsonProperty("id")]           public int Id         { get; set; }
+        [JsonProperty("source")]       public int SourceNode { get; set; }
+        [JsonProperty("target")]       public int TargetNode { get; set; }
+        [JsonProperty("type")]         public int LinkType   { get; set; } = 1; //LINK_TYPE_DIRECTED
+        [JsonProperty("sourceFields")] public IList< string > SourceFields { get; set; }
+        [JsonProperty("targetFields")] public IList< string > TargetFields { get; set; }
     }
 
 
@@ -83,10 +87,12 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
             Selected = selected;
         }
 
-        [JsonProperty("x")]        public double X;
-        [JsonProperty("y")]        public double Y;
-        [JsonProperty("id")]       public int    Id;
-        [JsonProperty("name")]     public string Name;
-        [JsonProperty("selected")] public bool   Selected;
+        [JsonProperty("x")]        public double X        { get; set; }
+        [JsonProperty("y")]        public double Y        { get; set; }
+        [JsonProperty("id")]       public int    Id       { get; set; }
+        [JsonProperty("name")]     public string Name     { get; set; }
+        [JsonProperty("selected")] public bool   Selected { get; set; }
+
+        public override string ToString() => $"Id={Id}, Name={Name}, (X={X}, Y={Y})";
     }
 }

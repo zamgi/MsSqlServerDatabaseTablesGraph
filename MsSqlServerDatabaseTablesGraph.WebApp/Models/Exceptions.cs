@@ -10,7 +10,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp
     internal sealed class RefsNotFoundException : Exception
     {
         public RefsNotFoundException( ICollection< string > rootTableNames )
-            => RootTableNames = rootTableNames?.Where( t => !t.IsNullOrWhiteSpace() ).Select( t => t.Replace( "&apos;", "'" ).Replace( "&APOS;", "'" ) ).ToList();
+            => RootTableNames = rootTableNames?.Where( t => !string.IsNullOrWhiteSpace( t ) ).Select( t => t.Replace( "&apos;", "'" ).Replace( "&APOS;", "'" ) ).ToList();
 
         public ICollection< string > RootTableNames { get; }
     }

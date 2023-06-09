@@ -102,7 +102,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
         {
             try
             {
-                Request.LoadFromCookies( ip );
+                Request.LoadFromCookies_1( ip );
                 DALGetTablesInputParams.ThrowIfWrong( ip );
 
                 return (GetTablesInternal( ip ));
@@ -120,7 +120,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
         {
             try
             {
-                Request.LoadFromCookies( ip );
+                Request.LoadFromCookies_2( ip );
                 DALGetTablesInputParams.ThrowIfWrong( ip );
 
                 #region [.check exists root-tables.]
@@ -136,6 +136,8 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
                     }
                 }
                 #endregion
+
+                #region [.get refs.]
 #if USE_CACHE
                 var refs = await HttpContext.Current.Cache.Get( ip.ConnectionString + '-' + ip.RootTableNames, () => DAL.GetRefs( ip ) );
 #else
@@ -143,18 +145,16 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
 #endif
                 if ( !refs.Any() )
                 {
-                    //if ( ip.RootTableNamesSet.Any() )
-                    //{
-                    //    throw (new RefsNotFoundException( ip.RootTableNamesSet ));
-                    //}
+                    //if ( ip.RootTableNamesSet.Any() ) throw (new RefsNotFoundException( ip.RootTableNamesSet ));
 
                     foreach ( var rootTableName in ip.RootTableNamesSet )
                     {
                         refs.Add( RefItem.CreateForSingleTable( rootTableName ) );
                     }
                 }
+                #endregion
 
-
+                #region [.build graph.]
                 var nodes = new Dictionary< string, Node >();
                 var links = new HashSet< Link >( new Link.EqualityComparer() );
 
@@ -215,13 +215,12 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
                     { 
                         SourceNode   = node_1.Id, 
                         TargetNode   = node_2.Id,
-                        SourceFields = from _it in g select _it.ForeignColumn,
-                        TargetFields = from _it in g select _it.Column,
+                        SourceFields = (from x in g select x.ForeignColumn).ToList(),
+                        TargetFields = (from x in g select x.Column).ToList(),
                     };
                     links.Add( link );
                     /*var success = links.Add( link );
-                    if ( !success )
-                        System.Diagnostics.Debugger.Break();*/
+                    if ( !success ) Debugger.Break();*/
                 }
                 #endregion
 
@@ -229,6 +228,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
 
                 CalcGraphCoords( graph, ip.GraphWidth, ip.GraphHeight );
                 return (graph);
+                #endregion
             }
             catch ( TableNotExistsException ex )
             {
@@ -237,7 +237,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
             catch ( RefsNotFoundException ex )
             {
                 var error = ex.RootTableNames.Any()
-                            ? ($"Reference from table {ex.RootTableNames.Join( '\'', '\'', "','" )} not found")
+                            ? ($"Reference from table '{string.Join( "','", ex.RootTableNames )}' not found")
                             : "Any tables not found";
                 return (Graph.CreateError( error ));
             }
@@ -247,21 +247,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
             }
         }
 
-        private static void CalcGraphCoords( Graph graph, int width, int height )
+        private static void CalcGraphCoords( Graph graph, int width, int height, CoordsLayoutMode layoutMode = CoordsLayoutMode.SpringEmbedderFR )
         {
             const int X_CUT = 50;
             const int Y_CUT = 30;
             const double SCALE = 0.95;
-            /*const CoordsLayoutMode*/ var layoutMode = CoordsLayoutMode.SpringEmbedderFR;
 
-            var links = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList( /*graph.Links.Count*/ );
+            var links  = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList();
             var points = GraphLayout.CalcSizedGraphLayout( links, graph.Nodes.Count, layoutMode, (width - X_CUT, height - Y_CUT) );
      
             foreach ( var node in graph.Nodes )
             {
-                var pt = points[ node.Id ];
-                node.X = pt.x * SCALE;
-                node.Y = pt.y * SCALE;
+                var (x, y) = points[ node.Id ];
+                node.X = x * SCALE;
+                node.Y = y * SCALE;
             }
         }
     }
@@ -271,7 +270,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
     /// </summary>
     internal static class GraphApiControllerExtensions
     {
-        public static void LoadFromCookies( this HttpRequest request, DALGetTablesInputParams ip )
+        public static void LoadFromCookies_1( this HttpRequest request, DALGetTablesInputParams ip )
         {
             if ( ip.UserName.IsNullOrWhiteSpace() )
             {
@@ -282,9 +281,9 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Controllers
                 ip.Password = request.GetCookieString( "Password" );
             }
         }
-        public static void LoadFromCookies( this HttpRequest request, DALGetRefsInputParams ip )
+        public static void LoadFromCookies_2( this HttpRequest request, DALGetRefsInputParams ip )
         {
-            request.LoadFromCookies( (DALGetTablesInputParams) ip );
+            request.LoadFromCookies_1( ip );
 
             if ( ip.GraphHeight == 0 )
             {

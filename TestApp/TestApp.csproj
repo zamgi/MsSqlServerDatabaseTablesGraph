@@ -50,14 +50,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\MsSqlServerDatabaseTablesGraph.WebApp\Controllers\DAL.cs">
-      <Link>DAL.cs</Link>
+      <Link>[-=links=-]\DAL.cs</Link>
+    </Compile>
+    <Compile Include="..\MsSqlServerDatabaseTablesGraph.WebApp\Models\Exceptions.cs">
+      <Link>[-=links=-]\Exceptions.cs</Link>
+    </Compile>
+    <Compile Include="..\MsSqlServerDatabaseTablesGraph.WebApp\Models\GraphVM.cs">
+      <Link>[-=links=-]\GraphVM.cs</Link>
     </Compile>
     <Compile Include="..\MsSqlServerDatabaseTablesGraph.WebApp\Models\Model.cs">
-      <Link>Model.cs</Link>
+      <Link>[-=links=-]\Model.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ogdf.net\ogdf.net.csproj">
+      <Project>{013778d7-d08b-475d-ab4d-abaca81fc172}</Project>
+      <Name>ogdf.net</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo ------------ copy native ogdf_.dll ------------
+copy "..\..\[lib]\ogdf_x64.dll" "$(ProjectDir)\bin"
+copy "..\..\[lib]\ogdf_x86.dll" "$(ProjectDir)\bin"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

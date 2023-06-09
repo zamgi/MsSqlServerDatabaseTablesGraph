@@ -9,6 +9,44 @@ namespace ogdf
     /// </summary>
     public static class GraphLayout
     {
+        public static IReadOnlyDictionary< int, (double x, double y) > CalcSizedGraphLayout( 
+            IList< (int nodeIndex1, int nodeIndex2) > links, int nodeCount, 
+            CoordsLayoutMode coordsLayoutMode, in (int width, int height) layoutFieldSize )
+        {
+            nodeCount = Math.Max( nodeCount, links.GetMaxNodeIndex() + 1 );
+
+            var handle = Native.OGDFCore_AllocMapNodes( nodeCount );
+            try
+            {
+                foreach ( var (nodeIndex1, nodeIndex2) in links )
+                {
+                    Native.OGDFCore_AddNodesPair( handle, nodeIndex1, nodeIndex2 );
+                }
+                Native.OGDFCore_ProcessingCoords( handle, coordsLayoutMode );
+
+                var coords = new (double x, double y)[ nodeCount ];
+                for ( var i = 0; i < nodeCount; i++ )
+                {
+                    if ( Native.OGDFCore_GetNodeCoords( handle, i, out var x, out var y ) )
+                    {                    
+                        coords[ i ] = (x, y);
+                    }
+                }
+                StowageCoords2ZeroOneRange( coords, layoutFieldSize );
+
+                var dict = new Dictionary< int, (double x, double y) >( nodeCount );
+                for ( var i = 0; i < nodeCount; i++ )
+                {
+                    dict[ i ] = coords[ i ];
+                }
+                return (dict);
+            }
+            finally
+            {
+                Native.OGDFCore_FreeMapNodes( handle );
+            }
+        }        
+
         private static void StowageCoords2ZeroOneRange( (double x, double y)[] coords, in (int width, int height) layoutFieldSize, 
             double xy_NaN = 0.5, double xy_NaN_offset = 0.01 )
         {
@@ -72,44 +110,6 @@ namespace ogdf
                 //coords[ i ] = (x_n * layoutFieldSize.width, y_n * layoutFieldSize.height);
             }
         }
-
-        public static IReadOnlyDictionary< int, (double x, double y) > CalcSizedGraphLayout( 
-            IList< (int nodeIndex1, int nodeIndex2) > links, int nodeCount, 
-            CoordsLayoutMode coordsLayoutMode, in (int width, int height) layoutFieldSize )
-        {
-            nodeCount = Math.Max( nodeCount, links.GetMaxNodeIndex() + 1 );
-
-            var handle = Native.OGDFCore_AllocMapNodes( nodeCount );
-            try
-            {
-                foreach ( var (nodeIndex1, nodeIndex2) in links )
-                {
-                    Native.OGDFCore_AddNodesPair( handle, nodeIndex1, nodeIndex2 );
-                }
-                Native.OGDFCore_ProcessingCoords( handle, coordsLayoutMode );
-
-                var coords = new (double x, double y)[ nodeCount ];
-                for ( var i = 0; i < nodeCount; i++ )
-                {
-                    if ( Native.OGDFCore_GetNodeCoords( handle, i, out var x, out var y ) )
-                    {                    
-                        coords[ i ] = (x, y);
-                    }
-                }
-                StowageCoords2ZeroOneRange( coords, layoutFieldSize );
-
-                var dict = new Dictionary< int, (double x, double y) >( nodeCount );
-                for ( var i = 0; i < nodeCount; i++ )
-                {
-                    dict[ i ] = coords[ i ];
-                }
-                return (dict);
-            }
-            finally
-            {
-                Native.OGDFCore_FreeMapNodes( handle );
-            }
-        }        
 
         private static int GetMaxNodeIndex( this IList< (int nodeIndex1, int nodeIndex2) > links )
             => (links != null) && (0 < links.Count) ? links.Max( t => Math.Max( t.nodeIndex1, t.nodeIndex2 ) ) : 0;

@@ -17,21 +17,21 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         public ActionResult Index() => View( "V1", new DALGetRefsInputParams() );
 
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public ActionResult V1( [FromUri] DALGetRefsInputParams inputParams )
+        public ActionResult V1( [FromUri] DALGetRefsInputParams ip )
         {
-            inputParams.LoadFromCookies( _HttpContext_.Current.Request );
-            DALGetTablesInputParams.ThrowIfWrong( inputParams );
+            _HttpContext_.Current.Request.LoadFromCookies_2( ip );
+            DALGetTablesInputParams.ThrowIfWrong( ip );
 
-            return View( inputParams );
+            return View( ip );
         }
 
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public ActionResult V2( [FromUri] DALGetRefsInputParams inputParams )
+        public ActionResult V2( [FromUri] DALGetRefsInputParams ip )
         {
-            inputParams.LoadFromCookies( _HttpContext_.Current.Request );
-            DALGetTablesInputParams.ThrowIfWrong( inputParams );
+            _HttpContext_.Current.Request.LoadFromCookies_2( ip );
+            DALGetTablesInputParams.ThrowIfWrong( ip );
 
-            return View( inputParams );
+            return View( ip );
         }
 
         [HttpGet, NoCache, NoOutputCache]

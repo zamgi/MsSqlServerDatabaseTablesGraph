@@ -23,15 +23,15 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
     {
 #if USE_CACHE
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public Task< DatabaseCollection > GetDatabases( [FromUri] DALInputParams inputParams )
+        public Task< DatabaseCollection > GetDatabases( [FromUri] DALInputParams ip )
         {
             try
             {
-                DALInputParams.ThrowIfWrong( inputParams );
-                return (HttpContext.Current.Cache.Get_Async( inputParams.ConnectionString + "-databases", 
+                DALInputParams.ThrowIfWrong( ip );
+                return (HttpContext.Current.Cache.Get_Async( ip.ConnectionString + "-databases", 
                         async () =>
                         {
-                            var databases = await DAL.GetDatabases_Async( inputParams ).CAX();
+                            var databases = await DAL.GetDatabases_Async( ip ).CAX();
                             return (new DatabaseCollection( databases ));
                         }));
             }
@@ -42,20 +42,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         }
 #else
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public async Task< DatabaseCollection > GetDatabases( [FromUri] DALInputParams inputParams )
+        public async Task< DatabaseCollection > GetDatabases( [FromUri] DALInputParams ip )
         {
             try
             {
-                DALInputParams.ThrowIfWrong( inputParams );
+                DALInputParams.ThrowIfWrong( ip );
 #if USE_CACHE
-                return (HttpContext.Current.Cache.Get_Async( inputParams.ConnectionString + "-databases", 
+                return (HttpContext.Current.Cache.Get_Async( ip.ConnectionString + "-databases", 
                         async () =>
                         {
-                            var databases = await DAL.GetDatabases_Async( inputParams );
+                            var databases = await DAL.GetDatabases_Async( ip );
                             return (new DatabaseCollection( databases ));
                         }));
 #else
-                var databases = await DAL.GetDatabases_Async( inputParams );
+                var databases = await DAL.GetDatabases( ip );
                 return (new DatabaseCollection( databases ));
 #endif
             }
@@ -67,31 +67,31 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
 #endif
 
 #if USE_CACHE
-        private Task< TableCollection > GetTablesInternal_Async( DALGetTablesInputParams inputParams )
-            => HttpContext.Current.Cache.Get_Async( inputParams.ConnectionString + "-tables", 
+        private static Task< TableCollection > GetTablesInternal( DALGetTablesInputParams ip )
+            => HttpContext.Current.Cache.Get_Async( ip.ConnectionString + "-tables", 
                         async () =>
                         {
-                            var tables = await DAL.GetTables_Async( inputParams ).CAX();
+                            var tables = await DAL.GetTables_Async( ip ).CAX();
                             return new TableCollection( tables );
                         });
 #else
-        private async Task< TableCollection > GetTablesInternal_Async( DALGetTablesInputParams inputParams )
+        private static async Task< TableCollection > GetTablesInternal( DALGetTablesInputParams ip )
         {
-            var tables = await DAL.GetTables_Async( inputParams ).CAX();
+            var tables = await DAL.GetTables( ip ).CAX();
             return (new TableCollection( tables ));
         }
 #endif
 
 #if USE_CACHE
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public Task< TableCollection > GetTables( [FromUri] DALGetTablesInputParams inputParams )
+        public Task< TableCollection > GetTables( [FromUri] DALGetTablesInputParams ip )
         {
             try
             {
-                inputParams.TryLoadFromCookies( HttpContext.Current.Request );
-                DALGetTablesInputParams.ThrowIfWrong( inputParams );
+                ip.TryLoadFromCookies( HttpContext.Current.Request );
+                DALGetTablesInputParams.ThrowIfWrong( ip );
 
-                return (GetTablesInternal_Async( inputParams ));
+                return (GetTablesInternal_Async( ip ));
             }
             catch ( Exception ex )
             {
@@ -100,14 +100,14 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         }
 #else
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public Task< TableCollection > GetTables( [FromUri] DALGetTablesInputParams inputParams )
+        public Task< TableCollection > GetTables( [FromUri] DALGetTablesInputParams ip )
         {
             try
             {
-                inputParams.LoadFromCookies( HttpContext.Current.Request );
-                DALGetTablesInputParams.ThrowIfWrong( inputParams );
+                HttpContext.Current.Request.LoadFromCookies_1( ip );
+                DALGetTablesInputParams.ThrowIfWrong( ip );
 
-                return (GetTablesInternal_Async( inputParams ));
+                return (GetTablesInternal( ip ));
             }
             catch ( Exception ex )
             {
@@ -118,18 +118,18 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
 
 
         [HttpPost, HttpGet, NoCache, NoOutputCache]
-        public async Task< Graph > GetRefs( [FromUri] DALGetRefsInputParams inputParams )
+        public async Task< Graph > GetRefs( [FromUri] DALGetRefsInputParams ip )
         {
             try
             {
-                inputParams.LoadFromCookies( HttpContext.Current.Request );
-                DALGetTablesInputParams.ThrowIfWrong( inputParams );
+                HttpContext.Current.Request.LoadFromCookies_2( ip );
+                DALGetTablesInputParams.ThrowIfWrong( ip );
 
                 #region [.check exists root-tables.]
-                if ( inputParams.RootTableNamesSet.Any() )
+                if ( ip.RootTableNamesSet.Any() )
                 {
-                    var tableCollection = await GetTablesInternal_Async( inputParams );
-                    foreach ( var rootTableName in inputParams.RootTableNamesSet )
+                    var tableCollection = await GetTablesInternal( ip );
+                    foreach ( var rootTableName in ip.RootTableNamesSet )
                     {
                         if ( !tableCollection.Contains( rootTableName ) )
                         {
@@ -138,36 +138,34 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                     }
                 }
                 #endregion
+
+                #region [.get refs.]
 #if USE_CACHE
-                var refs = await HttpContext.Current.Cache.Get_Async( 
-                    inputParams.ConnectionString + '-' + inputParams.RootTableNames
-                    , () => DAL.GetRefs_Async( inputParams ) );
+                var refs = await HttpContext.Current.Cache.Get_Async( ip.ConnectionString + '-' + ip.RootTableNames, () => DAL.GetRefs( ip ) );
 #else
-                var refs = await DAL.GetRefs_Async( inputParams );
+                var refs = await DAL.GetRefs( ip );
 #endif
                 if ( !refs.Any() )
                 {
-                    //if ( inputParams.RootTableNamesSet.Any() )
-                    //{
-                    //    throw (new RefsNotFoundException( inputParams.RootTableNamesSet ));
-                    //}
+                    //if ( ip.RootTableNamesSet.Any() ) throw (new RefsNotFoundException( ip.RootTableNamesSet ));
 
-                    foreach ( var rootTableName in inputParams.RootTableNamesSet )
+                    foreach ( var rootTableName in ip.RootTableNamesSet )
                     {
                         refs.Add( RefItem.CreateForSingleTable( rootTableName ) );
                     }
                 }
+                #endregion
 
-
+                #region [.build graph.]
                 var nodes = new Dictionary< string, Node >();
                 var links = new HashSet< Link >( new Link.EqualityComparer() );
 
                 #region [.create-graph-nodes-&-links.]
                 var node_id = 0;
                 var link_id = 0;
-                if ( inputParams.RootTableNamesSet.Any() )
+                if ( ip.RootTableNamesSet.Any() )
                 {
-                    foreach ( var rootTableName in inputParams.RootTableNamesSet )
+                    foreach ( var rootTableName in ip.RootTableNamesSet )
                     {
                         //var linksTotal = refs.Count( it => it.Level <= 2 && it.TableName == rootTableName );
                         var centerNode = new Node( node_id, rootTableName, true );
@@ -180,7 +178,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                     var rootTableName = refs.FirstOrDefault().ForeignTableName;
                     if ( rootTableName.IsNullOrWhiteSpace() )
                     {
-                        throw (new RefsNotFoundException( inputParams.RootTableNamesSet ));
+                        throw (new RefsNotFoundException( ip.RootTableNamesSet ));
                     }
                     //var linksTotal = refs.Count( it => it.Level <= 2 && it.TableName == rootTableName );
                     var centerNode = new Node( node_id, rootTableName, true );
@@ -219,20 +217,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
                     { 
                         SourceNode   = node_1.Id, 
                         TargetNode   = node_2.Id,
-                        SourceFields = from _it in g select _it.ForeignColumn,
-                        TargetFields = from _it in g select _it.Column,
+                        SourceFields = (from x in g select x.ForeignColumn).ToList(),
+                        TargetFields = (from x in g select x.Column).ToList(),
                     };
                     links.Add( link );
                     /*var success = links.Add( link );
-                    if ( !success )
-                        System.Diagnostics.Debugger.Break();*/
+                    if ( !success ) Debugger.Break();*/
                 }
                 #endregion
 
                 var graph = new Graph( nodes.Values, links );
 
-                CalcGraphCoords( graph, inputParams.GraphWidth, inputParams.GraphHeight );
+                CalcGraphCoords( graph, ip.GraphWidth, ip.GraphHeight );
                 return (graph);
+                #endregion
             }
             catch ( TableNotExistsException ex )
             {
@@ -241,7 +239,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
             catch ( RefsNotFoundException ex )
             {
                 var error = ex.RootTableNames.Any()
-                            ? ($"Reference from table {ex.RootTableNames.Join( '\'', '\'', "','" )} not found")
+                            ? ($"Reference from table '{string.Join( "','", ex.RootTableNames )}' not found")
                             : "Any tables not found";
                 return (Graph.CreateError( error ));
             }
@@ -251,21 +249,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
             }
         }
 
-        private static void CalcGraphCoords( Graph graph, int width, int height )
+        private static void CalcGraphCoords( Graph graph, int width, int height, CoordsLayoutMode layoutMode = CoordsLayoutMode.SpringEmbedderFR )
         {
             const int X_CUT = 50;
             const int Y_CUT = 30;
             const double SCALE = 0.95;
-            /*const CoordsLayoutMode*/ var layoutMode = CoordsLayoutMode.SpringEmbedderFR;
 
-            var links = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList( /*graph.Links.Count*/ );
+            var links  = graph.Links.Select( x => (x.SourceNode, x.TargetNode) ).ToList();
             var points = GraphLayout.CalcSizedGraphLayout( links, graph.Nodes.Count, layoutMode, (width - X_CUT, height - Y_CUT) );
      
             foreach ( var node in graph.Nodes )
             {
-                var pt = points[ node.Id ];
-                node.X = pt.x * SCALE;
-                node.Y = pt.y * SCALE;
+                var (x, y) = points[ node.Id ];
+                node.X = x * SCALE;
+                node.Y = y * SCALE;
             }
         }
     }
@@ -275,28 +272,28 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
     /// </summary>
     internal static class GraphApiControllerExtensions
     {
-        public static void LoadFromCookies( this DALGetTablesInputParams inputParams, HttpRequest request )
+        public static void LoadFromCookies_1( this HttpRequest request, DALGetTablesInputParams ip )
         {
-            if ( inputParams.UserName.IsNullOrWhiteSpace() )
+            if ( ip.UserName.IsNullOrWhiteSpace() )
             {
-                inputParams.UserName = request.GetCookieString( "UserName" );
+                ip.UserName = request.GetCookieString( "UserName" );
             }
-            if ( inputParams.Password.IsNullOrWhiteSpace() )
+            if ( ip.Password.IsNullOrWhiteSpace() )
             {
-                inputParams.Password = request.GetCookieString( "Password" );
+                ip.Password = request.GetCookieString( "Password" );
             }
         }
-        public static void LoadFromCookies( this DALGetRefsInputParams inputParams, HttpRequest request )
+        public static void LoadFromCookies_2( this HttpRequest request, DALGetRefsInputParams ip )
         {
-            ((DALGetTablesInputParams) inputParams).LoadFromCookies( request );
+            request.LoadFromCookies_1( ip );
 
-            if ( inputParams.GraphHeight == 0 )
+            if ( ip.GraphHeight == 0 )
             {
-                inputParams.GraphHeight = request.GetCookieInt32( "GraphHeight" ).GetValueOrDefault( 1024 );
+                ip.GraphHeight = request.GetCookieInt32( "GraphHeight" ).GetValueOrDefault( 1024 );
             }
-            if ( inputParams.GraphWidth == 0 )
+            if ( ip.GraphWidth == 0 )
             {
-                inputParams.GraphWidth = request.GetCookieInt32( "GraphWidth" ).GetValueOrDefault( 1280 );
+                ip.GraphWidth = request.GetCookieInt32( "GraphWidth" ).GetValueOrDefault( 1280 );
             }
         }
     }

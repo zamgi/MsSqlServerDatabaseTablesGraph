@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
-//using Newtonsoft.Json;
-using JsonProperty = System.Text.Json.Serialization.JsonPropertyNameAttribute;
+using Newtonsoft.Json;
 
-namespace MsSqlServerDatabaseTablesGraph.WebService.Models
+namespace MsSqlServerDatabaseTablesGraph.WebApp.Models
 {
     /// <summary>
     /// 
@@ -19,6 +19,9 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Models
 
         [JsonProperty("nodes")] public ICollection< Node > Nodes { get; }
         [JsonProperty("links")] public ICollection< Link > Links { get; }
+
+        public override string ToString() => ((Error != null) ? $"Error: {Error}, " : null) + 
+                                             $"Nodes={Nodes?.Count}, Links={Links?.Count}";
     }
 
     /*/// <summary>
@@ -57,10 +60,11 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Models
         [JsonProperty("source")]       public int SourceNode { get; set; }
         [JsonProperty("target")]       public int TargetNode { get; set; }
         [JsonProperty("type")]         public int LinkType   { get; set; } = 1; //LINK_TYPE_DIRECTED
-        [JsonProperty("sourceFields")] public IEnumerable< string > SourceFields { get; set; }
-        [JsonProperty("targetFields")] public IEnumerable< string > TargetFields { get; set; }
-    }
+        [JsonProperty("sourceFields")] public IList< string > SourceFields { get; set; }
+        [JsonProperty("targetFields")] public IList< string > TargetFields { get; set; }
 
+        public override string ToString() => $"Src={SourceNode}, Trg={TargetNode}";
+    }
 
 
     /// <summary>
@@ -89,6 +93,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Models
         [JsonProperty("id")]       public int    Id       { get; set; }
         [JsonProperty("name")]     public string Name     { get; set; }
         [JsonProperty("selected")] public bool   Selected { get; set; }
+
         public override string ToString() => $"Id={Id}, Name={Name}, (X={X}, Y={Y})";
     }
 }

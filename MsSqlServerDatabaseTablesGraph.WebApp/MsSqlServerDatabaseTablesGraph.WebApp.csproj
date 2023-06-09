@@ -136,7 +136,7 @@
     <Compile Include="App_MatchCode\Sync_primitives.cs" />
     <Compile Include="Controllers\DAL.cs" />
     <Compile Include="Controllers\GraphController.cs" />
-    <Compile Include="Models\GraphViewModel.cs" />
+    <Compile Include="Models\GraphVM.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Exceptions.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
