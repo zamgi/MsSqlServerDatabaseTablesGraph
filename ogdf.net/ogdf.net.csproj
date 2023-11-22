@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48;net60</TargetFrameworks>
+    <TargetFrameworks>net481;net8.0</TargetFrameworks>
     <AssemblyName>ogdf.net</AssemblyName>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>    
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
@@ -12,12 +12,11 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net4.8'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net4.8.1'">
     <Reference Include="System.Core" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
-  
 </Project>

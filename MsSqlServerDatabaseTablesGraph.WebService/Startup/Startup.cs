@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 using Microsoft.AspNetCore.Builder;
@@ -29,20 +28,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebService
     {
         public void ConfigureServices( IServiceCollection services )
         {
-            services.AddControllers().AddJsonOptions( options =>
+            services.AddControllers().AddJsonOptions( opts =>
             {
-                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-                options.JsonSerializerOptions.NumberHandling         = JsonNumberHandling.AllowNamedFloatingPointLiterals;
-                options.JsonSerializerOptions.Converters.Add( new JsonStringEnumConverter() );
+                opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                opts.JsonSerializerOptions.NumberHandling         = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+                opts.JsonSerializerOptions.Converters.Add( new JsonStringEnumConverter() );
             });
 
-            services.Configure< IISServerOptions >( options => options.MaxRequestBodySize = int.MaxValue );
-            services.Configure< KestrelServerOptions >( options => options.Limits.MaxRequestBodySize = int.MaxValue );
-            services.Configure< FormOptions >( x =>
+            services.Configure< IISServerOptions >( opts => opts.MaxRequestBodySize = int.MaxValue );
+            services.Configure< KestrelServerOptions >( opts => opts.Limits.MaxRequestBodySize = int.MaxValue );
+            services.Configure< FormOptions >( opts =>
             {
-                x.ValueLengthLimit            = int.MaxValue;
-                x.MultipartBodyLengthLimit    = int.MaxValue; // if don't set default value is: 128 MB
-                x.MultipartHeadersLengthLimit = int.MaxValue;
+                opts.ValueLengthLimit            = int.MaxValue;
+                opts.MultipartBodyLengthLimit    = int.MaxValue; // if don't set default value is: 128 MB
+                opts.MultipartHeadersLengthLimit = int.MaxValue;
             });
 
             services.AddRazorPages();
@@ -72,9 +71,8 @@ namespace MsSqlServerDatabaseTablesGraph.WebService
                 if ( (ctx.Response.StatusCode == 404) && (ctx.Request.Path == ROOT_PATH) )
                 {
                     ctx.Response.Redirect( $"/{GraphViewController.CONTROLLER_NAME}" );
-                    //ctx.Response.Redirect( $"/{GraphViewController.CONTROLLER_NAME}/{nameof(GraphViewController.Index)}" );
                 }
-            } );
+            });
 #if DEBUG
             //-------------------------------------------------------------//
             OpenBrowserIfRunAsConsole( app );
@@ -88,24 +86,20 @@ namespace MsSqlServerDatabaseTablesGraph.WebService
             {
                 var server    = app.ApplicationServices.GetRequiredService< IServer >();
                 var addresses = server.Features?.Get< IServerAddressesFeature >()?.Addresses;
-                var address   = addresses?.FirstOrDefault();
+                var address   = addresses?.FirstOrDefault( a => a.StartsWith( "https:" ) ) ?? addresses?.FirstOrDefault();
                 
                 if ( address == null )
                 {
                     var config = app.ApplicationServices.GetService< IConfiguration >();
                     address = config.GetSection( "Kestrel:Endpoints:Https:Url" ).Value ??
                               config.GetSection( "Kestrel:Endpoints:Http:Url"  ).Value;
-                    if ( address != null )
-                    {
-                        address = address.Replace( "/*:", "/localhost:" );
-                    }
                 }
-
-                //System.Console.WriteLine( $"[ADDRESS: {address ?? "NULL"}]" );
 
                 if ( address != null )
                 {
-                    using ( Process.Start( new ProcessStartInfo( address.TrimEnd('/') + '/'  ) { UseShellExecute = true } ) ) { };
+                    address = address.Replace( "/*:", "/localhost:" );
+
+                    using ( Process.Start( new ProcessStartInfo( address.TrimEnd( '/' ) + '/' ) { UseShellExecute = true } ) ) { };
                 }                
             }
             #endregion
