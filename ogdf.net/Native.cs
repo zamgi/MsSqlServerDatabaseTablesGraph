@@ -14,15 +14,15 @@ namespace ogdf
 
         private static bool IsLinux()
         {
-            var p = (int)Environment.OSVersion.Platform;
+            var p = (int) Environment.OSVersion.Platform;
             return (p == 4) || (p == 6) || (p == 128);
         }
         private static bool Isx64() => (IntPtr.Size == 8);
 
-        private const string DLL_NAME_WIN_x64 = "ogdf_x64.dll";
-        private const string DLL_NAME_WIN_x86 = "ogdf_x86.dll";
-        private const string DLL_NAME_LIN_x64 = "libogdf.so";
-        private const string DLL_NAME_LIN_x86 = DLL_NAME_LIN_x64;
+        private const string DLL_WIN_x64 = "ogdf_x64.dll";
+        private const string DLL_WIN_x86 = "ogdf_x86.dll";
+        private const string DLL_LIN_x64 = "libogdf.so";
+        private const string DLL_LIN_x86 = DLL_LIN_x64;
 		
         private const string OGDFCore_AllocMapNodes_name    = "OGDFCore_AllocMapNodes";
         private const string OGDFCore_FreeMapNodes_name     = "OGDFCore_FreeMapNodes";
@@ -40,84 +40,84 @@ namespace ogdf
 
         #region [.win.]
         #region [.x64.]
-        [DllImport(DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
+        [DllImport(DLL_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
         private extern static IntPtr OGDFCore_AllocMapNodes_win_x64( int count );
 
-        [DllImport(DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
+        [DllImport(DLL_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
         private extern static void OGDFCore_FreeMapNodes_win_x64( IntPtr data );
 
-        [DllImport(DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
+        [DllImport(DLL_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
         private extern static void OGDFCore_AddNodesPair_win_x64( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
-        [DllImport(DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
-        private extern static void OGDFCore_ProcessingCoords_win_x64( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
+        [DllImport(DLL_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
+        private extern static void OGDFCore_ProcessingCoords_win_x64( IntPtr data, [MarshalAs(UnmanagedType.I4)] CoordsLayoutMode mode );
 
-        [DllImport( DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
+        [DllImport(DLL_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name)]
         private extern static bool OGDFCore_GetNodeCoords_win_x64( IntPtr data, int nodeIndex, out double x, out double y );
 
-        [DllImport(DLL_NAME_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
+        [DllImport(DLL_WIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
         private extern static bool OGDFCore_SetNodeSize_win_x64( IntPtr data, int nodeIndex, double width, double height );
         #endregion
 
         #region [.x86.]
-        [DllImport(DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
+        [DllImport(DLL_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
         private extern static IntPtr OGDFCore_AllocMapNodes_win_x86( int count );
 
-        [DllImport(DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
+        [DllImport(DLL_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
         private extern static void OGDFCore_FreeMapNodes_win_x86( IntPtr data );
 
-        [DllImport(DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
+        [DllImport(DLL_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
         private extern static void OGDFCore_AddNodesPair_win_x86( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
-        [DllImport(DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
-        private extern static void OGDFCore_ProcessingCoords_win_x86( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
+        [DllImport(DLL_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
+        private extern static void OGDFCore_ProcessingCoords_win_x86( IntPtr data, [MarshalAs(UnmanagedType.I4)] CoordsLayoutMode mode );
 
-        [DllImport( DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
+        [DllImport(DLL_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name)]
         private extern static bool OGDFCore_GetNodeCoords_win_x86( IntPtr data, int nodeIndex, out double x, out double y );
 
-        [DllImport(DLL_NAME_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
+        [DllImport(DLL_WIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
         private extern static bool OGDFCore_SetNodeSize_win_x86( IntPtr data, int nodeIndex, double width, double height );
         #endregion
         #endregion
 
         #region [.linux.]
         #region [.x64.]
-        [DllImport(DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
+        [DllImport(DLL_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
         private extern static IntPtr OGDFCore_AllocMapNodes_lin_x64( int count );
 
-        [DllImport(DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
+        [DllImport(DLL_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
         private extern static void OGDFCore_FreeMapNodes_lin_x64( IntPtr data );
 
-        [DllImport(DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
+        [DllImport(DLL_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
         private extern static void OGDFCore_AddNodesPair_lin_x64( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
-        [DllImport(DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
-        private extern static void OGDFCore_ProcessingCoords_lin_x64( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
+        [DllImport(DLL_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
+        private extern static void OGDFCore_ProcessingCoords_lin_x64( IntPtr data, [MarshalAs(UnmanagedType.I4)] CoordsLayoutMode mode );
 
-        [DllImport( DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
+        [DllImport(DLL_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
         private extern static bool OGDFCore_GetNodeCoords_lin_x64( IntPtr data, int nodeIndex, out double x, out double y );
 
-        [DllImport(DLL_NAME_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
+        [DllImport(DLL_LIN_x64, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
         private extern static bool OGDFCore_SetNodeSize_lin_x64( IntPtr data, int nodeIndex, double width, double height );
         #endregion
 
         #region [.x86.]
-        [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name )]
+        [DllImport(DLL_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AllocMapNodes_name)]
         private extern static IntPtr OGDFCore_AllocMapNodes_lin_x86( int count );
 
-        [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name )]
+        [DllImport(DLL_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_FreeMapNodes_name)]
         private extern static void OGDFCore_FreeMapNodes_lin_x86( IntPtr data );
 
-        [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name )]
+        [DllImport(DLL_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_AddNodesPair_name)]
         private extern static void OGDFCore_AddNodesPair_lin_x86( IntPtr data, int nodeIndex1, int nodeIndex2 );
 
-        [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name )]
-        private extern static void OGDFCore_ProcessingCoords_lin_x86( IntPtr data, [MarshalAs( UnmanagedType.I4 )] CoordsLayoutMode eMode );
+        [DllImport(DLL_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_ProcessingCoords_name)]
+        private extern static void OGDFCore_ProcessingCoords_lin_x86( IntPtr data, [MarshalAs(UnmanagedType.I4)] CoordsLayoutMode mode );
 
-        [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name )]
+        [DllImport(DLL_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_GetNodeCoords_name)]
         private extern static bool OGDFCore_GetNodeCoords_lin_x86( IntPtr data, int nodeIndex, out double x, out double y );
 
-        [DllImport( DLL_NAME_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name )]
+        [DllImport(DLL_LIN_x86, CallingConvention=CC.Cdecl, EntryPoint=OGDFCore_SetNodeSize_name)]
         private extern static bool OGDFCore_SetNodeSize_lin_x86( IntPtr data, int nodeIndex, double width, double height );
         #endregion
         #endregion
