@@ -36,11 +36,11 @@ namespace System.Threading
 
         [M(O.AggressiveInlining)] public Task EnterAsync() => _Smpr.WaitAsync();
         [M(O.AggressiveInlining)] public Task EnterAsync( CancellationToken ct ) => _Smpr.WaitAsync( ct );
-        [M(O.AggressiveInlining)] public Task<bool> TryEnterAsync() => _Smpr.WaitAsync( 0 );
-        [M(O.AggressiveInlining)] public Task<bool> TryEnterAsync( int millisecondsTimeout ) => _Smpr.WaitAsync( millisecondsTimeout );
-        [M(O.AggressiveInlining)] public Task<bool> TryEnterAsync( TimeSpan timeout ) => _Smpr.WaitAsync( timeout );
-        [M(O.AggressiveInlining)] public Task<bool> TryEnterAsync( TimeSpan timeout, CancellationToken ct ) => _Smpr.WaitAsync( timeout, ct );
-        [M(O.AggressiveInlining)] public Task<bool> TryEnterAsync( int millisecondsTimeout, CancellationToken ct ) => _Smpr.WaitAsync( millisecondsTimeout, ct );
+        [M(O.AggressiveInlining)] public Task< bool > TryEnterAsync() => _Smpr.WaitAsync( 0 );
+        [M(O.AggressiveInlining)] public Task< bool > TryEnterAsync( int millisecondsTimeout ) => _Smpr.WaitAsync( millisecondsTimeout );
+        [M(O.AggressiveInlining)] public Task< bool > TryEnterAsync( TimeSpan timeout ) => _Smpr.WaitAsync( timeout );
+        [M(O.AggressiveInlining)] public Task< bool > TryEnterAsync( TimeSpan timeout, CancellationToken ct ) => _Smpr.WaitAsync( timeout, ct );
+        [M(O.AggressiveInlining)] public Task< bool > TryEnterAsync( int millisecondsTimeout, CancellationToken ct ) => _Smpr.WaitAsync( millisecondsTimeout, ct );
 
         [M(O.AggressiveInlining)] public void Exit() => _Smpr.Release();
 #if DEBUG
@@ -111,10 +111,10 @@ namespace System.Threading
 
         [M(O.AggressiveInlining)] public Task WaitAsync() => _Smpr.WaitAsync();
         [M(O.AggressiveInlining)] public Task WaitAsync( CancellationToken ct ) => _Smpr.WaitAsync( ct );
-        [M(O.AggressiveInlining)] public Task<bool> WaitAsync( int millisecondsTimeout ) => _Smpr.WaitAsync( millisecondsTimeout );
-        [M(O.AggressiveInlining)] public Task<bool> WaitAsync( TimeSpan timeout ) => _Smpr.WaitAsync( timeout );
-        [M(O.AggressiveInlining)] public Task<bool> WaitAsync( TimeSpan timeout, CancellationToken ct ) => _Smpr.WaitAsync( timeout, ct );
-        [M(O.AggressiveInlining)] public Task<bool> WaitAsync( int millisecondsTimeout, CancellationToken ct ) => _Smpr.WaitAsync( millisecondsTimeout, ct );
+        [M(O.AggressiveInlining)] public Task< bool > WaitAsync( int millisecondsTimeout ) => _Smpr.WaitAsync( millisecondsTimeout );
+        [M(O.AggressiveInlining)] public Task< bool > WaitAsync( TimeSpan timeout ) => _Smpr.WaitAsync( timeout );
+        [M(O.AggressiveInlining)] public Task< bool > WaitAsync( TimeSpan timeout, CancellationToken ct ) => _Smpr.WaitAsync( timeout, ct );
+        [M(O.AggressiveInlining)] public Task< bool > WaitAsync( int millisecondsTimeout, CancellationToken ct ) => _Smpr.WaitAsync( millisecondsTimeout, ct );
 
         [M(O.AggressiveInlining)] public void Set() => _Smpr.Release();
         [M(O.AggressiveInlining)] public void Release() => _Smpr.Release();
@@ -167,10 +167,7 @@ namespace System.Threading.Tasks
             , Func< T, CancellationToken, Task > seqItemFunc
              ) 
         {
-            if ( (seq == null) || !seq.Any() )
-            {
-                return;
-            }
+            if ( (seq == null) || !seq.Any() ) return;
             if ( maxDegreeOfParallelism <= 0 ) throw (new ArgumentException( nameof(maxDegreeOfParallelism) ));
             if ( seqItemFunc == null )         throw (new ArgumentException( nameof(seqItemFunc) ));
             //-----------------------------------------------------------//
@@ -188,11 +185,12 @@ namespace System.Threading.Tasks
                     //Because this call is not awaited, execution of the current method continues before the call is completed. 
                     //Consider applying the 'await' operator to the result of the call.
 
+                    var local_t = t;
                     Task.Run( async () =>
                     {
                         try
                         {
-                            await seqItemFunc( t, ct ).ConfigureAwait( false );
+                            await seqItemFunc( local_t, ct ).ConfigureAwait( false );
                         }
                         finally
                         {
@@ -219,10 +217,7 @@ namespace System.Threading.Tasks
             , Func< T, CancellationToken, Task > seqItemFunc
              ) 
         {
-            if ( (seq == null) || !seq.Any() )
-            {
-                return;
-            }
+            if ( (seq == null) || !seq.Any() ) return;
             if ( maxDegreeOfParallelism <= 0 ) throw (new ArgumentException( nameof(maxDegreeOfParallelism) ));
             if ( seqItemFunc == null )         throw (new ArgumentException( nameof(seqItemFunc) ));
             //-----------------------------------------------------------//
@@ -240,11 +235,12 @@ namespace System.Threading.Tasks
                     //Because this call is not awaited, execution of the current method continues before the call is completed. 
                     //Consider applying the 'await' operator to the result of the call.
 
+                    var local_t = t;
                     Task.Run( async () =>
                     {
                         try
                         {
-                            await seqItemFunc( t, ct ).ConfigureAwait( false );
+                            await seqItemFunc( local_t, ct ).ConfigureAwait( false );
                         }
                         finally
                         {
@@ -271,10 +267,7 @@ namespace System.Threading.Tasks
             , Func< T, CancellationToken, Task > seqItemFunc
              ) 
         {
-            if ( (seq == null) || !seq.Any() )
-            {
-                return;
-            }
+            if ( (seq == null) || !seq.Any() ) return;
             if ( maxDegreeOfParallelism <= 0 ) throw (new ArgumentException( nameof(maxDegreeOfParallelism) ));
             if ( seqItemFunc == null )         throw (new ArgumentException( nameof(seqItemFunc) ));
             //-----------------------------------------------------------//
@@ -292,11 +285,12 @@ namespace System.Threading.Tasks
                     //Because this call is not awaited, execution of the current method continues before the call is completed. 
                     //Consider applying the 'await' operator to the result of the call.
 
+                    var local_t = t;
                     Task.Run( async () =>
                     {
                         try
                         {
-                            await seqItemFunc( t, ct ).ConfigureAwait( false );
+                            await seqItemFunc( local_t, ct ).ConfigureAwait( false );
                         }
                         finally
                         {
@@ -323,10 +317,7 @@ namespace System.Threading.Tasks
             , Func< T, CancellationToken, Task > seqItemFunc
              ) 
         {
-            if ( (seq == null) || !seq.Any() )
-            {
-                return;
-            }
+            if ( (seq == null) || !seq.Any() ) return;
             if ( maxDegreeOfParallelism <= 0 ) throw (new ArgumentException( nameof(maxDegreeOfParallelism) ));
             if ( seqItemFunc == null )         throw (new ArgumentException( nameof(seqItemFunc) ));
             //-----------------------------------------------------------//
@@ -344,11 +335,12 @@ namespace System.Threading.Tasks
                     //Because this call is not awaited, execution of the current method continues before the call is completed. 
                     //Consider applying the 'await' operator to the result of the call.
 
+                    var local_t = t;
                     Task.Run( async () =>
                     {
                         try
                         {
-                            await seqItemFunc( t, ct ).ConfigureAwait( false );
+                            await seqItemFunc( local_t, ct ).ConfigureAwait( false );
                         }
                         finally
                         {
@@ -374,10 +366,7 @@ namespace System.Threading.Tasks
             , CancellationToken ct
             , Func< T, CancellationToken, Task > seqItemFunc )
         {
-            if ( seq == null )
-            {
-                return;
-            }
+            if ( seq == null ) return;
             if ( maxDegreeOfParallelism <= 0 ) throw (new ArgumentException( nameof(maxDegreeOfParallelism) ));
             if ( seqItemFunc == null )         throw (new ArgumentException( nameof(seqItemFunc) ));
             //-----------------------------------------------------------//
@@ -402,16 +391,17 @@ namespace System.Threading.Tasks
                         }
 
                         Interlocked.Increment( ref enqueueSeqCount );
-                        await semaphore.WaitAsync( ct ).ConfigureAwait( false );                        
+                        await semaphore.WaitAsync( ct ).ConfigureAwait( false );
 #pragma warning disable CS4014
                         //Because this call is not awaited, execution of the current method continues before the call is completed. 
                         //Consider applying the 'await' operator to the result of the call.
 
+                        var local_t = t;
                         Task.Run( async () =>
                         {
                             try
                             {
-                                await seqItemFunc( t, ct ).ConfigureAwait( false );
+                                await seqItemFunc( local_t, ct ).ConfigureAwait( false );
                             }
                             finally
                             {
