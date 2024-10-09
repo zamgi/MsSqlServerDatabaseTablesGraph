@@ -23,7 +23,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebApp.Controllers
         private const int    COMMAND_TIMEOUT_300 = 300;
 
         private const string SQL_GET_DATABASES = @"
-SELECT name DatabaseName FROM master.dbo.sysdatabases WHERE (name NOT IN ('master', 'tempdb', 'model', 'msdb')) ORDER BY name;";
+SELECT DatabaseName = name FROM master.dbo.sysdatabases WHERE (name NOT IN ('master', 'tempdb', 'model', 'msdb')) ORDER BY name;";
 
         private const string SQL_GET_TABLES = @"
 SELECT DISTINCT (s.name + '.' + t.name) TableName
