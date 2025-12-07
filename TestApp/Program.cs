@@ -4,9 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-using MsSqlServerDatabaseTablesGraph.WebApp;
-using MsSqlServerDatabaseTablesGraph.WebApp.Controllers;
-using MsSqlServerDatabaseTablesGraph.WebApp.Models;
+using MsSqlServerDatabaseTablesGraph.WebService;
+using MsSqlServerDatabaseTablesGraph.WebService.Models;
 
 using ogdf;
 
@@ -24,9 +23,9 @@ namespace TestApp
                 var ip = new DALGetRefsInputParams()
                 {
                     ServerName     = "(local)",
-                    DatabaseName   = "OrdInv__NEW", //"xz",
-                    UserName       = "sa",          //"xz",
-                    Password       = "12qwQW12",    //"xz",
+                    DatabaseName   = "OrdInv",   //"xz",
+                    UserName       = "sa",       //"xz",
+                    Password       = "12qwQW12", //"xz",
                     //RootTableNames = "xz.xz"
 
                     GraphWidth  = 1280,

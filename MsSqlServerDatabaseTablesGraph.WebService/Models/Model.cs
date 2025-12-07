@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+
+using Microsoft.Data.SqlClient;
 
 //using Newtonsoft.Json;
 using JsonProperty = System.Text.Json.Serialization.JsonPropertyNameAttribute;
@@ -45,6 +46,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Models
                     DataSource = ServerName,
                     UserID     = UserName,
                     Password   = Password ?? string.Empty,
+                    TrustServerCertificate = true,
                 };
                 if ( ConnectTimeout.HasValue )
                 {
@@ -94,6 +96,7 @@ namespace MsSqlServerDatabaseTablesGraph.WebService.Models
                     InitialCatalog = DatabaseName ?? string.Empty,
                     UserID         = UserName,
                     Password       = Password ?? string.Empty,
+                    TrustServerCertificate = true,
                 };
                 return (builder.ConnectionString);
             }
